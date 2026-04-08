@@ -10,6 +10,8 @@ export class Engine {
   async init() {
     const resp = await fetch('./game-data.json');
     this.data = await resp.json();
+    // Filter out levels marked as hidden (work-in-progress)
+    this.data.levelCatalog = this.data.levelCatalog.filter(l => !l.hidden);
     this.state = {
       currentLevelIndex: 0,
       phase: 'BRIEFING',       // BRIEFING | ASSEMBLY | RESULT
