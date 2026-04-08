@@ -12,8 +12,9 @@ export class Engine {
     this.data = await resp.json();
     this.state = {
       currentLevelIndex: 0,
-      phase: 'BRIEFING', // BRIEFING | ASSEMBLY | RESULT
-      placements: {},    // { slotId: spellId }
+      phase: 'BRIEFING',       // BRIEFING | ASSEMBLY | RESULT
+      placements: {},          // { slotId: spellId }
+      installedMatrixIds: [],  // instanceId[] — optional matrices the player placed
       lastResult: null,
     };
     return this;
@@ -41,11 +42,64 @@ export class Engine {
     return this.data.matrixCatalog.find(m => m.id === id) ?? null;
   }
 
+  // ─── Matrix helpers ───────────────────────────────────────────────────────
+
+  /**
+   * Matrix instances that are currently on the board:
+   * - preInstalled (absent field defaults to true) always present
+   * - optional ones only if the player has installed them
+   */
+  boardMatrices() {
+    return (this.currentLevel.availableMatrices ?? []).filter(m =>
+      (m.preInstalled !== false) || this.state.installedMatrixIds.includes(m.instanceId)
+    );
+  }
+
+  /** Optional matrix instances (preInstalled: false) defined for this level. */
+  optionalMatrices() {
+    return (this.currentLevel.availableMatrices ?? []).filter(m => m.preInstalled === false);
+  }
+
+  /** Optional matrices not yet installed by the player. */
+  availableToInstall() {
+    return this.optionalMatrices().filter(
+      m => !this.state.installedMatrixIds.includes(m.instanceId)
+    );
+  }
+
+  /** Install an optional matrix onto the board. */
+  installMatrix(instanceId) {
+    const matrix = this.optionalMatrices().find(m => m.instanceId === instanceId);
+    if (!matrix) return { ok: false, reason: 'Матрица не найдена или уже установлена.' };
+    if (this.state.installedMatrixIds.includes(instanceId))
+      return { ok: false, reason: 'Матрица уже на доске.' };
+    this.state.installedMatrixIds = [...this.state.installedMatrixIds, instanceId];
+    return { ok: true };
+  }
+
+  /**
+   * Uninstall an optional matrix from the board.
+   * Fails if any of its slots have spells in them.
+   */
+  uninstallMatrix(instanceId) {
+    const matrix = this.optionalMatrices().find(m => m.instanceId === instanceId);
+    if (!matrix) return { ok: false, reason: 'Матрица не найдена.' };
+    if (!this.state.installedMatrixIds.includes(instanceId))
+      return { ok: false, reason: 'Матрица не установлена.' };
+
+    const occupiedSlot = matrix.slots.find(s => this.state.placements[s.slotId]);
+    if (occupiedSlot)
+      return { ok: false, reason: 'Сначала убери все заклинания из матрицы.' };
+
+    this.state.installedMatrixIds = this.state.installedMatrixIds.filter(id => id !== instanceId);
+    return { ok: true };
+  }
+
   // ─── Placement helpers ────────────────────────────────────────────────────
 
-  /** Returns all slots for the current level (flat list). */
+  /** Returns all slots currently visible on the board (flat list). */
   allSlots() {
-    return this.currentLevel.availableMatrices.flatMap(m => m.slots);
+    return this.boardMatrices().flatMap(m => m.slots);
   }
 
   /** Returns spell IDs of all currently placed spells. */
@@ -92,7 +146,7 @@ export class Engine {
 
   // ─── Core computation (shared by evaluate + computeLiveState) ─────────────
 
-  _compute(level, placements) {
+  _compute(level, placements, installedMatrixIds) {
     const spells = Object.values(placements)
       .filter(Boolean)
       .map(id => this.spellById(id))
@@ -108,7 +162,7 @@ export class Engine {
       }
     }
 
-    // 2. Debts
+    // 2. Debts — from spells
     const debtMap = new Map(); // debtId -> debt object
     for (const sp of spells) {
       for (const d of sp.addsDebts ?? []) {
@@ -148,9 +202,13 @@ export class Engine {
     let riskTotal = spells.reduce((sum, sp) => sum + (sp.riskDelta ?? 0), 0);
     riskTotal += nonCriticalStatuses.length * (level.nonCriticalDebtRisk ?? 2);
 
-    // 8. Gold (goldDelta on a spell reduces the total, e.g. AI buff rebate)
+    // 8. Gold: spells + only player-installed optional matrices (not preInstalled ones)
+    const matrixInstallCost = (level.availableMatrices ?? [])
+      .filter(m => m.preInstalled === false && installedMatrixIds.includes(m.instanceId))
+      .reduce((sum, m) => sum + (m.installCostGold ?? 0), 0);
+
     const goldSpent = spells.reduce((sum, sp) => sum + (sp.costGold ?? 0) + (sp.goldDelta ?? 0), 0)
-      + (level.availableMatrices ?? []).reduce((sum, m) => sum + (m.installCostGold ?? 0), 0);
+      + matrixInstallCost;
 
     // 9. Missing requirements
     const missingRequirements = (level.requirements ?? []).filter(
@@ -175,7 +233,7 @@ export class Engine {
 
   evaluate() {
     const level = this.currentLevel;
-    const c = this._compute(level, this.state.placements);
+    const c = this._compute(level, this.state.placements, this.state.installedMatrixIds);
     const failReasons = [];
 
     // Category 1: missing requirements
@@ -228,7 +286,7 @@ export class Engine {
 
   computeLiveState() {
     const level = this.currentLevel;
-    const c = this._compute(level, this.state.placements);
+    const c = this._compute(level, this.state.placements, this.state.installedMatrixIds);
     return {
       goldSpent: c.goldSpent,
       goldRemaining: c.goldRemaining,
@@ -251,6 +309,8 @@ export class Engine {
 
   retry() {
     this.state.phase = 'ASSEMBLY';
+    this.state.placements = {};
+    this.state.installedMatrixIds = [];
     this.state.lastResult = null;
   }
 
@@ -258,6 +318,7 @@ export class Engine {
     if (!this.hasNextLevel) return false;
     this.state.currentLevelIndex++;
     this.state.placements = {};
+    this.state.installedMatrixIds = [];
     this.state.lastResult = null;
     this.state.phase = 'BRIEFING';
     return true;

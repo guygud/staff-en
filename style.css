@@ -830,3 +830,126 @@ ul { list-style: none; }
   border-radius: var(--radius-lg);
   margin-top: 0.5rem;
 }
+
+/* ─── Matrix Panel (optional matrices as cards) ──────────────────────────── */
+.matrix-panel-title {
+  font-family: var(--font-main);
+  color: var(--text-label);
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  margin-bottom: 0.5rem;
+  padding: 0 0.25rem;
+}
+
+#assembly-matrix-cards {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.matrix-card {
+  background: var(--bg-raised);
+  border: 1px solid var(--border-glow);
+  border-radius: var(--radius);
+  padding: 0.6rem 0.75rem;
+  cursor: pointer;
+  transition: border-color 0.12s ease, box-shadow 0.12s ease;
+  user-select: none;
+}
+.matrix-card:hover {
+  border-color: var(--gold-dim);
+  box-shadow: 0 0 8px rgba(230, 200, 76, 0.2);
+}
+.matrix-card-selected {
+  border-color: var(--gold) !important;
+  box-shadow: 0 0 12px rgba(230, 200, 76, 0.35) !important;
+}
+.matrix-card-dragging { opacity: 0.5; }
+
+.matrix-card-header {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  margin-bottom: 0.2rem;
+}
+.matrix-card-icon { font-size: 1rem; }
+.matrix-card-name {
+  font-family: var(--font-main);
+  color: var(--gold);
+  font-size: 0.9rem;
+  flex: 1;
+}
+.matrix-card-cost {
+  font-size: 0.8rem;
+  color: var(--gold);
+  background: rgba(230,200,76,0.1);
+  border-radius: 4px;
+  padding: 0 0.4rem;
+}
+.matrix-card-desc {
+  font-size: 0.75rem;
+  color: var(--text-dim);
+  margin-bottom: 0.25rem;
+}
+.matrix-card-slots {
+  font-size: 0.68rem;
+  color: var(--text-dim);
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+}
+
+.panel-divider {
+  height: 1px;
+  background: var(--border);
+  margin: 0.75rem 0;
+}
+
+/* ─── Matrix block states ────────────────────────────────────────────────── */
+.matrix-locked .matrix-header {
+  opacity: 0.8;
+}
+.matrix-lock-icon {
+  font-size: 0.85rem;
+  margin-left: auto;
+  opacity: 0.5;
+}
+
+.matrix-remove-btn {
+  margin-left: auto;
+  background: none;
+  border: 1px solid var(--red-dim);
+  color: var(--red);
+  border-radius: 4px;
+  padding: 0.1rem 0.4rem;
+  font-size: 0.8rem;
+  cursor: pointer;
+  line-height: 1.4;
+  transition: var(--transition);
+  flex-shrink: 0;
+}
+.matrix-remove-btn:hover { background: rgba(224,85,85,0.15); }
+.matrix-remove-btn.disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+/* ─── Board drag-over state ──────────────────────────────────────────────── */
+.board-drag-over {
+  outline: 2px dashed var(--gold-dim);
+  outline-offset: 4px;
+  border-radius: var(--radius);
+}
+
+/* ─── Empty board hint ───────────────────────────────────────────────────── */
+.matrices-empty-hint {
+  color: var(--text-dim);
+  font-size: 0.875rem;
+  font-style: italic;
+  padding: 1.5rem 1rem;
+  text-align: center;
+  border: 2px dashed var(--border);
+  border-radius: var(--radius-lg);
+}

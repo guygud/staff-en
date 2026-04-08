@@ -80,15 +80,18 @@ function renderBriefing() {
 
 // ─── Screen: Assembly ─────────────────────────────────────────────────────────
 
-let selectedSpellId = null; // for click-to-place
+let selectedSpellId = null;   // for click-to-place
+let selectedMatrixId = null;  // instanceId of a matrix card selected for click-to-install
 
 function renderAssembly() {
   show('screen-assembly');
   selectedSpellId = null;
+  selectedMatrixId = null;
 
   renderSidebar();
   renderHUD();
   renderMatrices();
+  renderMatrixPanel();
   renderSpellPanel();
 
   qs('#btn-launch').onclick = () => {
@@ -183,21 +186,73 @@ function renderHUD() {
 }
 
 function renderMatrices() {
-  const level = engine.currentLevel;
   const container = qs('#assembly-matrices');
   container.innerHTML = '';
 
-  for (const matInst of level.availableMatrices) {
+  // Make the board a drop target for matrix cards
+  container.ondragover = e => {
+    if (e.dataTransfer.types.includes('matrixinstanceid')) {
+      e.preventDefault();
+      container.classList.add('board-drag-over');
+    }
+  };
+  container.ondragleave = () => container.classList.remove('board-drag-over');
+  container.ondrop = e => {
+    container.classList.remove('board-drag-over');
+    const instanceId = e.dataTransfer.getData('matrixInstanceId');
+    if (instanceId) {
+      e.preventDefault();
+      engine.installMatrix(instanceId);
+      refreshAssembly();
+    }
+  };
+
+  // Show empty-board hint on L3 when nothing is installed yet
+  const board = engine.boardMatrices();
+  if (board.length === 0) {
+    const hint = el('div', 'matrices-empty-hint');
+    hint.textContent = 'Выбери матрицы из панели справа и установи их на доску.';
+    container.appendChild(hint);
+    return;
+  }
+
+  for (const matInst of board) {
     const matDef = engine.matrixById(matInst.matrixId);
     if (!matDef) continue;
 
-    const block = el('div', 'matrix-block');
+    const isLocked = matInst.preInstalled !== false;
+    const block = el('div', `matrix-block${isLocked ? ' matrix-locked' : ''}`);
     block.dataset.matrixId = matInst.instanceId;
 
     const header = el('div', 'matrix-header');
+
+    // Remove button — only for optional, installed, empty matrices
+    let removeBtnHtml = '';
+    if (!isLocked) {
+      const hasSpells = matInst.slots.some(s => engine.state.placements[s.slotId]);
+      removeBtnHtml = `<button class="matrix-remove-btn${hasSpells ? ' disabled' : ''}"
+        data-instance="${matInst.instanceId}"
+        title="${hasSpells ? 'Сначала убери заклинания' : 'Убрать матрицу'}">×</button>`;
+    } else {
+      removeBtnHtml = `<span class="matrix-lock-icon" title="Предустановлено">🔒</span>`;
+    }
+
     header.innerHTML = `<span class="matrix-icon">${matDef.icon}</span>
       <span class="matrix-name">${matDef.name}</span>
-      <span class="matrix-desc">${matDef.description}</span>`;
+      <span class="matrix-desc">${matDef.description}</span>
+      ${removeBtnHtml}`;
+
+    if (!isLocked) {
+      const btn = header.querySelector('.matrix-remove-btn');
+      if (btn && !btn.classList.contains('disabled')) {
+        btn.onclick = e => {
+          e.stopPropagation();
+          engine.uninstallMatrix(matInst.instanceId);
+          refreshAssembly();
+        };
+      }
+    }
+
     block.appendChild(header);
 
     const slotsRow = el('div', 'matrix-slots');
@@ -206,6 +261,66 @@ function renderMatrices() {
     }
     block.appendChild(slotsRow);
     container.appendChild(block);
+  }
+}
+
+function renderMatrixPanel() {
+  const toInstall = engine.availableToInstall();
+  const panel = qs('#assembly-matrix-panel');
+
+  if (!panel) return;
+
+  if (toInstall.length === 0) {
+    panel.style.display = 'none';
+    return;
+  }
+
+  panel.style.display = '';
+  const list = qs('#assembly-matrix-cards');
+  list.innerHTML = '';
+
+  for (const matInst of toInstall) {
+    const matDef = engine.matrixById(matInst.matrixId);
+    if (!matDef) continue;
+
+    const isSelected = selectedMatrixId === matInst.instanceId;
+    const card = el('div', `matrix-card${isSelected ? ' matrix-card-selected' : ''}`);
+    card.dataset.instanceId = matInst.instanceId;
+    card.draggable = true;
+
+    card.innerHTML = `
+      <div class="matrix-card-header">
+        <span class="matrix-card-icon">${matDef.icon}</span>
+        <span class="matrix-card-name">${matDef.name}</span>
+        <span class="matrix-card-cost">⚗ ${matInst.installCostGold ?? 0}</span>
+      </div>
+      <div class="matrix-card-desc">${matDef.description}</div>
+      <div class="matrix-card-slots">${matInst.slots.map(s => slotTypeLabel(s.slotType)).join(' · ')}</div>
+    `;
+
+    card.addEventListener('dragstart', e => {
+      e.dataTransfer.setData('matrixInstanceId', matInst.instanceId);
+      card.classList.add('matrix-card-dragging');
+    });
+    card.addEventListener('dragend', () => {
+      card.classList.remove('matrix-card-dragging');
+    });
+
+    card.onclick = () => {
+      if (selectedMatrixId === matInst.instanceId) {
+        selectedMatrixId = null;
+      } else {
+        selectedSpellId = null;
+        selectedMatrixId = matInst.instanceId;
+        engine.installMatrix(matInst.instanceId);
+        selectedMatrixId = null;
+        refreshAssembly();
+        return;
+      }
+      renderMatrixPanel();
+    };
+
+    list.appendChild(card);
   }
 }
 

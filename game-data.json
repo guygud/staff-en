@@ -682,6 +682,133 @@
         "Access-логи без контроля роста переполнят хранилище — обязательно к критичным.",
         "Без TLS и DNS требования клиента не выполнены — это не обсуждается."
       ]
+    },
+
+    {
+      "id": "L3_NEW_CASTLE",
+      "name": "Новый Замок с нуля",
+      "order": 4,
+      "description": "Торговый Союз трёх королевств заказал полную инфраструктуру для своей новой цитадели. Ничего нет — ни матриц, ни заклинаний. Ты выбираешь всё сам. Бюджет ограничен, требования жёсткие: связность, безопасность, наблюдаемость и воспроизводимая доставка.",
+      "clientName": "Торговый Союз трёх королевств",
+      "budgetGold": 25,
+      "riskLimit": 7,
+      "criticalStatuses": ["F3_COMPROMISE", "F5_FRAGILITY", "F4_BLINDNESS", "F6_NONDELIVERY"],
+
+      "requirements": [
+        {
+          "id": "REQ_TLS",
+          "type": "CAPABILITY_REQUIRED",
+          "capabilityId": "HAS_TLS",
+          "label": "Шифрование соединений (TLS)"
+        },
+        {
+          "id": "REQ_AUTHZ",
+          "type": "CAPABILITY_REQUIRED",
+          "capabilityId": "HAS_AUTHZ",
+          "label": "Контроль доступа — только своим"
+        },
+        {
+          "id": "REQ_FAILOVER",
+          "type": "CAPABILITY_REQUIRED",
+          "capabilityId": "HAS_FAILOVER",
+          "label": "Failover при отказе узла"
+        },
+        {
+          "id": "REQ_OBSERVABILITY",
+          "type": "CAPABILITY_REQUIRED",
+          "capabilityId": "HAS_LOGS",
+          "label": "Наблюдаемость — журналы событий"
+        },
+        {
+          "id": "REQ_DELIVERY",
+          "type": "CAPABILITY_REQUIRED",
+          "capabilityId": "HAS_CICD",
+          "label": "Воспроизводимая доставка изменений"
+        }
+      ],
+
+      "availableMatrices": [
+        {
+          "matrixId": "M_CONNECTIVITY",
+          "instanceId": "net3",
+          "installCostGold": 2,
+          "preInstalled": false,
+          "slots": [
+            { "slotId": "net3_auth",  "slotType": "NET_AUTH" },
+            { "slotId": "net3_tls",   "slotType": "NET_TLS" },
+            { "slotId": "net3_disc1", "slotType": "NET_DISCOVERY" },
+            { "slotId": "net3_disc2", "slotType": "NET_DISCOVERY" }
+          ]
+        },
+        {
+          "matrixId": "M_OBSERVATION",
+          "instanceId": "obs3",
+          "installCostGold": 2,
+          "preInstalled": false,
+          "slots": [
+            { "slotId": "obs3_logs",    "slotType": "OBS_LOGS" },
+            { "slotId": "obs3_filters", "slotType": "OBS_FILTERS" },
+            { "slotId": "obs3_alerts",  "slotType": "OBS_ALERTS" }
+          ]
+        },
+        {
+          "matrixId": "M_STORAGE",
+          "instanceId": "st3",
+          "installCostGold": 2,
+          "preInstalled": false,
+          "slots": [
+            { "slotId": "st3_ret",   "slotType": "ST_RETENTION" },
+            { "slotId": "st3_quota", "slotType": "ST_QUOTA" }
+          ]
+        },
+        {
+          "matrixId": "M_DELIVERY",
+          "instanceId": "cd3",
+          "installCostGold": 3,
+          "preInstalled": false,
+          "slots": [
+            { "slotId": "cd3_pipe", "slotType": "CD_PIPELINE" },
+            { "slotId": "cd3_gate", "slotType": "CD_GATES" },
+            { "slotId": "cd3_rb",   "slotType": "CD_ROLLBACK" }
+          ]
+        }
+      ],
+
+      "defaultInstalled": [],
+
+      "availableSpells": [
+        "S_AUTHZ",
+        "S_TLS_CERT",
+        "S_DNS",
+        "S_DISCOVERY",
+        "S_HEALTHCHECK",
+        "S_LOGGING",
+        "S_ACCESS_LOGS",
+        "S_LOG_FILTER",
+        "S_ALERTING",
+        "S_TTL",
+        "S_ROTATION",
+        "S_QUOTAS",
+        "S_CICD",
+        "S_ROLLBACK",
+        "S_MR_GATES"
+      ],
+
+      "nonCriticalDebtRisk": 2,
+
+      "successReports": [
+        "Замок возведён с нуля и стоит крепко. Торговый Союз impressed: всё работает, всё видно, всё доставляется воспроизводимо. Слава мастеру!",
+        "Три королевства объединились под одной крышей — и ты это сделал. Доступ закрыт, TLS держит, CI/CD гонит, наблюдатели не спят.",
+        "С пустого места — к рабочей цитадели. Именно так думают настоящие инженеры. Торговый Союз подписал долгосрочный договор."
+      ],
+
+      "hints": [
+        "Матрицы стоят золота — устанавливай только те, которые нужны для выполнения требований.",
+        "Матрица Копирования дорогая, но без неё нет воспроизводимой доставки — это критично.",
+        "Матрица Связей обязательна: без неё нет ни TLS, ни контроля доступа, ни failover.",
+        "Если устанавливаешь Матрицу Взгляда — позаботься об управлении ростом журналов.",
+        "Delivery pipeline без rollback — это F5: одна ошибка и всё рухнет."
+      ]
     }
   ]
 }
