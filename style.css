@@ -317,6 +317,15 @@ ul { list-style: none; }
   font-size: 0.75rem;
 }
 
+.hud-group-label {
+  font-size: 0.65rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text-dim);
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
 #hud-critical {
   display: flex;
   gap: 0.25rem;

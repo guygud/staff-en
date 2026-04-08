@@ -314,9 +314,8 @@ export class Engine {
 
   retry() {
     this.state.phase = 'ASSEMBLY';
-    this.state.placements = {};
-    this.state.installedMatrixIds = [];
     this.state.lastResult = null;
+    // placements and installedMatrixIds are intentionally kept
   }
 
   nextLevel() {
