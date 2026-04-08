@@ -831,6 +831,53 @@ ul { list-style: none; }
   margin-top: 0.5rem;
 }
 
+/* ─── Dev Nav ────────────────────────────────────────────────────────────── */
+#dev-nav {
+  position: fixed;
+  bottom: 12px;
+  right: 14px;
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  background: rgba(13,13,26,0.88);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  padding: 4px 8px;
+  backdrop-filter: blur(4px);
+}
+
+.dev-nav-label {
+  font-size: 0.6rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--text-dim);
+  margin-right: 2px;
+}
+
+.dev-nav-btn {
+  background: var(--bg-raised);
+  border: 1px solid var(--border);
+  color: var(--text-dim);
+  border-radius: 50%;
+  width: 22px;
+  height: 22px;
+  font-size: 0.72rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: var(--transition);
+  padding: 0;
+}
+.dev-nav-btn:hover { border-color: var(--gold-dim); color: var(--gold); }
+.dev-nav-btn.dev-nav-active {
+  background: var(--gold-dim);
+  border-color: var(--gold);
+  color: #1a1200;
+  font-weight: bold;
+}
+
 /* ─── Matrix Panel (optional matrices as cards) ──────────────────────────── */
 .matrix-panel-title {
   font-family: var(--font-main);

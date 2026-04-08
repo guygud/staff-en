@@ -8,10 +8,39 @@ import { Engine } from './engine.js';
 const engine = new Engine();
 
 engine.init().then(() => {
+  renderDevNav();
   renderPhase();
 }).catch(err => {
   document.body.innerHTML = `<div class="fatal-error">Ошибка загрузки данных: ${err.message}</div>`;
 });
+
+function renderDevNav() {
+  const container = qs('#dev-nav-levels');
+  if (!container) return;
+  container.innerHTML = '';
+  engine.data.levelCatalog.forEach((lvl, idx) => {
+    const btn = el('button', 'dev-nav-btn');
+    btn.textContent = `${lvl.order}`;
+    btn.title = lvl.name;
+    btn.onclick = () => {
+      engine.state.currentLevelIndex = idx;
+      engine.state.placements = {};
+      engine.state.installedMatrixIds = [];
+      engine.state.lastResult = null;
+      engine.state.phase = 'BRIEFING';
+      updateDevNav();
+      renderPhase();
+    };
+    container.appendChild(btn);
+  });
+  updateDevNav();
+}
+
+function updateDevNav() {
+  qsAll('.dev-nav-btn').forEach((btn, idx) => {
+    btn.classList.toggle('dev-nav-active', idx === engine.state.currentLevelIndex);
+  });
+}
 
 // ─── Phase dispatcher ─────────────────────────────────────────────────────────
 
@@ -20,6 +49,7 @@ function renderPhase() {
   hide('screen-briefing');
   hide('screen-assembly');
   hide('screen-result');
+  updateDevNav();
 
   if (phase === 'BRIEFING') renderBriefing();
   else if (phase === 'ASSEMBLY') renderAssembly();
