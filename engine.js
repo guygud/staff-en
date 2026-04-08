@@ -148,8 +148,8 @@ export class Engine {
     let riskTotal = spells.reduce((sum, sp) => sum + (sp.riskDelta ?? 0), 0);
     riskTotal += nonCriticalStatuses.length * (level.nonCriticalDebtRisk ?? 2);
 
-    // 8. Gold
-    const goldSpent = spells.reduce((sum, sp) => sum + (sp.costGold ?? 0), 0)
+    // 8. Gold (goldDelta on a spell reduces the total, e.g. AI buff rebate)
+    const goldSpent = spells.reduce((sum, sp) => sum + (sp.costGold ?? 0) + (sp.goldDelta ?? 0), 0)
       + (level.availableMatrices ?? []).reduce((sum, m) => sum + (m.installCostGold ?? 0), 0);
 
     // 9. Missing requirements

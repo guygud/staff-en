@@ -108,6 +108,19 @@
       "resolvesDebts": []
     },
     {
+      "id": "S_AI_BUFF",
+      "name": "Печать Прогресса",
+      "description": "Астрологи провозгласили неделю ИИ. Скажи князю, что в замке стоит ИИ — и он вернёт 3 золота. Но обещание без основания — это риск.",
+      "allowedSlotTypes": ["OBS_FILTERS"],
+      "costGold": 1,
+      "goldDelta": -3,
+      "riskDelta": 3,
+      "unique": true,
+      "effects": [{ "type": "CAPABILITY", "id": "HAS_AI_BUFF" }],
+      "addsDebts": [],
+      "resolvesDebts": []
+    },
+    {
       "id": "S_LOGGING",
       "name": "Перо Летописца",
       "description": "Записывает события системы в журнал",
@@ -161,7 +174,7 @@
       "description": "Автоматически истекает старые записи по времени",
       "allowedSlotTypes": ["ST_RETENTION"],
       "costGold": 2,
-      "riskDelta": 0,
+      "riskDelta": 2,
       "unique": true,
       "effects": [{ "type": "CAPABILITY", "id": "HAS_TTL" }],
       "addsDebts": [],
@@ -402,8 +415,8 @@
       "order": 1,
       "description": "Из амбара мельника Проспера пропадает мука. Магический замок уже стоит — он пускает только работников мельницы. Но кто именно входил и когда — неизвестно. Нужно добавить журнал доступа, чтобы найти виновного.",
       "clientName": "Мельник Проспер",
-      "budgetGold": 7,
-      "riskLimit": 3,
+      "budgetGold": 4,
+      "riskLimit": 5,
       "criticalStatuses": ["F1_OVERFLOW", "F4_BLINDNESS"],
 
       "requirements": [
@@ -421,7 +434,8 @@
           "instanceId": "obs0",
           "installCostGold": 0,
           "slots": [
-            { "slotId": "obs0_logs", "slotType": "OBS_LOGS" }
+            { "slotId": "obs0_logs",    "slotType": "OBS_LOGS" },
+            { "slotId": "obs0_filters", "slotType": "OBS_FILTERS" }
           ]
         },
         {
@@ -445,7 +459,8 @@
         "S_BROAD_LOGGING",
         "S_ACCESS_LOGS",
         "S_TTL",
-        "S_ROTATION"
+        "S_ROTATION",
+        "S_AI_BUFF"
       ],
 
       "nonCriticalDebtRisk": 2,
