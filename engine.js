@@ -69,10 +69,14 @@ export class Engine {
 
   /** Install an optional matrix onto the board. */
   installMatrix(instanceId) {
+    const level = this.currentLevel;
     const matrix = this.optionalMatrices().find(m => m.instanceId === instanceId);
     if (!matrix) return { ok: false, reason: 'Матрица не найдена или уже установлена.' };
     if (this.state.installedMatrixIds.includes(instanceId))
       return { ok: false, reason: 'Матрица уже на доске.' };
+    const limit = level.maxOptionalMatrices ?? Infinity;
+    if (this.state.installedMatrixIds.length >= limit)
+      return { ok: false, reason: `На этом уровне можно установить не более ${limit} матриц.` };
     this.state.installedMatrixIds = [...this.state.installedMatrixIds, instanceId];
     return { ok: true };
   }
