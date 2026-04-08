@@ -183,6 +183,30 @@
       "resolvesDebts": []
     },
     {
+      "id": "S_GUARD_TO_BAR",
+      "name": "Стражника в бар",
+      "description": "Стража становится сговорчивее. Меньше сопротивления изменениям — меньше операционных рисков.",
+      "allowedSlotTypes": ["NET_ROUTING"],
+      "costGold": 2,
+      "riskDelta": -2,
+      "unique": true,
+      "effects": [{ "type": "CAPABILITY", "id": "HAS_GUARD_MORALE" }],
+      "addsDebts": [],
+      "resolvesDebts": []
+    },
+    {
+      "id": "S_CANARY",
+      "name": "Канарейка в шахте",
+      "description": "Раннее предупреждение о проблемах. Дёшево, эффективно, незаметно.",
+      "allowedSlotTypes": ["OBS_FILTERS"],
+      "costGold": 1,
+      "riskDelta": -1,
+      "unique": true,
+      "effects": [{ "type": "CAPABILITY", "id": "HAS_CANARY" }],
+      "addsDebts": [],
+      "resolvesDebts": []
+    },
+    {
       "id": "S_LOGGING",
       "name": "Перо Летописца",
       "description": "Записывает события системы в журнал",
@@ -640,9 +664,143 @@
     },
 
     {
+      "id": "L2_GATEWAY_PASS",
+      "name": "Врата для посланников",
+      "order": 3,
+      "description": "На Карванном перевале стоит сторожевая башня. Посланники жалуются: то не достучаться, то утекли письма, то никто не знает, кто приходил. Нужна единая точка входа с базовой устойчивостью и следами. Матриц можно поставить только две — выбирай с умом.",
+      "clientName": "Смотритель Башни",
+      "budgetGold": 18,
+      "riskLimit": 4,
+      "maxOptionalMatrices": 2,
+      "criticalStatuses": ["F3_COMPROMISE", "F5_FRAGILITY", "F4_BLINDNESS"],
+
+      "requirements": [
+        {
+          "id": "REQ_TLS",
+          "type": "CAPABILITY_REQUIRED",
+          "capabilityId": "HAS_TLS",
+          "label": "Шифрование писем (TLS)"
+        },
+        {
+          "id": "REQ_AUTHZ",
+          "type": "CAPABILITY_REQUIRED",
+          "capabilityId": "HAS_AUTHZ",
+          "label": "Контроль доступа — только своим посланникам"
+        },
+        {
+          "id": "REQ_DISCOVERY",
+          "type": "CAPABILITY_REQUIRED",
+          "capabilityId": "HAS_DISCOVERY",
+          "label": "Обнаружение узлов (service discovery)"
+        },
+        {
+          "id": "REQ_FAILOVER",
+          "type": "CAPABILITY_REQUIRED",
+          "capabilityId": "HAS_FAILOVER",
+          "label": "Живучесть при отказе узла"
+        },
+        {
+          "id": "REQ_AUDIT",
+          "type": "CAPABILITY_REQUIRED",
+          "capabilityId": "HAS_ACCESS_LOGS",
+          "label": "Журнал — кто и когда входил в башню"
+        }
+      ],
+
+      "availableMatrices": [
+        {
+          "matrixId": "M_CONNECTIVITY",
+          "instanceId": "net_pass",
+          "installCostGold": 2,
+          "preInstalled": false,
+          "slots": [
+            { "slotId": "pass_auth",   "slotType": "NET_AUTH" },
+            { "slotId": "pass_tls",    "slotType": "NET_TLS" },
+            { "slotId": "pass_disc1",  "slotType": "NET_DISCOVERY" },
+            { "slotId": "pass_disc2",  "slotType": "NET_DISCOVERY" },
+            { "slotId": "pass_route",  "slotType": "NET_ROUTING" }
+          ]
+        },
+        {
+          "matrixId": "M_OBSERVATION",
+          "instanceId": "obs_pass",
+          "installCostGold": 2,
+          "preInstalled": false,
+          "slots": [
+            { "slotId": "pass_logs",    "slotType": "OBS_LOGS" },
+            { "slotId": "pass_filters", "slotType": "OBS_FILTERS" }
+          ]
+        },
+        {
+          "matrixId": "M_STORAGE",
+          "instanceId": "st_pass",
+          "installCostGold": 2,
+          "preInstalled": false,
+          "slots": [
+            { "slotId": "pass_ret",   "slotType": "ST_RETENTION" },
+            { "slotId": "pass_quota", "slotType": "ST_QUOTA" }
+          ]
+        },
+        {
+          "matrixId": "M_DELIVERY",
+          "instanceId": "cd_pass",
+          "installCostGold": 2,
+          "preInstalled": false,
+          "slots": [
+            { "slotId": "pass_pipe", "slotType": "CD_PIPELINE" },
+            { "slotId": "pass_rb",   "slotType": "CD_ROLLBACK" }
+          ]
+        }
+      ],
+
+      "defaultInstalled": [
+        {
+          "note": "Башня работает, но никто не ведёт записей о посетителях.",
+          "grantsCapabilities": [],
+          "addsDebts": [
+            { "id": "D_AUDIT_NEEDED", "statusIfUnresolved": "F4_BLINDNESS" }
+          ]
+        }
+      ],
+
+      "availableSpells": [
+        "S_TLS_CERT",
+        "S_AUTHZ",
+        "S_DISCOVERY",
+        "S_HEALTHCHECK",
+        "S_ACCESS_LOGS",
+        "S_BROAD_LOGGING",
+        "S_LOG_FILTER",
+        "S_CANARY",
+        "S_NET_JOURNAL",
+        "S_GUARD_TO_BAR",
+        "S_TTL",
+        "S_QUOTAS",
+        "S_CICD",
+        "S_ROLLBACK"
+      ],
+
+      "nonCriticalDebtRisk": 2,
+
+      "successReports": [
+        "Башня стоит! Посланники проходят по правилам, письма не текут, журнал не врёт. Смотритель доволен.",
+        "Выбор матриц оказался верным. Связи держат, следы ведутся. Перевал снова в порядке.",
+        "Минимальный контур — но рабочий. Посланники довольны, Смотритель рекомендует мастера соседним башням."
+      ],
+
+      "hints": [
+        "Только 2 матрицы. Матрица Связей закрывает TLS, доступ и живучесть — без неё не выжить.",
+        "Аудит можно наладить двумя способами: через Взгляд (Книга Доступа) или через Связи (Сетевой Журнал в слоте маршрутов).",
+        "Матрица Копирования — ловушка: она не даёт ни безопасности, ни следов, ни живучести.",
+        "Discovery без Healthcheck — хрупкость: мёртвые узлы будут получать трафик.",
+        "Рост логов некритичен для этого заказчика. На сетевом пути бюджет не позволяет взять TTL — это осознанный техдолг."
+      ]
+    },
+
+    {
       "id": "L2_LBAAS_FAIR_GATE",
       "name": "Служба Врат для ярмарки",
-      "order": 3,
+      "order": 4,
       "description": "Ярмарочный союз требует единую точку входа для сотни сервисов: домен, TLS, обнаружение узлов, failover при падении одного «града» (ДЦ), и аудит доступа. Всё должно держаться при любой нагрузке.",
       "clientName": "Ярмарочный Союз",
       "budgetGold": 16,
@@ -761,7 +919,7 @@
     {
       "id": "L3_NEW_CASTLE",
       "name": "Новый Замок с нуля",
-      "order": 4,
+      "order": 5,
       "description": "Торговый Союз трёх королевств заказал полную инфраструктуру для своей новой цитадели. Ничего нет — ни матриц, ни заклинаний. Ты выбираешь всё сам. Бюджет ограничен, требования жёсткие: связность, безопасность, наблюдаемость и воспроизводимая доставка.",
       "clientName": "Торговый Союз трёх королевств",
       "budgetGold": 25,
