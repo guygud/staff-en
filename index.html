@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="TechnoMage Platform — браузерная игра-прототип о системном дизайне в фэнтези-сеттинге." />
+  <title>TechnoMage Platform</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════════════════════════════
+     SCREEN 1 — BRIEFING
+════════════════════════════════════════════════════════════════ -->
+<div id="screen-briefing" class="screen">
+  <p id="briefing-level-num" class="level-badge"></p>
+  <h1 id="briefing-level-name"></h1>
+  <p id="briefing-client" class="briefing-client"></p>
+
+  <p id="briefing-description" class="briefing-description"></p>
+
+  <p class="section-title">Требования заказчика</p>
+  <ul id="briefing-requirements"></ul>
+
+  <div class="briefing-resources">
+    <div class="resource-pill">Бюджет: <span id="briefing-budget"></span></div>
+    <div class="resource-pill">Риск: <span id="briefing-risk"></span></div>
+  </div>
+
+  <div class="kp-section">
+    <p class="kp-title">⚔ Князь не простит</p>
+    <div id="briefing-critical"></div>
+  </div>
+
+  <div class="hint-box">
+    <div id="briefing-hints"></div>
+  </div>
+
+  <button id="btn-start-assembly" class="btn btn-primary">Приступить к сборке →</button>
+</div>
+
+
+<!-- ═══════════════════════════════════════════════════════════════
+     SCREEN 2 — ASSEMBLY
+════════════════════════════════════════════════════════════════ -->
+<div id="screen-assembly" style="display:none">
+
+  <!-- Sticky HUD -->
+  <div class="hud">
+    <span id="hud-level-name" class="hud-level-name"></span>
+    <span id="hud-gold" class="hud-resource"></span>
+    <span id="hud-risk" class="hud-resource"></span>
+    <span class="hud-divider">|</span>
+    <div id="hud-statuses"></div>
+    <span class="hud-divider">|</span>
+    <span class="hud-kp-label">☠</span>
+    <div id="hud-critical"></div>
+  </div>
+
+  <!-- Main area -->
+  <div class="assembly-body">
+
+    <!-- Left: Matrices -->
+    <div>
+      <div id="assembly-matrices"></div>
+      <div class="launch-area">
+        <button id="btn-launch" class="btn btn-launch">⚡ Запуск в прод — Отдать клиенту</button>
+      </div>
+    </div>
+
+    <!-- Right: Spell panel -->
+    <div class="spell-panel">
+      <p class="spell-panel-title">Доступные заклинания</p>
+      <div id="assembly-spells"></div>
+    </div>
+
+  </div>
+</div>
+
+
+<!-- ═══════════════════════════════════════════════════════════════
+     SCREEN 3 — RESULT
+════════════════════════════════════════════════════════════════ -->
+<div id="screen-result" class="screen" style="display:none">
+
+  <div id="result-banner" class="result-banner">
+    <h1 id="result-title"></h1>
+  </div>
+
+  <!-- Success block -->
+  <div id="result-success-block">
+    <p id="result-client-report" class="result-client-text"></p>
+    <p id="result-success-stats" class="result-stats"></p>
+  </div>
+
+  <!-- Fail block -->
+  <div id="result-fail-block" class="fail-report">
+
+    <!-- Block 1: Requirements -->
+    <div id="result-req-block" class="fail-block">
+      <p class="fail-block-title">◆ Не выполнены требования</p>
+      <ul id="result-req-list" class="fail-list"></ul>
+    </div>
+
+    <!-- Block 2: Statuses -->
+    <div id="result-status-block" class="fail-block">
+      <p class="fail-block-title">⚠ Статусы (долги и конфликты)</p>
+      <ul id="result-status-list" class="fail-list"></ul>
+    </div>
+
+    <!-- Block 3: Resources -->
+    <div id="result-res-block" class="fail-block">
+      <p class="fail-block-title">⚗ Ресурсы</p>
+      <ul id="result-res-list" class="fail-list"></ul>
+    </div>
+
+  </div>
+
+  <!-- Actions -->
+  <div class="result-actions">
+    <button id="btn-retry" class="btn btn-secondary">↩ Пересобрать</button>
+    <button id="btn-next-level" class="btn btn-primary">Следующий уровень →</button>
+  </div>
+
+  <div id="result-all-done" class="result-all-done" style="display:none">
+    ✦ Все уровни пройдены. Ты настоящий Техно-Маг. ✦
+  </div>
+
+</div>
+
+<script type="module" src="ui.js"></script>
+
+<!-- Wire up launch button after module loads -->
+<script type="module">
+  // The btn-launch is in a non-module context for simplicity,
+  // but we need it wired — handled inside ui.js below.
+</script>
+
+</body>
+</html>

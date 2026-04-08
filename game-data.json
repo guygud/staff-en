@@ -1,0 +1,592 @@
+{
+  "version": "0.1",
+  "meta": {
+    "title": "TechnoMage Platform (MVP)",
+    "runMode": "alwaysProd",
+    "resources": ["gold", "risk"]
+  },
+
+  "statusCatalog": [
+    {
+      "id": "F1_OVERFLOW",
+      "name": "Переполнение",
+      "icon": "⚗️",
+      "reportHints": [
+        "Архив распух и треснул по швам — чернила затопили хранилище.",
+        "Бесконтрольный рост данных сломал хранилище изнутри."
+      ]
+    },
+    {
+      "id": "F2_CONTRADICTION",
+      "name": "Противоречие",
+      "icon": "⚡",
+      "reportHints": [
+        "Руны спорят и гасят друг друга — печати конфликтуют.",
+        "Несовместимые заклинания наложены одновременно, магия рассыпалась."
+      ]
+    },
+    {
+      "id": "F3_COMPROMISE",
+      "name": "Компрометация",
+      "icon": "🔓",
+      "reportHints": [
+        "Калитка без стражи — любой мог пройти незамеченным.",
+        "Печать подделана: защита есть лишь на бумаге."
+      ]
+    },
+    {
+      "id": "F4_BLINDNESS",
+      "name": "Слепота",
+      "icon": "🙈",
+      "reportHints": [
+        "Зеркало потускнело — следов не осталось, наблюдатель спит.",
+        "Никто не знал, что происходило внутри — и когда всё рухнуло, было поздно."
+      ]
+    },
+    {
+      "id": "F5_FRAGILITY",
+      "name": "Хрупкость",
+      "icon": "🕸️",
+      "reportHints": [
+        "Мост держался на одной опоре — и она рухнула.",
+        "Стоило одному узлу захромать, и вся конструкция посыпалась."
+      ]
+    },
+    {
+      "id": "F6_NONDELIVERY",
+      "name": "Недоставка",
+      "icon": "🌀",
+      "reportHints": [
+        "Ритуал доставки каждый раз получался по‑разному — воспроизвести нельзя.",
+        "Без обряда повторяемости прод не принимает изменения."
+      ]
+    }
+  ],
+
+  "matrixCatalog": [
+    {
+      "id": "M_OBSERVATION",
+      "name": "Матрица Взгляда",
+      "description": "Наблюдаемость: логи, трейсы, алерты",
+      "icon": "👁️",
+      "slotTypes": ["OBS_LOGS", "OBS_FILTERS", "OBS_ALERTS", "OBS_TRACING"]
+    },
+    {
+      "id": "M_STORAGE",
+      "name": "Матрица Хранения",
+      "description": "Хранение, TTL, ротация, квоты, индексы",
+      "icon": "📦",
+      "slotTypes": ["ST_RETENTION", "ST_INDEX", "ST_QUOTA", "ST_SECRETS"]
+    },
+    {
+      "id": "M_CONNECTIVITY",
+      "name": "Матрица Связей",
+      "description": "API, доступ, маршрутизация, DNS, TLS",
+      "icon": "🕸",
+      "slotTypes": ["NET_AUTH", "NET_ROUTING", "NET_DISCOVERY", "NET_DNS", "NET_TLS"]
+    },
+    {
+      "id": "M_DELIVERY",
+      "name": "Матрица Копирования",
+      "description": "CI/CD, деплой, откат, тесты",
+      "icon": "⚙️",
+      "slotTypes": ["CD_PIPELINE", "CD_GATES", "CD_ROLLBACK", "CD_TESTING"]
+    }
+  ],
+
+  "spellCatalog": [
+    {
+      "id": "S_LOGGING",
+      "name": "Перо Летописца",
+      "description": "Записывает события системы в журнал",
+      "allowedSlotTypes": ["OBS_LOGS"],
+      "costGold": 2,
+      "riskDelta": 1,
+      "unique": true,
+      "effects": [{ "type": "CAPABILITY", "id": "HAS_LOGS" }],
+      "addsDebts": [{ "id": "D_LOG_VOLUME", "statusIfUnresolved": "F1_OVERFLOW" }],
+      "resolvesDebts": []
+    },
+    {
+      "id": "S_LOG_FILTER",
+      "name": "Сито Смыслов",
+      "description": "Фильтрует и очищает поток логов",
+      "allowedSlotTypes": ["OBS_FILTERS"],
+      "costGold": 2,
+      "riskDelta": 0,
+      "unique": true,
+      "effects": [{ "type": "CAPABILITY", "id": "HAS_LOG_FILTERING" }],
+      "addsDebts": [],
+      "resolvesDebts": ["D_LOG_VOLUME"]
+    },
+    {
+      "id": "S_ACCESS_LOGS",
+      "name": "Книга Доступа",
+      "description": "Ведёт аудитный журнал всех входов и обращений",
+      "allowedSlotTypes": ["OBS_LOGS"],
+      "costGold": 3,
+      "riskDelta": 1,
+      "unique": true,
+      "effects": [{ "type": "CAPABILITY", "id": "HAS_ACCESS_LOGS" }],
+      "addsDebts": [{ "id": "D_ACCESS_LOG_VOLUME", "statusIfUnresolved": "F1_OVERFLOW" }],
+      "resolvesDebts": []
+    },
+    {
+      "id": "S_ALERTING",
+      "name": "Набат Тревоги",
+      "description": "Оповещает о сбоях в реальном времени",
+      "allowedSlotTypes": ["OBS_ALERTS"],
+      "costGold": 2,
+      "riskDelta": 1,
+      "unique": true,
+      "effects": [{ "type": "CAPABILITY", "id": "HAS_ALERTING" }],
+      "addsDebts": [],
+      "resolvesDebts": []
+    },
+    {
+      "id": "S_TTL",
+      "name": "Песочные Часы",
+      "description": "Автоматически истекает старые записи по времени",
+      "allowedSlotTypes": ["ST_RETENTION"],
+      "costGold": 2,
+      "riskDelta": 0,
+      "unique": true,
+      "effects": [{ "type": "CAPABILITY", "id": "HAS_TTL" }],
+      "addsDebts": [],
+      "resolvesDebts": ["D_LOG_VOLUME", "D_ACCESS_LOG_VOLUME", "D_CACHE_GROWTH", "D_INDEX_GROWTH"]
+    },
+    {
+      "id": "S_ROTATION",
+      "name": "Метла Кладовщика",
+      "description": "Периодически очищает и ротирует хранилище",
+      "allowedSlotTypes": ["ST_RETENTION"],
+      "costGold": 2,
+      "riskDelta": 0,
+      "unique": true,
+      "effects": [{ "type": "CAPABILITY", "id": "HAS_ROTATION" }],
+      "addsDebts": [],
+      "resolvesDebts": ["D_LOG_VOLUME", "D_ACCESS_LOG_VOLUME"]
+    },
+    {
+      "id": "S_QUOTAS",
+      "name": "Предел Закромов",
+      "description": "Устанавливает жёсткие квоты на объём хранения",
+      "allowedSlotTypes": ["ST_QUOTA"],
+      "costGold": 2,
+      "riskDelta": 1,
+      "unique": true,
+      "effects": [{ "type": "CAPABILITY", "id": "HAS_QUOTAS" }],
+      "addsDebts": [],
+      "resolvesDebts": ["D_LOG_VOLUME", "D_ACCESS_LOG_VOLUME", "D_CACHE_GROWTH", "D_INDEX_GROWTH"]
+    },
+    {
+      "id": "S_INDEX",
+      "name": "Клеймо Поиска",
+      "description": "Индексирует данные для быстрого поиска",
+      "allowedSlotTypes": ["ST_INDEX"],
+      "costGold": 2,
+      "riskDelta": 1,
+      "unique": true,
+      "effects": [{ "type": "CAPABILITY", "id": "HAS_INDEX" }],
+      "addsDebts": [{ "id": "D_INDEX_GROWTH", "statusIfUnresolved": "F1_OVERFLOW" }],
+      "resolvesDebts": []
+    },
+    {
+      "id": "S_SECRETS",
+      "name": "Сейф Тайнописи",
+      "description": "Шифрует и защищает секреты в хранилище",
+      "allowedSlotTypes": ["ST_SECRETS"],
+      "costGold": 3,
+      "riskDelta": 0,
+      "unique": true,
+      "effects": [{ "type": "CAPABILITY", "id": "HAS_STORAGE_SECRETS" }],
+      "addsDebts": [],
+      "resolvesDebts": []
+    },
+    {
+      "id": "S_AUTHZ",
+      "name": "Страж Порогов",
+      "description": "Контролирует доступ — только своим",
+      "allowedSlotTypes": ["NET_AUTH"],
+      "costGold": 3,
+      "riskDelta": 0,
+      "unique": true,
+      "effects": [{ "type": "CAPABILITY", "id": "HAS_AUTHZ" }],
+      "addsDebts": [],
+      "resolvesDebts": []
+    },
+    {
+      "id": "S_DNS",
+      "name": "Глашатай Домена",
+      "description": "Регистрирует доменное имя для службы",
+      "allowedSlotTypes": ["NET_DNS"],
+      "costGold": 2,
+      "riskDelta": 0,
+      "unique": true,
+      "effects": [{ "type": "CAPABILITY", "id": "HAS_DNS" }],
+      "addsDebts": [],
+      "resolvesDebts": []
+    },
+    {
+      "id": "S_TLS_CERT",
+      "name": "Печать Серта",
+      "description": "Выдаёт TLS-сертификат, шифрует трафик",
+      "allowedSlotTypes": ["NET_TLS"],
+      "costGold": 2,
+      "riskDelta": 0,
+      "unique": true,
+      "effects": [{ "type": "CAPABILITY", "id": "HAS_TLS" }],
+      "addsDebts": [],
+      "resolvesDebts": []
+    },
+    {
+      "id": "S_DISCOVERY",
+      "name": "Зов Разведчика",
+      "description": "Обнаруживает доступные эндпоинты сервисов",
+      "allowedSlotTypes": ["NET_DISCOVERY"],
+      "costGold": 2,
+      "riskDelta": 1,
+      "unique": true,
+      "effects": [{ "type": "CAPABILITY", "id": "HAS_DISCOVERY" }],
+      "addsDebts": [{ "id": "D_NEEDS_HEALTHCHECK", "statusIfUnresolved": "F5_FRAGILITY" }],
+      "resolvesDebts": []
+    },
+    {
+      "id": "S_HEALTHCHECK",
+      "name": "Сердцебиение",
+      "description": "Проверяет живость узлов, обеспечивает failover",
+      "allowedSlotTypes": ["NET_DISCOVERY"],
+      "costGold": 2,
+      "riskDelta": 0,
+      "unique": true,
+      "effects": [
+        { "type": "CAPABILITY", "id": "HAS_HEALTHCHECK" },
+        { "type": "CAPABILITY", "id": "HAS_FAILOVER" }
+      ],
+      "addsDebts": [],
+      "resolvesDebts": ["D_NEEDS_HEALTHCHECK"]
+    },
+    {
+      "id": "S_TRAFFIC_SPLIT",
+      "name": "Весы Потоков",
+      "description": "Распределяет трафик по весам между эндпоинтами",
+      "allowedSlotTypes": ["NET_ROUTING"],
+      "costGold": 2,
+      "riskDelta": 1,
+      "unique": true,
+      "effects": [{ "type": "CAPABILITY", "id": "HAS_TRAFFIC_SPLIT" }],
+      "addsDebts": [],
+      "resolvesDebts": []
+    },
+    {
+      "id": "S_HASH_ROUTING",
+      "name": "Якорь Сессии",
+      "description": "Привязывает сессию к одному эндпоинту (sticky routing)",
+      "allowedSlotTypes": ["NET_ROUTING"],
+      "costGold": 2,
+      "riskDelta": 1,
+      "unique": true,
+      "effects": [{ "type": "CAPABILITY", "id": "HAS_HASH_ROUTING" }],
+      "addsDebts": [],
+      "resolvesDebts": []
+    },
+    {
+      "id": "S_POLICY_RESOLVER",
+      "name": "Арбитр Печатей",
+      "description": "Согласует конфликтующие политики маршрутизации",
+      "allowedSlotTypes": ["NET_ROUTING"],
+      "costGold": 3,
+      "riskDelta": 0,
+      "unique": true,
+      "effects": [{ "type": "CAPABILITY", "id": "HAS_POLICY_RESOLVER" }],
+      "addsDebts": [],
+      "resolvesDebts": []
+    },
+    {
+      "id": "S_CICD",
+      "name": "Ритуал Доставки",
+      "description": "Автоматизирует доставку изменений в прод",
+      "allowedSlotTypes": ["CD_PIPELINE"],
+      "costGold": 2,
+      "riskDelta": 1,
+      "unique": true,
+      "effects": [{ "type": "CAPABILITY", "id": "HAS_CICD" }],
+      "addsDebts": [{ "id": "D_NEEDS_ROLLBACK", "statusIfUnresolved": "F5_FRAGILITY" }],
+      "resolvesDebts": []
+    },
+    {
+      "id": "S_ROLLBACK",
+      "name": "Ключ Отката",
+      "description": "Позволяет вернуться к предыдущей версии",
+      "allowedSlotTypes": ["CD_ROLLBACK"],
+      "costGold": 2,
+      "riskDelta": 0,
+      "unique": true,
+      "effects": [{ "type": "CAPABILITY", "id": "HAS_ROLLBACK" }],
+      "addsDebts": [],
+      "resolvesDebts": ["D_NEEDS_ROLLBACK"]
+    },
+    {
+      "id": "S_MR_GATES",
+      "name": "Страж Врат MR",
+      "description": "Запрещает деплой без проверенного MR",
+      "allowedSlotTypes": ["CD_GATES"],
+      "costGold": 2,
+      "riskDelta": 0,
+      "unique": true,
+      "effects": [{ "type": "CAPABILITY", "id": "HAS_MR_GATES" }],
+      "addsDebts": [],
+      "resolvesDebts": []
+    }
+  ],
+
+  "conflictPairs": [
+    {
+      "id": "CP_ROUTING_CONFLICT",
+      "spells": ["S_TRAFFIC_SPLIT", "S_HASH_ROUTING"],
+      "statusIfUnresolved": "F2_CONTRADICTION",
+      "resolvedBy": ["S_POLICY_RESOLVER"],
+      "description": "Весовое и sticky-распределение несовместимы без арбитра"
+    }
+  ],
+
+  "reportTemplates": {
+    "F1_OVERFLOW": {
+      "title": "Переполнение",
+      "failText": "Архив распух и треснул по швам — чернила затопили хранилище.",
+      "advice": "Установи TTL, ротацию или квоты, чтобы сдержать рост данных."
+    },
+    "F2_CONTRADICTION": {
+      "title": "Противоречие",
+      "failText": "Руны спорят и гасят друг друга — несовместимые печати конфликтуют.",
+      "advice": "Убери одно из конфликтующих заклинаний или добавь Арбитра Печатей."
+    },
+    "F3_COMPROMISE": {
+      "title": "Компрометация",
+      "failText": "Калитка без стражи — любой мог пройти незамеченным.",
+      "advice": "Убедись, что доступ огорожен: AuthZ, TLS и шифрование должны быть на месте."
+    },
+    "F4_BLINDNESS": {
+      "title": "Слепота",
+      "failText": "Зеркало потускнело — следов не осталось, наблюдатель спит.",
+      "advice": "Добавь логирование или трейсинг туда, где это требуется."
+    },
+    "F5_FRAGILITY": {
+      "title": "Хрупкость",
+      "failText": "Мост держался на одной опоре — и она рухнула.",
+      "advice": "Добавь проверки живости и возможность отката, чтобы система выдержала сбой."
+    },
+    "F6_NONDELIVERY": {
+      "title": "Недоставка",
+      "failText": "Ритуал доставки каждый раз выходит по‑разному — воспроизвести нельзя.",
+      "advice": "Настрой воспроизводимый контур доставки с откатом и гейтами."
+    }
+  },
+
+  "levelCatalog": [
+    {
+      "id": "L1_CACHE_FOR_SHOPS",
+      "name": "Шепчущий кэш для лавочников",
+      "order": 1,
+      "description": "Гильдия торговцев просит надёжный кэш, совместимый с Красным Кристаллом (Redis). Доступ — только своим. Данные не должны переполнить хранилище.",
+      "clientName": "Гильдия Лавочников",
+      "budgetGold": 10,
+      "riskLimit": 5,
+      "criticalStatuses": ["F1_OVERFLOW", "F3_COMPROMISE"],
+
+      "requirements": [
+        {
+          "id": "REQ_REDIS_COMPAT",
+          "type": "CAPABILITY_REQUIRED",
+          "capabilityId": "HAS_CACHE_REDIS",
+          "label": "Кэш, совместимый с Redis (Красным Кристаллом)"
+        },
+        {
+          "id": "REQ_ACCESS_CONTROL",
+          "type": "CAPABILITY_REQUIRED",
+          "capabilityId": "HAS_AUTHZ",
+          "label": "Контроль доступа — только своим"
+        }
+      ],
+
+      "availableMatrices": [
+        {
+          "matrixId": "M_STORAGE",
+          "instanceId": "st1",
+          "installCostGold": 0,
+          "slots": [
+            { "slotId": "st1_ret", "slotType": "ST_RETENTION" },
+            { "slotId": "st1_quota", "slotType": "ST_QUOTA" }
+          ]
+        },
+        {
+          "matrixId": "M_CONNECTIVITY",
+          "instanceId": "net1",
+          "installCostGold": 0,
+          "slots": [
+            { "slotId": "net1_auth", "slotType": "NET_AUTH" }
+          ]
+        },
+        {
+          "matrixId": "M_OBSERVATION",
+          "instanceId": "obs1",
+          "installCostGold": 0,
+          "slots": [
+            { "slotId": "obs1_logs", "slotType": "OBS_LOGS" },
+            { "slotId": "obs1_filters", "slotType": "OBS_FILTERS" }
+          ]
+        }
+      ],
+
+      "defaultInstalled": [
+        {
+          "note": "Базовый Redis-совместимый кэш уже развёрнут — без обвеса.",
+          "grantsCapabilities": ["HAS_CACHE_REDIS"]
+        }
+      ],
+
+      "availableSpells": [
+        "S_AUTHZ",
+        "S_LOGGING",
+        "S_LOG_FILTER",
+        "S_ACCESS_LOGS",
+        "S_TTL",
+        "S_ROTATION",
+        "S_QUOTAS"
+      ],
+
+      "nonCriticalDebtRisk": 2,
+
+      "successReports": [
+        "Мудрый решил правильно! Кэш работает быстро, чужие не проходят, архив не пухнет. Гильдия довольна.",
+        "Лавочники поют хвалу — товары находятся мгновенно, а чужой взгляд отражён стражей. Хорошая работа, мастер.",
+        "Красный Кристалл засиял в полную силу. Торговля оживилась. Гильдия обещает новые заказы."
+      ],
+
+      "hints": [
+        "Логи без контроля роста переполнят хранилище — поставь TTL или ротацию.",
+        "Без Стража Порогов любой может добраться до кэша — это недопустимо.",
+        "Если бюджет поджимает — квоты дешевле TTL, но добавляют риск."
+      ]
+    },
+
+    {
+      "id": "L2_LBAAS_FAIR_GATE",
+      "name": "Служба Врат для ярмарки",
+      "order": 2,
+      "description": "Ярмарочный союз требует единую точку входа для сотни сервисов: домен, TLS, обнаружение узлов, failover при падении одного «града» (ДЦ), и аудит доступа. Всё должно держаться при любой нагрузке.",
+      "clientName": "Ярмарочный Союз",
+      "budgetGold": 16,
+      "riskLimit": 6,
+      "criticalStatuses": ["F3_COMPROMISE", "F5_FRAGILITY", "F1_OVERFLOW"],
+
+      "requirements": [
+        {
+          "id": "REQ_DNS",
+          "type": "CAPABILITY_REQUIRED",
+          "capabilityId": "HAS_DNS",
+          "label": "Доменное имя (DNS)"
+        },
+        {
+          "id": "REQ_TLS",
+          "type": "CAPABILITY_REQUIRED",
+          "capabilityId": "HAS_TLS",
+          "label": "Шифрование соединений (TLS)"
+        },
+        {
+          "id": "REQ_DISCOVERY",
+          "type": "CAPABILITY_REQUIRED",
+          "capabilityId": "HAS_DISCOVERY",
+          "label": "Обнаружение сервисов (service discovery)"
+        },
+        {
+          "id": "REQ_FAILOVER",
+          "type": "CAPABILITY_REQUIRED",
+          "capabilityId": "HAS_FAILOVER",
+          "label": "Failover при отказе узла"
+        },
+        {
+          "id": "REQ_ACCESS_LOGS",
+          "type": "CAPABILITY_REQUIRED",
+          "capabilityId": "HAS_ACCESS_LOGS",
+          "label": "Аудитный журнал доступа"
+        }
+      ],
+
+      "availableMatrices": [
+        {
+          "matrixId": "M_CONNECTIVITY",
+          "instanceId": "net1",
+          "installCostGold": 0,
+          "slots": [
+            { "slotId": "net1_dns", "slotType": "NET_DNS" },
+            { "slotId": "net1_tls", "slotType": "NET_TLS" },
+            { "slotId": "net1_disc1", "slotType": "NET_DISCOVERY" },
+            { "slotId": "net1_disc2", "slotType": "NET_DISCOVERY" }
+          ]
+        },
+        {
+          "matrixId": "M_OBSERVATION",
+          "instanceId": "obs1",
+          "installCostGold": 0,
+          "slots": [
+            { "slotId": "obs1_logs1", "slotType": "OBS_LOGS" },
+            { "slotId": "obs1_logs2", "slotType": "OBS_LOGS" },
+            { "slotId": "obs1_filters", "slotType": "OBS_FILTERS" }
+          ]
+        },
+        {
+          "matrixId": "M_STORAGE",
+          "instanceId": "st1",
+          "installCostGold": 0,
+          "slots": [
+            { "slotId": "st1_ret", "slotType": "ST_RETENTION" },
+            { "slotId": "st1_quota", "slotType": "ST_QUOTA" }
+          ]
+        },
+        {
+          "matrixId": "M_DELIVERY",
+          "instanceId": "cd1",
+          "installCostGold": 0,
+          "slots": [
+            { "slotId": "cd1_pipe", "slotType": "CD_PIPELINE" },
+            { "slotId": "cd1_gate", "slotType": "CD_GATES" },
+            { "slotId": "cd1_rb", "slotType": "CD_ROLLBACK" }
+          ]
+        }
+      ],
+
+      "defaultInstalled": [],
+
+      "availableSpells": [
+        "S_DNS",
+        "S_TLS_CERT",
+        "S_DISCOVERY",
+        "S_HEALTHCHECK",
+        "S_ACCESS_LOGS",
+        "S_LOGGING",
+        "S_LOG_FILTER",
+        "S_TTL",
+        "S_ROTATION",
+        "S_QUOTAS",
+        "S_CICD",
+        "S_ROLLBACK",
+        "S_MR_GATES"
+      ],
+
+      "nonCriticalDebtRisk": 2,
+
+      "successReports": [
+        "Врата стоят! Домен найден, TLS держит, узлы мониторятся, аудит пишется. Ярмарочный Союз снимает шляпу.",
+        "Ни один купец не потерялся, ни один злоумышленник не прошёл. Врата выдержали ярмарочный поток. Отличная работа!",
+        "Союз рекомендует тебя всем гильдиям. Служба работает как часы — и мы знаем об этом, потому что журналы в порядке."
+      ],
+
+      "hints": [
+        "Service discovery без healthcheck — это хрупкость: мёртвые узлы будут получать трафик.",
+        "Access-логи без контроля роста переполнят хранилище — обязательно к критичным.",
+        "Без TLS и DNS требования клиента не выполнены — это не обсуждается."
+      ]
+    }
+  ]
+}
