@@ -86,6 +86,7 @@ function renderAssembly() {
   show('screen-assembly');
   selectedSpellId = null;
 
+  renderSidebar();
   renderHUD();
   renderMatrices();
   renderSpellPanel();
@@ -94,6 +95,44 @@ function renderAssembly() {
     engine.evaluate();
     renderPhase();
   };
+}
+
+function renderSidebar() {
+  const level = engine.currentLevel;
+
+  qs('#sidebar-level-num').textContent = `Уровень ${level.order}`;
+  qs('#sidebar-level-name').textContent = level.name;
+  qs('#sidebar-client').textContent = level.clientName;
+  qs('#sidebar-description').textContent = level.description;
+
+  // Requirements
+  const reqList = qs('#sidebar-requirements');
+  reqList.innerHTML = '';
+  for (const req of level.requirements) {
+    const li = el('li', 'sidebar-req-item');
+    li.innerHTML = `<span class="req-icon">◆</span> ${req.label}`;
+    reqList.appendChild(li);
+  }
+
+  // Critical statuses
+  const kpContainer = qs('#sidebar-critical');
+  kpContainer.innerHTML = '';
+  for (const statusId of level.criticalStatuses) {
+    const status = engine.statusById(statusId);
+    if (!status) continue;
+    const badge = el('div', 'sidebar-critical-badge');
+    badge.innerHTML = `<span>${status.icon}</span><span>${status.name}</span>`;
+    kpContainer.appendChild(badge);
+  }
+
+  // Hints
+  const hintBox = qs('#sidebar-hints');
+  hintBox.innerHTML = '';
+  for (const hint of level.hints ?? []) {
+    const p = el('p', 'sidebar-hint-line');
+    p.textContent = `💡 ${hint}`;
+    hintBox.appendChild(p);
+  }
 }
 
 function renderHUD() {

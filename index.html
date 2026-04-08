@@ -60,7 +60,27 @@
   <!-- Main area -->
   <div class="assembly-body">
 
-    <!-- Left: Matrices -->
+    <!-- Left: Task sidebar (always visible) -->
+    <div class="task-sidebar">
+      <div id="sidebar-level-num" class="sidebar-level-num"></div>
+      <div id="sidebar-level-name" class="sidebar-level-name"></div>
+      <div id="sidebar-client" class="sidebar-client"></div>
+      <p id="sidebar-description" class="sidebar-description"></p>
+
+      <p class="sidebar-section-title">Требования</p>
+      <ul id="sidebar-requirements" class="sidebar-requirements"></ul>
+
+      <div class="sidebar-kp">
+        <p class="sidebar-kp-title">⚔ Князь не простит</p>
+        <div id="sidebar-critical"></div>
+      </div>
+
+      <div class="sidebar-hints">
+        <div id="sidebar-hints"></div>
+      </div>
+    </div>
+
+    <!-- Center: Matrices -->
     <div>
       <div id="assembly-matrices"></div>
       <div class="launch-area">
