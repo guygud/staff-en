@@ -162,8 +162,13 @@ export class Engine {
       }
     }
 
-    // 2. Debts — from spells
+    // 2. Debts — from defaultInstalled (tech debt left by previous mage) + from spells
     const debtMap = new Map(); // debtId -> debt object
+    for (const inst of level.defaultInstalled ?? []) {
+      for (const d of inst.addsDebts ?? []) {
+        debtMap.set(d.id, d);
+      }
+    }
     for (const sp of spells) {
       for (const d of sp.addsDebts ?? []) {
         debtMap.set(d.id, d);

@@ -108,6 +108,19 @@
       "resolvesDebts": []
     },
     {
+      "id": "S_PATRON_SEAL",
+      "name": "Печать Мецената",
+      "description": "Академия доплачивает за наблюдаемость системы. Но обещание без порядка — это риск.",
+      "allowedSlotTypes": ["OBS_FILTERS"],
+      "costGold": 1,
+      "goldDelta": -3,
+      "riskDelta": 2,
+      "unique": true,
+      "effects": [{ "type": "CAPABILITY", "id": "HAS_PATRON_SEAL" }],
+      "addsDebts": [],
+      "resolvesDebts": []
+    },
+    {
       "id": "S_AI_BUFF",
       "name": "Печать Прогресса",
       "description": "Астрологи провозгласили неделю ИИ. Скажи князю, что в замке стоит ИИ — и он вернёт 3 золота. Но обещание без основания — это риск.",
@@ -154,7 +167,7 @@
       "unique": true,
       "effects": [{ "type": "CAPABILITY", "id": "HAS_ACCESS_LOGS" }],
       "addsDebts": [{ "id": "D_ACCESS_LOG_VOLUME", "statusIfUnresolved": "F1_OVERFLOW" }],
-      "resolvesDebts": []
+      "resolvesDebts": ["D_AUDIT_NEEDED"]
     },
     {
       "id": "S_ALERTING",
@@ -238,7 +251,7 @@
       "unique": true,
       "effects": [{ "type": "CAPABILITY", "id": "HAS_AUTHZ" }],
       "addsDebts": [],
-      "resolvesDebts": []
+      "resolvesDebts": ["D_OPEN_ACCESS"]
     },
     {
       "id": "S_DNS",
@@ -480,27 +493,33 @@
     },
 
     {
-      "id": "L1_CACHE_FOR_SHOPS",
-      "name": "Шепчущий кэш для лавочников",
+      "id": "L1_LIBRARY_ORBS",
+      "name": "Шар Поиска Фолиантов",
       "order": 2,
-      "description": "Гильдия торговцев просит надёжный кэш, совместимый с Красным Кристаллом (Redis). Доступ — только своим. Данные не должны переполнить хранилище.",
-      "clientName": "Гильдия Лавочников",
-      "budgetGold": 10,
-      "riskLimit": 5,
-      "criticalStatuses": ["F1_OVERFLOW", "F3_COMPROMISE"],
+      "description": "Библиотекарь Мирослава жалуется: шар поиска всегда показывает одну и ту же книгу — «Общий каталог хранилища». Предыдущий маг оставил неуправляемый индекс и открытый доступ к редким рукописям. Исправь это.",
+      "clientName": "Библиотекарь Мирослава",
+      "budgetGold": 14,
+      "riskLimit": 7,
+      "criticalStatuses": ["F1_OVERFLOW", "F3_COMPROMISE", "F4_BLINDNESS"],
 
       "requirements": [
         {
-          "id": "REQ_REDIS_COMPAT",
+          "id": "REQ_INDEX",
           "type": "CAPABILITY_REQUIRED",
-          "capabilityId": "HAS_CACHE_REDIS",
-          "label": "Кэш, совместимый с Redis (Красным Кристаллом)"
+          "capabilityId": "HAS_INDEX",
+          "label": "Настоящий поиск по индексу (не первая книга в списке)"
         },
         {
-          "id": "REQ_ACCESS_CONTROL",
+          "id": "REQ_AUTHZ",
           "type": "CAPABILITY_REQUIRED",
           "capabilityId": "HAS_AUTHZ",
-          "label": "Контроль доступа — только своим"
+          "label": "Контроль доступа к редким рукописям"
+        },
+        {
+          "id": "REQ_AUDIT",
+          "type": "CAPABILITY_REQUIRED",
+          "capabilityId": "HAS_ACCESS_LOGS",
+          "label": "Аудит — кто и что искал в хранилище"
         }
       ],
 
@@ -509,25 +528,31 @@
           "matrixId": "M_STORAGE",
           "instanceId": "st1",
           "installCostGold": 0,
+          "preInstalled": true,
           "slots": [
-            { "slotId": "st1_ret", "slotType": "ST_RETENTION" },
+            { "slotId": "st1_idx",   "slotType": "ST_INDEX" },
+            { "slotId": "st1_ret",   "slotType": "ST_RETENTION" },
             { "slotId": "st1_quota", "slotType": "ST_QUOTA" }
           ]
         },
         {
           "matrixId": "M_CONNECTIVITY",
           "instanceId": "net1",
-          "installCostGold": 0,
+          "installCostGold": 2,
+          "preInstalled": false,
           "slots": [
-            { "slotId": "net1_auth", "slotType": "NET_AUTH" }
+            { "slotId": "net1_auth",   "slotType": "NET_AUTH" },
+            { "slotId": "net1_route1", "slotType": "NET_ROUTING" },
+            { "slotId": "net1_route2", "slotType": "NET_ROUTING" }
           ]
         },
         {
           "matrixId": "M_OBSERVATION",
           "instanceId": "obs1",
-          "installCostGold": 0,
+          "installCostGold": 2,
+          "preInstalled": false,
           "slots": [
-            { "slotId": "obs1_logs", "slotType": "OBS_LOGS" },
+            { "slotId": "obs1_logs",    "slotType": "OBS_LOGS" },
             { "slotId": "obs1_filters", "slotType": "OBS_FILTERS" }
           ]
         }
@@ -535,33 +560,44 @@
 
       "defaultInstalled": [
         {
-          "note": "Базовый Redis-совместимый кэш уже развёрнут — без обвеса.",
-          "grantsCapabilities": ["HAS_CACHE_REDIS"]
+          "note": "Предыдущий маг оставил неуправляемый индекс и незакрытый аудит редких фолиантов.",
+          "grantsCapabilities": ["HAS_SEARCH_INPUT"],
+          "addsDebts": [
+            { "id": "D_INDEX_GROWTH",  "statusIfUnresolved": "F1_OVERFLOW" },
+            { "id": "D_AUDIT_NEEDED",  "statusIfUnresolved": "F4_BLINDNESS" },
+            { "id": "D_OPEN_ACCESS",   "statusIfUnresolved": "F3_COMPROMISE" }
+          ]
         }
       ],
 
       "availableSpells": [
-        "S_AUTHZ",
-        "S_LOGGING",
-        "S_LOG_FILTER",
-        "S_ACCESS_LOGS",
+        "S_INDEX",
         "S_TTL",
-        "S_ROTATION",
-        "S_QUOTAS"
+        "S_QUOTAS",
+        "S_AUTHZ",
+        "S_ACCESS_LOGS",
+        "S_LOG_FILTER",
+        "S_PATRON_SEAL",
+        "S_TRAFFIC_SPLIT",
+        "S_HASH_ROUTING",
+        "S_POLICY_RESOLVER"
       ],
 
       "nonCriticalDebtRisk": 2,
 
       "successReports": [
-        "Мудрый решил правильно! Кэш работает быстро, чужие не проходят, архив не пухнет. Гильдия довольна.",
-        "Лавочники поют хвалу — товары находятся мгновенно, а чужой взгляд отражён стражей. Хорошая работа, мастер.",
-        "Красный Кристалл засиял в полную силу. Торговля оживилась. Гильдия обещает новые заказы."
+        "Шар засиял! Мирослава в восторге: поиск работает, чужие не проходят, аудит ведётся. Редкие фолианты в безопасности.",
+        "Теперь по шару можно найти любую книгу — и увидеть, кто её искал. Библиотека благодарит мастера.",
+        "Индекс чёткий, доступ закрытый, аудит работает. Академия уже просит поставить такой же шар в их хранилище."
       ],
 
       "hints": [
-        "Логи без контроля роста переполнят хранилище — поставь TTL или ротацию.",
-        "Без Стража Порогов любой может добраться до кэша — это недопустимо.",
-        "Если бюджет поджимает — квоты дешевле TTL, но добавляют риск."
+        "Шар всегда показывает одну книгу — в нём нет индекса. Клеймо Поиска закроет этот пробел.",
+        "Предыдущий маг оставил два долга с первого же хода — посмотри на статусы до того, как что-либо ставить.",
+        "Обе матрицы нужны: без Связей нет доступа, без Взгляда нет аудита. Бюджет потребует выбора.",
+        "Книга Доступа создаёт долг роста. Один заговор может закрыть сразу оба долга — индекса и логов.",
+        "Академия платит за наблюдаемость — Печать Мецената освобождает золото. Но она занимает слот фильтров.",
+        "Весы Потоков и Якорь Сессии вместе конфликтуют. Выбери один — или поставь Арбитра."
       ]
     },
 
