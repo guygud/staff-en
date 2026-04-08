@@ -622,11 +622,28 @@ ul { list-style: none; }
   margin-top: 0.2rem;
 }
 
+/* ─── Matrices center column ─────────────────────────────────────────────── */
+.matrices-col {
+  position: sticky;
+  top: 56px;
+  max-height: calc(100vh - 72px);
+  overflow-y: auto;
+  padding-bottom: 0.5rem;
+}
+.matrices-col::-webkit-scrollbar { width: 4px; }
+.matrices-col::-webkit-scrollbar-track { background: transparent; }
+.matrices-col::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+
 /* ─── Spell Panel ────────────────────────────────────────────────────────── */
 .spell-panel {
   position: sticky;
   top: 56px;
+  max-height: calc(100vh - 72px);
+  overflow-y: auto;
 }
+.spell-panel::-webkit-scrollbar { width: 4px; }
+.spell-panel::-webkit-scrollbar-track { background: transparent; }
+.spell-panel::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
 
 .spell-panel-title {
   font-family: var(--font-main);
@@ -642,8 +659,6 @@ ul { list-style: none; }
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
-  max-height: calc(100vh - 160px);
-  overflow-y: auto;
   padding-right: 4px;
 }
 
