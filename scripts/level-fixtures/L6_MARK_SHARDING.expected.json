@@ -1,0 +1,64 @@
+{
+  "levelId": "L6_MARK_SHARDING",
+  "scenarios": [
+    {
+      "name": "Путь A — LOG_FILTER (классическая фильтрация)",
+      "placements": {
+        "l6_disc1":   "S_DISCOVERY",
+        "l6_disc2":   "S_HEALTHCHECK",
+        "l6_route1":  "S_HASH_ROUTING",
+        "l6_logs":    "S_LOGGING",
+        "l6_filters": "S_LOG_FILTER",
+        "l6_pipe":    "S_CICD",
+        "l6_rb":      "S_ROLLBACK"
+      },
+      "installedMatrixIds": [],
+      "expected": {
+        "outcome": "pass",
+        "missingRequirements": [],
+        "fatalStatuses": [],
+        "coinsSpentRange": [14, 14],
+        "auraTotalRange":  [4, 4]
+      }
+    },
+    {
+      "name": "Путь B — Субсидия (M_STORAGE + R_LIBRARY_GRANT + R_GUARD_TO_BAR)",
+      "placements": {
+        "l6_disc1":   "S_DISCOVERY",
+        "l6_disc2":   "S_HEALTHCHECK",
+        "l6_route1":  "S_HASH_ROUTING",
+        "l6_logs":    "S_LOGGING",
+        "l6_quota":   "S_QUOTAS",
+        "l6_pipe":    "S_CICD",
+        "l6_rb":      "S_ROLLBACK",
+        "l6_st_rit":  "R_LIBRARY_GRANT",
+        "l6_net_rit": "R_GUARD_TO_BAR"
+      },
+      "installedMatrixIds": ["st_l6"],
+      "expected": {
+        "outcome": "pass",
+        "missingRequirements": [],
+        "fatalStatuses": [],
+        "coinsSpentRange": [14, 14],
+        "auraTotalRange":  [3, 3]
+      }
+    },
+    {
+      "name": "Ловушка — DISCOVERY без HEALTHCHECK (F5_FRAGILITY)",
+      "placements": {
+        "l6_disc1":   "S_DISCOVERY",
+        "l6_route1":  "S_HASH_ROUTING",
+        "l6_logs":    "S_LOGGING",
+        "l6_filters": "S_LOG_FILTER",
+        "l6_pipe":    "S_CICD",
+        "l6_rb":      "S_ROLLBACK"
+      },
+      "installedMatrixIds": [],
+      "expected": {
+        "outcome": "fail",
+        "fatalStatuses": ["F5_FRAGILITY"],
+        "missingRequirementsContains": ["REQ_FAILOVER"]
+      }
+    }
+  ]
+}

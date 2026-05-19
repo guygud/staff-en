@@ -1,0 +1,71 @@
+{
+  "levelId": "L1_MILLER_BARN",
+  "scenarios": [
+    {
+      "name": "Путь A — Книга Доступа + Метла + Печать Прогресса",
+      "placements": {
+        "obs0_logs":   "S_ACCESS_LOGS",
+        "st0_ret":     "S_ROTATION",
+        "obs0_ritual": "R_AI_BUFF"
+      },
+      "installedMatrixIds": [],
+      "expected": {
+        "outcome": "pass",
+        "missingRequirements": [],
+        "fatalStatuses": [],
+        "coinsSpentRange": [3, 3],
+        "auraTotalRange":  [4, 4]
+      }
+    },
+    {
+      "name": "Ловушка 1 — Перо Всевидящего (путаница)",
+      "placements": {
+        "obs0_logs": "S_BROAD_LOGGING"
+      },
+      "installedMatrixIds": [],
+      "expected": {
+        "outcome": "fail",
+        "fatalStatuses": ["F7_CONFUSION"],
+        "missingRequirementsContains": ["REQ_AUDIT"]
+      }
+    },
+    {
+      "name": "Ловушка 2 — Книга Доступа без самоочистки",
+      "placements": {
+        "obs0_logs":   "S_ACCESS_LOGS",
+        "obs0_ritual": "R_AI_BUFF"
+      },
+      "installedMatrixIds": [],
+      "expected": {
+        "outcome": "fail",
+        "fatalStatuses": ["F1_OVERFLOW"],
+        "missingRequirements": []
+      }
+    },
+    {
+      "name": "Ловушка 3 — Книга + Метла без обряда (бюджет превышен)",
+      "placements": {
+        "obs0_logs": "S_ACCESS_LOGS",
+        "st0_ret":   "S_ROTATION"
+      },
+      "installedMatrixIds": [],
+      "expected": {
+        "outcome": "fail",
+        "fatalStatuses": []
+      }
+    },
+    {
+      "name": "Ловушка 4 — R_AI_BUFF + Песочные Часы (аура превышена)",
+      "placements": {
+        "obs0_logs":   "S_ACCESS_LOGS",
+        "st0_ret":     "S_TTL",
+        "obs0_ritual": "R_AI_BUFF"
+      },
+      "installedMatrixIds": [],
+      "expected": {
+        "outcome": "fail",
+        "fatalStatuses": []
+      }
+    }
+  ]
+}

@@ -1,0 +1,83 @@
+{
+  "levelId": "L7_EDWARD_MULTIDC",
+  "scenarios": [
+    {
+      "name": "Путь A — Классический Multi-DC (без обрядов)",
+      "placements": {
+        "l7_auth": "S_AUTHZ",
+        "l7_tls": "S_TLS_CERT",
+        "l7_disc1": "S_DISCOVERY",
+        "l7_disc2": "S_HEALTHCHECK",
+        "l7_logs": "S_LOGGING",
+        "l7_quota": "S_QUOTAS",
+        "l7_pipe": "S_CICD",
+        "l7_rb": "S_ROLLBACK"
+      },
+      "installedMatrixIds": [],
+      "expected": {
+        "outcome": "pass",
+        "missingRequirements": [],
+        "fatalStatuses": [],
+        "coinsSpentRange": [
+          18,
+          18
+        ],
+        "auraTotalRange": [
+          4,
+          4
+        ]
+      }
+    },
+    {
+      "name": "Путь B — Multi-DC с Кнарейкой и LOG_FILTER",
+      "placements": {
+        "l7_auth": "S_AUTHZ",
+        "l7_tls": "S_TLS_CERT",
+        "l7_disc1": "S_DISCOVERY",
+        "l7_disc2": "S_HEALTHCHECK",
+        "l7_logs": "S_LOGGING",
+        "l7_filters": "S_LOG_FILTER",
+        "l7_quota": "S_QUOTAS",
+        "l7_pipe": "S_CICD",
+        "l7_rb": "S_ROLLBACK",
+        "l7_obs_rit": "R_CANARY"
+      },
+      "installedMatrixIds": [],
+      "expected": {
+        "outcome": "pass",
+        "missingRequirements": [],
+        "fatalStatuses": [],
+        "coinsSpentRange": [
+          21,
+          21
+        ],
+        "auraTotalRange": [
+          3,
+          3
+        ]
+      }
+    },
+    {
+      "name": "Ловушка — Нет квот (F1_OVERFLOW)",
+      "placements": {
+        "l7_auth": "S_AUTHZ",
+        "l7_tls": "S_TLS_CERT",
+        "l7_disc1": "S_DISCOVERY",
+        "l7_disc2": "S_HEALTHCHECK",
+        "l7_logs": "S_LOGGING",
+        "l7_pipe": "S_CICD",
+        "l7_rb": "S_ROLLBACK"
+      },
+      "installedMatrixIds": [],
+      "expected": {
+        "outcome": "fail",
+        "fatalStatuses": [
+          "F1_OVERFLOW"
+        ],
+        "missingRequirementsContains": [
+          "REQ_QUOTA"
+        ]
+      }
+    }
+  ]
+}

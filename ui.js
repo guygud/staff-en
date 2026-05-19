@@ -8,6 +8,7 @@ import { Engine } from './engine.js';
 const engine = new Engine();
 
 engine.init().then(() => {
+  debtStatusMap = buildDebtStatusMap();
   renderDevNav();
   renderPhase();
 }).catch(err => {
@@ -78,19 +79,23 @@ function renderBriefing() {
   }
 
   // Budget & risk
-  qs('#briefing-budget').textContent = `${level.budgetGold} ⚗ золота`;
-  qs('#briefing-risk').textContent = `до ${level.riskLimit} ☠ риска`;
+  qs('#briefing-budget').textContent = `${level.coinsBudget} ⚗ монет`;
+  qs('#briefing-risk').textContent = `до ${level.auraLimit} ☠ ауры`;
 
-  // "Князь не простит"
-  const kpContainer = qs('#briefing-critical');
-  kpContainer.innerHTML = '';
-  for (const statusId of level.criticalStatuses) {
-    const status = engine.statusById(statusId);
-    if (!status) continue;
-    const badge = el('div', 'critical-badge');
-    badge.setAttribute('title', status.name);
-    badge.innerHTML = `<span class="status-icon">${status.icon}</span><span class="status-label">${status.name}</span>`;
-    kpContainer.appendChild(badge);
+  // Стартовые дебафы (из defaultInstalled.addsDebts)
+  const debuffsContainer = qs('#briefing-debuffs');
+  debuffsContainer.innerHTML = '';
+  const inheritedDebts = (level.defaultInstalled ?? []).flatMap(d => d.addsDebts ?? []);
+  if (inheritedDebts.length === 0) {
+    debuffsContainer.innerHTML = '<span class="no-debuffs">нет</span>';
+  } else {
+    for (const debt of inheritedDebts) {
+      const status = engine.statusById(debt.statusIfUnresolved);
+      const badge = el('div', 'critical-badge');
+      badge.setAttribute('title', status ? status.name : debt.statusIfUnresolved);
+      badge.innerHTML = `<span class="status-icon">${status ? status.icon : '⚠'}</span><span class="status-label">${status ? status.name : debt.statusIfUnresolved}</span>`;
+      debuffsContainer.appendChild(badge);
+    }
   }
 
   // Hints
@@ -112,6 +117,27 @@ function renderBriefing() {
 
 let selectedSpellId = null;   // for click-to-place
 let selectedMatrixId = null;  // instanceId of a matrix card selected for click-to-install
+let focusedSlotType = null;   // slot type clicked by user — filters the card panel
+
+// debtId → statusId — built once from all addsDebts in catalogs + defaultInstalled
+function capabilityLabel(capId) {
+  return engine.data.capabilityLabels?.[capId] ?? capId;
+}
+
+function buildDebtStatusMap() {
+  const map = {};
+  const all = [...(engine.data.spellCatalog ?? []), ...(engine.data.obryadCatalog ?? [])];
+  for (const c of all) {
+    for (const d of c.addsDebts ?? []) map[d.id] = d.statusIfUnresolved;
+  }
+  for (const l of engine.data.levelCatalog ?? []) {
+    for (const inst of l.defaultInstalled ?? []) {
+      for (const d of inst.addsDebts ?? []) map[d.id] = d.statusIfUnresolved;
+    }
+  }
+  return map;
+}
+let debtStatusMap = null;
 
 function renderAssembly() {
   show('screen-assembly');
@@ -147,15 +173,19 @@ function renderSidebar() {
     reqList.appendChild(li);
   }
 
-  // Critical statuses
-  const kpContainer = qs('#sidebar-critical');
-  kpContainer.innerHTML = '';
-  for (const statusId of level.criticalStatuses) {
-    const status = engine.statusById(statusId);
-    if (!status) continue;
-    const badge = el('div', 'sidebar-critical-badge');
-    badge.innerHTML = `<span>${status.icon}</span><span>${status.name}</span>`;
-    kpContainer.appendChild(badge);
+  // Стартовые дебафы (сайдбар)
+  const sidebarDebuffs = qs('#sidebar-debuffs');
+  sidebarDebuffs.innerHTML = '';
+  const sidebarDebts = (level.defaultInstalled ?? []).flatMap(d => d.addsDebts ?? []);
+  if (sidebarDebts.length === 0) {
+    sidebarDebuffs.innerHTML = '<span class="no-debuffs">нет</span>';
+  } else {
+    for (const debt of sidebarDebts) {
+      const status = engine.statusById(debt.statusIfUnresolved);
+      const badge = el('div', 'sidebar-critical-badge');
+      badge.innerHTML = `<span>${status ? status.icon : '⚠'}</span><span>${status ? status.name : debt.statusIfUnresolved}</span>`;
+      sidebarDebuffs.appendChild(badge);
+    }
   }
 
   // Hints
@@ -174,15 +204,18 @@ function renderHUD() {
 
   qs('#hud-level-name').textContent = level.name;
 
-  // Gold
+  // Coins: show spent / budget
   const goldEl = qs('#hud-gold');
-  goldEl.textContent = `⚗ ${live.goldRemaining} / ${live.budgetGold}`;
-  goldEl.className = 'hud-resource' + (live.goldRemaining < 0 ? ' danger' : live.goldRemaining <= 2 ? ' warn' : '');
+  const coinsOver = live.coinsSpent > live.coinsBudget;
+  goldEl.textContent = `⚗ ${live.coinsSpent} / ${live.coinsBudget}`;
+  goldEl.className = 'hud-resource' + (coinsOver ? ' danger' : live.coinsRemaining <= 2 ? ' warn' : '');
 
-  // Risk
+  // Aura: show accumulated / limit
   const riskEl = qs('#hud-risk');
-  riskEl.textContent = `☠ ${live.riskTotal} / ${live.riskLimit}`;
-  riskEl.className = 'hud-resource' + (live.riskTotal > live.riskLimit ? ' danger' : live.riskTotal >= live.riskLimit ? ' warn' : '');
+  const auraOver = live.auraTotal > live.auraLimit;
+  const auraWarn = live.auraTotal >= live.auraLimit;
+  riskEl.textContent = `☠ ${live.auraTotal} / ${live.auraLimit}`;
+  riskEl.className = 'hud-resource' + (auraOver ? ' danger' : auraWarn ? ' warn' : live.auraTotal < 0 ? ' good' : '');
 
   // Active statuses
   const statusBar = qs('#hud-statuses');
@@ -201,18 +234,7 @@ function renderHUD() {
     }
   }
 
-  // "Князь не простит" reminder
-  const kpBar = qs('#hud-critical');
-  kpBar.innerHTML = '';
-  for (const sid of live.criticalStatuses) {
-    const status = engine.statusById(sid);
-    if (!status) continue;
-    const isFired = live.activeStatuses.includes(sid);
-    const badge = el('span', `critical-mini${isFired ? ' fired' : ''}`);
-    badge.setAttribute('title', status.name);
-    badge.textContent = status.icon;
-    kpBar.appendChild(badge);
-  }
+  // hud-critical removed
 }
 
 function renderMatrices() {
@@ -322,7 +344,7 @@ function renderMatrixPanel() {
       <div class="matrix-card-header">
         <span class="matrix-card-icon">${matDef.icon}</span>
         <span class="matrix-card-name">${matDef.name}</span>
-        <span class="matrix-card-cost">⚗ ${matInst.installCostGold ?? 0}</span>
+        <span class="matrix-card-cost">⚗ ${matInst.installCostCoins ?? 0}</span>
       </div>
       <div class="matrix-card-desc">${matDef.description}</div>
       <div class="matrix-card-slots">${matInst.slots.map(s => slotTypeLabel(s.slotType)).join(' · ')}</div>
@@ -365,7 +387,7 @@ function buildSlotEl(slot) {
   if (spell) {
     slotEl.innerHTML = `
       <div class="slot-spell-name">${spell.name}</div>
-      <div class="slot-spell-cost">⚗${spell.costGold} ☠+${spell.riskDelta}</div>
+      <div class="slot-spell-cost">⚗${spell.costCoins} ☠+${spell.auraDelta ?? 0}</div>
     `;
     slotEl.title = spell.description;
     slotEl.onclick = () => {
@@ -396,12 +418,18 @@ function buildSlotEl(slot) {
       refreshAssembly();
     });
 
-    // Click-to-place
+    // Click-to-place or focus slot to filter card panel
     slotEl.onclick = () => {
-      if (!selectedSpellId) return;
-      engine.placeSpell(slot.slotId, selectedSpellId);
-      selectedSpellId = null;
-      refreshAssembly();
+      if (selectedSpellId) {
+        engine.placeSpell(slot.slotId, selectedSpellId);
+        selectedSpellId = null;
+        focusedSlotType = null;
+        refreshAssembly();
+      } else {
+        // Toggle slot focus for card filtering
+        focusedSlotType = focusedSlotType === slot.slotType ? null : slot.slotType;
+        refreshAssembly();
+      }
     };
   }
 
@@ -413,11 +441,22 @@ function renderSpellPanel() {
   const container = qs('#assembly-spells');
   container.innerHTML = '';
 
+  // Slot filter label
+  const filterLabel = qs('#spell-slot-filter-label');
+  if (focusedSlotType) {
+    filterLabel.textContent = `→ ${slotTypeLabel(focusedSlotType)}`;
+    filterLabel.style.display = '';
+  } else {
+    filterLabel.style.display = 'none';
+  }
+
   const placed = new Set(engine.placedSpellIds());
 
   for (const spellId of level.availableSpells) {
     const spell = engine.spellById(spellId);
     if (!spell) continue;
+    // Filter: hide cards incompatible with focused slot
+    if (focusedSlotType && !spell.allowedSlotTypes.includes(focusedSlotType)) continue;
     const isPlaced = placed.has(spellId);
     const isSelected = selectedSpellId === spellId;
 
@@ -430,12 +469,26 @@ function renderSpellPanel() {
       return st ? `${st.icon} ${st.name}` : d.statusIfUnresolved;
     }).join(', ');
 
+    const resolveHints = [...new Set(
+      (spell.resolvesDebts ?? [])
+        .map(did => debtStatusMap?.[did])
+        .filter(Boolean)
+    )].map(sid => {
+      const st = engine.statusById(sid);
+      return st ? `${st.icon} ${st.name}` : sid;
+    }).join(', ');
+
+    const buffHints = (spell.buffs ?? []).map(b => `<span class="spell-buff">✨ ${b}</span>`).join('');
+
     card.innerHTML = `
       <div class="spell-name">${spell.name}</div>
       <div class="spell-desc">${spell.description}</div>
+      <div class="spell-effects">
+        ${buffHints}
+      </div>
       <div class="spell-meta">
-        <span class="spell-cost">⚗ ${spell.costGold}</span>
-        <span class="spell-risk ${spell.riskDelta > 0 ? 'has-risk' : ''}">☠ +${spell.riskDelta}</span>
+        <span class="spell-cost">⚗ ${spell.costCoins}</span>
+        <span class="spell-risk ${(spell.auraDelta ?? 0) > 0 ? 'has-risk' : ''}">☠ +${spell.auraDelta ?? 0}</span>
         ${debtHints ? `<span class="spell-debt" title="Добавляет долг">${debtHints}</span>` : ''}
       </div>
       <div class="spell-slots">${spell.allowedSlotTypes.map(slotTypeLabel).join(' · ')}</div>
@@ -467,6 +520,84 @@ function renderSpellPanel() {
 
     container.appendChild(card);
   }
+
+  // ── Обряды ──────────────────────────────────────────────────────────────────
+  const obryadSection = qs('#assembly-obryads-section');
+  const obryadContainer = qs('#assembly-obryads');
+  const availableObryads = level.availableObryads ?? [];
+
+  if (availableObryads.length === 0) {
+    obryadSection.style.display = 'none';
+  } else {
+    obryadSection.style.display = '';
+    obryadContainer.innerHTML = '';
+
+    for (const obryadId of availableObryads) {
+      const obryad = engine.cardById(obryadId);
+      if (!obryad) continue;
+      // Filter by focused slot
+      if (focusedSlotType && !obryad.allowedSlotTypes.includes(focusedSlotType)) continue;
+      const isPlaced = placed.has(obryadId);
+      const isSelected = selectedSpellId === obryadId;
+
+      const card = el('div', `spell-card obryad-card${isPlaced ? ' spell-placed' : ''}${isSelected ? ' spell-selected' : ''}`);
+      card.dataset.spellId = obryadId;
+      card.draggable = !isPlaced;
+
+      const effectParts = [];
+      if (obryad.coinsDelta)      effectParts.push(`<span class="spell-cap obryad-coins">✨ ${obryad.coinsDelta > 0 ? '+' : ''}${obryad.coinsDelta} монет</span>`);
+      if (obryad.auraDelta)       effectParts.push(`<span class="spell-cap ${obryad.auraDelta > 0 ? 'obryad-aura-neg' : 'obryad-aura-pos'}">✨ ${obryad.auraDelta > 0 ? '+' : ''}${obryad.auraDelta} ауры</span>`);
+      if (obryad.auraLimitDelta)  effectParts.push(`<span class="spell-cap obryad-coins">✨ лимит ауры +${obryad.auraLimitDelta}</span>`);
+      const obryadBuffHints = (obryad.buffs ?? []).map(b => `<span class="spell-buff">✨ ${b}</span>`).join('');
+
+      const obryadDebtHints = (obryad.addsDebts ?? []).map(d => {
+        const st = engine.statusById(d.statusIfUnresolved);
+        return st ? `${st.icon} ${st.name}` : d.statusIfUnresolved;
+      }).join(', ');
+
+      card.innerHTML = `
+        <div class="spell-name">${obryad.name}</div>
+        <div class="spell-desc">${obryad.description ?? ''}</div>
+        <div class="spell-effects">
+          ${effectParts.join('')}${obryadBuffHints}
+        </div>
+        <div class="spell-meta">
+          <span class="spell-cost">⚗ ${obryad.costCoins ?? 0}</span>
+          ${obryadDebtHints ? `<span class="spell-debt">${obryadDebtHints}</span>` : ''}
+        </div>
+        <div class="spell-slots">${(obryad.allowedSlotTypes ?? []).map(slotTypeLabel).join(' · ')}</div>
+      `;
+
+      if (!isPlaced) {
+        card.addEventListener('dragstart', e => {
+          e.dataTransfer.setData('spellId', obryadId);
+          card.classList.add('spell-dragging');
+          highlightValidSlots(obryad.allowedSlotTypes);
+        });
+        card.addEventListener('dragend', () => {
+          card.classList.remove('spell-dragging');
+          clearSlotHighlights();
+        });
+
+        card.onclick = () => {
+          if (selectedSpellId === obryadId) {
+            selectedSpellId = null;
+          } else {
+            selectedSpellId = obryadId;
+            highlightValidSlots(obryad.allowedSlotTypes);
+          }
+          renderSpellPanel();
+        };
+      }
+
+      obryadContainer.appendChild(card);
+    }
+
+    // If filter hid all obryads, hide section
+    if (obryadContainer.children.length === 0) {
+      obryadSection.style.display = 'none';
+    }
+  }
 }
 
 function highlightValidSlots(allowedTypes) {
@@ -491,6 +622,8 @@ function refreshAssembly() {
   renderHUD();
   renderMatrices();
   renderSpellPanel();
+  // Highlight focused slot type if still active
+  if (focusedSlotType) highlightValidSlots([focusedSlotType]);
 }
 
 // ─── Screen: Result ───────────────────────────────────────────────────────────
@@ -512,7 +645,7 @@ function renderResult() {
 
     qs('#result-client-report').textContent = result.successReport ?? '';
     qs('#result-success-stats').innerHTML =
-      `Золото: ${result.goldSpent} / ${level.budgetGold} ⚗ &nbsp;·&nbsp; Риск: ${result.riskTotal} / ${level.riskLimit} ☠`;
+      `Монеты: ${result.coinsSpent} / ${level.coinsBudget} ⚗ &nbsp;·&nbsp; Аура: ${result.auraTotal} / ${result.auraLimitFinal} ☠`;
 
     qs('#result-all-done').style.display = 'none';
     const btnNext = qs('#btn-next-level');
@@ -537,10 +670,46 @@ function renderResult() {
     renderFailReport(result, level);
   }
 
+  renderAssemblySummary();
+
   qs('#btn-retry').onclick = () => {
     engine.retry();
     renderPhase();
   };
+}
+
+function renderAssemblySummary() {
+  const list = qs('#result-assembly-list');
+  list.innerHTML = '';
+  const level = engine.currentLevel;
+  const placements = engine.state.placements ?? {};
+  const installedIds = new Set(engine.state.installedMatrixIds ?? []);
+
+  // Installed optional matrices
+  for (const matInst of level.availableMatrices ?? []) {
+    if (matInst.preInstalled) continue;
+    if (!installedIds.has(matInst.instanceId)) continue;
+    const matDef = engine.matrixById(matInst.matrixId);
+    const li = el('li', 'assembly-item assembly-item-matrix');
+    li.innerHTML = `<span class="assembly-icon">${matDef?.icon ?? '🔷'}</span> <span class="assembly-name">${matDef?.name ?? matInst.matrixId}</span> <span class="assembly-cost">⚗ ${matInst.installCostCoins ?? 0}</span>`;
+    list.appendChild(li);
+  }
+
+  // Placed spells and obryads
+  for (const [slotId, cardId] of Object.entries(placements)) {
+    const spell = engine.spellById(cardId);
+    if (!spell) continue;
+    const li = el('li', 'assembly-item');
+    const buffBadges = (spell.buffs ?? []).map(b => `<span class="assembly-buff">✨ ${b}</span>`).join('');
+    li.innerHTML = `<span class="assembly-name">${spell.name}</span>${buffBadges}`;
+    list.appendChild(li);
+  }
+
+  if (list.children.length === 0) {
+    const li = el('li', 'assembly-item assembly-empty');
+    li.textContent = 'Сборка пуста';
+    list.appendChild(li);
+  }
 }
 
 function renderFailReport(result, level) {
@@ -605,25 +774,24 @@ function renderFailReport(result, level) {
   const resList = qs('#result-res-list');
   resList.innerHTML = '';
   const budgetReason = result.failReasons.find(r => r.type === 'BUDGET_EXCEEDED');
-  const riskReason = result.failReasons.find(r => r.type === 'RISK_EXCEEDED');
+  const auraReason   = result.failReasons.find(r => r.type === 'AURA_EXCEEDED');
 
-  if (budgetReason || riskReason) {
+  if (budgetReason || auraReason) {
     resBlock.style.display = '';
     if (budgetReason) {
       const li = el('li', 'fail-item fail-fatal');
-      li.innerHTML = `<span class="fail-icon">⚗</span> Бюджет превышен: потрачено <strong>${budgetReason.goldSpent}</strong> из <strong>${budgetReason.budgetGold}</strong> золота`;
+      li.innerHTML = `<span class="fail-icon">⚗</span> Бюджет превышен: потрачено <strong>${budgetReason.coinsSpent}</strong> из <strong>${budgetReason.coinsBudget}</strong> монет`;
       resList.appendChild(li);
     }
-    if (riskReason) {
+    if (auraReason) {
       const li = el('li', 'fail-item fail-fatal');
-      li.innerHTML = `<span class="fail-icon">☠</span> Риск превышен: <strong>${riskReason.riskTotal}</strong> из <strong>${riskReason.riskLimit}</strong>`;
+      li.innerHTML = `<span class="fail-icon">☠</span> Аура превышена: <strong>${auraReason.auraTotal}</strong> из <strong>${auraReason.auraLimit}</strong>`;
       resList.appendChild(li);
     }
   } else {
-    // Show as info even on non-resource failures
     resBlock.style.display = '';
     resList.innerHTML = `<li class="fail-item fail-info">
-      <span class="fail-icon">ℹ</span> Золото: ${result.goldSpent} / ${level.budgetGold} ⚗ &nbsp;·&nbsp; Риск: ${result.riskTotal} / ${level.riskLimit} ☠
+      <span class="fail-icon">ℹ</span> Монеты: ${result.coinsSpent} / ${level.coinsBudget} ⚗ &nbsp;·&nbsp; Аура: ${result.auraTotal} / ${result.auraLimitFinal} ☠
     </li>`;
   }
 }

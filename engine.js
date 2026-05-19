@@ -1,5 +1,6 @@
-// TechnoMage Platform — Game Engine
+// TechnoMage Platform — Game Engine (v0.2)
 // Pure data-driven engine. No DOM dependencies.
+// Terminology: coinsBudget / auraLimit (v0.2 schema). See game-data.json version.
 
 export class Engine {
   constructor() {
@@ -15,7 +16,7 @@ export class Engine {
     this.state = {
       currentLevelIndex: 0,
       phase: 'BRIEFING',       // BRIEFING | ASSEMBLY | RESULT
-      placements: {},          // { slotId: spellId }
+      placements: {},          // { slotId: cardId }
       installedMatrixIds: [],  // instanceId[] — optional matrices the player placed
       lastResult: null,
     };
@@ -32,9 +33,15 @@ export class Engine {
     return this.state.currentLevelIndex < this.data.levelCatalog.length - 1;
   }
 
-  spellById(id) {
-    return this.data.spellCatalog.find(s => s.id === id) ?? null;
+  /** Look up a card by ID from spellCatalog or obryadCatalog. */
+  cardById(id) {
+    return this.data.spellCatalog.find(s => s.id === id)
+        ?? (this.data.obryadCatalog ?? []).find(r => r.id === id)
+        ?? null;
   }
+
+  /** @deprecated Use cardById. Kept for backward compatibility with any old callers. */
+  spellById(id) { return this.cardById(id); }
 
   statusById(id) {
     return this.data.statusCatalog.find(s => s.id === id) ?? null;
@@ -47,7 +54,7 @@ export class Engine {
   // ─── Matrix helpers ───────────────────────────────────────────────────────
 
   /**
-   * Matrix instances that are currently on the board:
+   * Matrix instances currently on the board:
    * - preInstalled (absent field defaults to true) always present
    * - optional ones only if the player has installed them
    */
@@ -57,19 +64,16 @@ export class Engine {
     );
   }
 
-  /** Optional matrix instances (preInstalled: false) defined for this level. */
   optionalMatrices() {
     return (this.currentLevel.availableMatrices ?? []).filter(m => m.preInstalled === false);
   }
 
-  /** Optional matrices not yet installed by the player. */
   availableToInstall() {
     return this.optionalMatrices().filter(
       m => !this.state.installedMatrixIds.includes(m.instanceId)
     );
   }
 
-  /** Install an optional matrix onto the board. */
   installMatrix(instanceId) {
     const level = this.currentLevel;
     const matrix = this.optionalMatrices().find(m => m.instanceId === instanceId);
@@ -83,67 +87,58 @@ export class Engine {
     return { ok: true };
   }
 
-  /**
-   * Uninstall an optional matrix from the board.
-   * Fails if any of its slots have spells in them.
-   */
   uninstallMatrix(instanceId) {
     const matrix = this.optionalMatrices().find(m => m.instanceId === instanceId);
     if (!matrix) return { ok: false, reason: 'Матрица не найдена.' };
     if (!this.state.installedMatrixIds.includes(instanceId))
       return { ok: false, reason: 'Матрица не установлена.' };
-
     const occupiedSlot = matrix.slots.find(s => this.state.placements[s.slotId]);
     if (occupiedSlot)
       return { ok: false, reason: 'Сначала убери все заклинания из матрицы.' };
-
     this.state.installedMatrixIds = this.state.installedMatrixIds.filter(id => id !== instanceId);
     return { ok: true };
   }
 
   // ─── Placement helpers ────────────────────────────────────────────────────
 
-  /** Returns all slots currently visible on the board (flat list). */
   allSlots() {
     return this.boardMatrices().flatMap(m => m.slots);
   }
 
-  /** Returns spell IDs of all currently placed spells. */
-  placedSpellIds() {
+  placedCardIds() {
     return Object.values(this.state.placements).filter(Boolean);
   }
 
-  /**
-   * Attempt to place a spell into a slot.
-   * Returns { ok: true } or { ok: false, reason: string }.
-   */
-  placeSpell(slotId, spellId) {
+  /** @deprecated Use placedCardIds. */
+  placedSpellIds() { return this.placedCardIds(); }
+
+  placeSpell(slotId, cardId) {
     const level = this.currentLevel;
     const slot = this.allSlots().find(s => s.slotId === slotId);
     if (!slot) return { ok: false, reason: 'Слот не найден.' };
 
-    const spell = this.spellById(spellId);
-    if (!spell) return { ok: false, reason: 'Заклинание не найдено.' };
+    const card = this.cardById(cardId);
+    if (!card) return { ok: false, reason: 'Заклинание не найдено.' };
 
-    if (!level.availableSpells.includes(spellId))
+    const isSpell  = (level.availableSpells  ?? []).includes(cardId);
+    const isObryad = (level.availableObryads ?? []).includes(cardId);
+    if (!isSpell && !isObryad)
       return { ok: false, reason: 'Заклинание недоступно на этом уровне.' };
 
-    if (!spell.allowedSlotTypes.includes(slot.slotType))
+    if (!card.allowedSlotTypes.includes(slot.slotType))
       return { ok: false, reason: `Это заклинание нельзя установить в слот типа ${slot.slotType}.` };
 
-    // Unique check
-    if (spell.unique !== false) {
+    if (card.unique !== false) {
       const alreadyPlaced = Object.entries(this.state.placements).some(
-        ([sid, sp]) => sp === spellId && sid !== slotId
+        ([sid, sp]) => sp === cardId && sid !== slotId
       );
       if (alreadyPlaced) return { ok: false, reason: 'Это заклинание уже используется.' };
     }
 
-    this.state.placements = { ...this.state.placements, [slotId]: spellId };
+    this.state.placements = { ...this.state.placements, [slotId]: cardId };
     return { ok: true };
   }
 
-  /** Remove spell from a slot. */
   removeSpell(slotId) {
     const next = { ...this.state.placements };
     delete next[slotId];
@@ -153,44 +148,38 @@ export class Engine {
   // ─── Core computation (shared by evaluate + computeLiveState) ─────────────
 
   _compute(level, placements, installedMatrixIds) {
-    const spells = Object.values(placements)
+    const cards = Object.values(placements)
       .filter(Boolean)
-      .map(id => this.spellById(id))
+      .map(id => this.cardById(id))
       .filter(Boolean);
 
-    // 1. Capabilities
+    // 1. Capabilities — from defaultInstalled + placed cards
     const capabilities = new Set(
       (level.defaultInstalled ?? []).flatMap(d => d.grantsCapabilities ?? [])
     );
-    for (const sp of spells) {
-      for (const ef of sp.effects ?? []) {
+    for (const card of cards) {
+      for (const ef of card.effects ?? []) {
         if (ef.type === 'CAPABILITY') capabilities.add(ef.id);
       }
     }
 
-    // 2. Debts — from defaultInstalled (tech debt left by previous mage) + from spells
-    const debtMap = new Map(); // debtId -> debt object
+    // 2. Debts — from defaultInstalled (inherited) and placed cards
+    const debtMap = new Map();
     for (const inst of level.defaultInstalled ?? []) {
-      for (const d of inst.addsDebts ?? []) {
-        debtMap.set(d.id, d);
-      }
+      for (const d of inst.addsDebts ?? []) debtMap.set(d.id, d);
     }
-    for (const sp of spells) {
-      for (const d of sp.addsDebts ?? []) {
-        debtMap.set(d.id, d);
-      }
+    for (const card of cards) {
+      for (const d of card.addsDebts ?? []) debtMap.set(d.id, d);
     }
 
     // 3. Resolve debts
-    for (const sp of spells) {
-      for (const rid of sp.resolvesDebts ?? []) {
-        debtMap.delete(rid);
-      }
+    for (const card of cards) {
+      for (const rid of card.resolvesDebts ?? []) debtMap.delete(rid);
     }
 
     // 4. Conflicts (F2)
     const placedIds = new Set(Object.values(placements).filter(Boolean));
-    const firedConflicts = []; // { pair, statusId }
+    const firedConflicts = [];
     for (const pair of this.data.conflictPairs ?? []) {
       const bothPresent = pair.spells.every(id => placedIds.has(id));
       if (!bothPresent) continue;
@@ -206,20 +195,24 @@ export class Engine {
 
     // 6. Split into critical / non-critical
     const criticalSet = new Set(level.criticalStatuses ?? []);
-    const fatalStatuses = [...allFiredStatuses].filter(s => criticalSet.has(s));
+    const fatalStatuses    = [...allFiredStatuses].filter(s => criticalSet.has(s));
     const nonCriticalStatuses = [...allFiredStatuses].filter(s => !criticalSet.has(s));
 
-    // 7. Risk
-    let riskTotal = spells.reduce((sum, sp) => sum + (sp.riskDelta ?? 0), 0);
-    riskTotal += nonCriticalStatuses.length * (level.nonCriticalDebtRisk ?? 2);
+    // 7. Aura = sum of auraDelta from all cards + penalty per non-critical status
+    //    auraLimit can be raised by obryad auraLimitDelta
+    const auraLimitModifier = cards.reduce((sum, c) => sum + (c.auraLimitDelta ?? 0), 0);
+    const auraLimitFinal = (level.auraLimit ?? 0) + auraLimitModifier;
+    let auraTotal = cards.reduce((sum, c) => sum + (c.auraDelta ?? 0), 0);
+    auraTotal += nonCriticalStatuses.length * (level.nonCriticalStatusAuraPenalty ?? 2);
 
-    // 8. Gold: spells + only player-installed optional matrices (not preInstalled ones)
+    // 8. Coins = sum of (costCoins + coinsDelta) for all cards + installed optional matrix costs
     const matrixInstallCost = (level.availableMatrices ?? [])
       .filter(m => m.preInstalled === false && installedMatrixIds.includes(m.instanceId))
-      .reduce((sum, m) => sum + (m.installCostGold ?? 0), 0);
+      .reduce((sum, m) => sum + (m.installCostCoins ?? 0), 0);
 
-    const goldSpent = spells.reduce((sum, sp) => sum + (sp.costGold ?? 0) + (sp.goldDelta ?? 0), 0)
-      + matrixInstallCost;
+    const coinsSpent = cards.reduce(
+      (sum, c) => sum + (c.costCoins ?? 0) + (c.coinsDelta ?? 0), 0
+    ) + matrixInstallCost;
 
     // 9. Missing requirements
     const missingRequirements = (level.requirements ?? []).filter(
@@ -233,9 +226,10 @@ export class Engine {
       allFiredStatuses: [...allFiredStatuses],
       fatalStatuses,
       nonCriticalStatuses,
-      riskTotal,
-      goldSpent,
-      goldRemaining: level.budgetGold - goldSpent,
+      auraTotal,
+      auraLimitFinal,
+      coinsSpent,
+      coinsRemaining: (level.coinsBudget ?? 0) - coinsSpent,
       missingRequirements,
     };
   }
@@ -264,24 +258,24 @@ export class Engine {
       });
     }
 
-    // Category 3: budget / risk
-    if (c.goldSpent > level.budgetGold) {
-      failReasons.push({ type: 'BUDGET_EXCEEDED', goldSpent: c.goldSpent, budgetGold: level.budgetGold });
+    // Category 3: budget / aura
+    if (c.coinsSpent > (level.coinsBudget ?? 0)) {
+      failReasons.push({ type: 'BUDGET_EXCEEDED', coinsSpent: c.coinsSpent, coinsBudget: level.coinsBudget });
     }
-    if (c.riskTotal > level.riskLimit) {
-      failReasons.push({ type: 'RISK_EXCEEDED', riskTotal: c.riskTotal, riskLimit: level.riskLimit });
+    if (c.auraTotal > c.auraLimitFinal) {
+      failReasons.push({ type: 'AURA_EXCEEDED', auraTotal: c.auraTotal, auraLimit: c.auraLimitFinal });
     }
 
     const success = failReasons.length === 0;
-
     const successReport = success
       ? this._pickRandom(level.successReports ?? ['Отлично! Задача выполнена.'])
       : null;
 
     const result = {
       success,
-      goldSpent: c.goldSpent,
-      riskTotal: c.riskTotal,
+      coinsSpent: c.coinsSpent,
+      auraTotal: c.auraTotal,
+      auraLimitFinal: c.auraLimitFinal,
       failReasons,
       activeStatuses: c.allFiredStatuses,
       unresolvedDebts: c.activeDebts,
@@ -299,16 +293,16 @@ export class Engine {
     const level = this.currentLevel;
     const c = this._compute(level, this.state.placements, this.state.installedMatrixIds);
     return {
-      goldSpent: c.goldSpent,
-      goldRemaining: c.goldRemaining,
-      budgetGold: level.budgetGold,
-      riskTotal: c.riskTotal,
-      riskLimit: level.riskLimit,
-      activeStatuses: c.allFiredStatuses,
-      fatalStatuses: c.fatalStatuses,
-      unresolvedDebts: c.activeDebts,
+      coinsSpent:    c.coinsSpent,
+      coinsRemaining: c.coinsRemaining,
+      coinsBudget:   level.coinsBudget ?? 0,
+      auraTotal:     c.auraTotal,
+      auraLimit:     c.auraLimitFinal,
+      activeStatuses:     c.allFiredStatuses,
+      fatalStatuses:      c.fatalStatuses,
+      unresolvedDebts:    c.activeDebts,
       missingRequirements: c.missingRequirements,
-      criticalStatuses: level.criticalStatuses ?? [],
+      criticalStatuses:   level.criticalStatuses ?? [],
     };
   }
 
@@ -321,7 +315,6 @@ export class Engine {
   retry() {
     this.state.phase = 'ASSEMBLY';
     this.state.lastResult = null;
-    // placements and installedMatrixIds are intentionally kept
   }
 
   nextLevel() {

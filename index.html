@@ -27,9 +27,9 @@
     <div class="resource-pill">Риск: <span id="briefing-risk"></span></div>
   </div>
 
-  <div class="kp-section">
-    <p class="kp-title">⚔ Князь не простит</p>
-    <div id="briefing-critical"></div>
+  <div class="debuffs-section">
+    <p class="debuffs-title">Стартовые дебафы</p>
+    <div id="briefing-debuffs"></div>
   </div>
 
   <div class="hint-box">
@@ -53,9 +53,6 @@
     <span class="hud-divider">|</span>
     <span class="hud-group-label">Долги</span>
     <div id="hud-statuses"></div>
-    <span class="hud-divider">|</span>
-    <span class="hud-group-label">Не простит</span>
-    <div id="hud-critical"></div>
   </div>
 
   <!-- Main area -->
@@ -71,9 +68,9 @@
       <p class="sidebar-section-title">Требования</p>
       <ul id="sidebar-requirements" class="sidebar-requirements"></ul>
 
-      <div class="sidebar-kp">
-        <p class="sidebar-kp-title">⚔ Князь не простит</p>
-        <div id="sidebar-critical"></div>
+      <div class="sidebar-debuffs">
+        <p class="sidebar-debuffs-title">Стартовые дебафы</p>
+        <div id="sidebar-debuffs"></div>
       </div>
 
       <div class="sidebar-hints">
@@ -96,8 +93,13 @@
         <div id="assembly-matrix-cards"></div>
         <div class="panel-divider"></div>
       </div>
-      <p class="spell-panel-title">Заклинания</p>
+      <p class="spell-panel-title">Заклинания <span id="spell-slot-filter-label" class="slot-filter-label" style="display:none"></span></p>
       <div id="assembly-spells"></div>
+      <div id="assembly-obryads-section" style="display:none">
+        <div class="panel-divider"></div>
+        <p class="spell-panel-title obryad-panel-title">Обряды</p>
+        <div id="assembly-obryads"></div>
+      </div>
     </div>
 
   </div>
@@ -140,6 +142,12 @@
       <ul id="result-res-list" class="fail-list"></ul>
     </div>
 
+  </div>
+
+  <!-- Assembly summary -->
+  <div id="result-assembly-block" class="result-assembly-block">
+    <p class="result-assembly-title">Ваша сборка</p>
+    <ul id="result-assembly-list" class="result-assembly-list"></ul>
   </div>
 
   <!-- Actions -->

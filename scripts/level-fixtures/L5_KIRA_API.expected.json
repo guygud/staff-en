@@ -1,0 +1,99 @@
+{
+  "levelId": "L5_KIRA_API",
+  "scenarios": [
+    {
+      "name": "Путь A — Полный контур + R_CANARY",
+      "placements": {
+        "l5_tls": "S_TLS_CERT",
+        "l5_auth": "S_AUTHZ",
+        "l5_disc1": "S_DISCOVERY",
+        "l5_disc2": "S_HEALTHCHECK",
+        "l5_logs": "S_ACCESS_LOGS",
+        "l5_pipe": "S_CICD",
+        "l5_rb": "S_ROLLBACK",
+        "l5_obs_rit": "R_CANARY"
+      },
+      "installedMatrixIds": [],
+      "expected": {
+        "outcome": "pass",
+        "missingRequirements": [],
+        "fatalStatuses": [],
+        "coinsSpentRange": [
+          18,
+          18
+        ],
+        "auraTotalRange": [
+          4,
+          4
+        ]
+      }
+    },
+    {
+      "name": "Путь B — Полный контур + R_GUARD_TO_BAR",
+      "placements": {
+        "l5_tls": "S_TLS_CERT",
+        "l5_auth": "S_AUTHZ",
+        "l5_disc1": "S_DISCOVERY",
+        "l5_disc2": "S_HEALTHCHECK",
+        "l5_logs": "S_ACCESS_LOGS",
+        "l5_pipe": "S_CICD",
+        "l5_rb": "S_ROLLBACK",
+        "l5_net_rit": "R_GUARD_TO_BAR"
+      },
+      "installedMatrixIds": [],
+      "expected": {
+        "outcome": "pass",
+        "missingRequirements": [],
+        "fatalStatuses": [],
+        "coinsSpentRange": [
+          17,
+          17
+        ],
+        "auraTotalRange": [
+          3,
+          3
+        ]
+      }
+    },
+    {
+      "name": "Ловушка 1 — Нет CICD (F6_NONDELIVERY)",
+      "placements": {
+        "l5_tls": "S_TLS_CERT",
+        "l5_auth": "S_AUTHZ",
+        "l5_disc1": "S_DISCOVERY",
+        "l5_disc2": "S_HEALTHCHECK",
+        "l5_logs": "S_ACCESS_LOGS"
+      },
+      "installedMatrixIds": [],
+      "expected": {
+        "outcome": "fail",
+        "fatalStatuses": [
+          "F6_NONDELIVERY"
+        ],
+        "missingRequirementsContains": [
+          "REQ_CICD"
+        ]
+      }
+    },
+    {
+      "name": "Ловушка 2 — CICD без ROLLBACK (F5_FRAGILITY)",
+      "placements": {
+        "l5_tls": "S_TLS_CERT",
+        "l5_auth": "S_AUTHZ",
+        "l5_disc1": "S_DISCOVERY",
+        "l5_disc2": "S_HEALTHCHECK",
+        "l5_logs": "S_ACCESS_LOGS",
+        "l5_pipe": "S_CICD",
+        "l5_net_rit": "R_GUARD_TO_BAR"
+      },
+      "installedMatrixIds": [],
+      "expected": {
+        "outcome": "fail",
+        "fatalStatuses": [
+          "F5_FRAGILITY"
+        ],
+        "missingRequirements": []
+      }
+    }
+  ]
+}

@@ -1,0 +1,77 @@
+{
+  "levelId": "L2_KESHA_CACHE",
+  "scenarios": [
+    {
+      "name": "Вариант A — M_CONNECTIVITY + AuthZ + Квоты + Грант",
+      "placements": {
+        "net_l2_auth":   "S_AUTHZ",
+        "st_l2_quota":   "S_QUOTAS",
+        "st_l2_ritual":  "R_LIBRARY_GRANT"
+      },
+      "installedMatrixIds": ["net_l2"],
+      "expected": {
+        "outcome": "pass",
+        "missingRequirements": [],
+        "fatalStatuses": [],
+        "coinsSpentRange": [6, 6],
+        "auraTotalRange":  [1, 1]
+      }
+    },
+    {
+      "name": "Вариант B — M_OBSERVATION + Онбординг + Квоты",
+      "placements": {
+        "obs_l2_ritual": "R_ONBOARDING",
+        "st_l2_quota":   "S_QUOTAS"
+      },
+      "installedMatrixIds": ["obs_l2"],
+      "expected": {
+        "outcome": "pass",
+        "missingRequirements": [],
+        "fatalStatuses": [],
+        "coinsSpentRange": [5, 5],
+        "auraTotalRange":  [-1, -1]
+      }
+    },
+    {
+      "name": "Ловушка 1 — Только квоты, без изоляции",
+      "placements": {
+        "st_l2_quota": "S_QUOTAS"
+      },
+      "installedMatrixIds": [],
+      "expected": {
+        "outcome": "fail",
+        "fatalStatuses": ["F3_COMPROMISE"],
+        "missingRequirements": []
+      }
+    },
+    {
+      "name": "Ловушка 2 — TTL вместо квот (DoD не выполнен)",
+      "placements": {
+        "net_l2_auth":  "S_AUTHZ",
+        "st_l2_ret":    "S_TTL",
+        "st_l2_ritual": "R_LIBRARY_GRANT"
+      },
+      "installedMatrixIds": ["net_l2"],
+      "expected": {
+        "outcome": "fail",
+        "fatalStatuses": [],
+        "missingRequirementsContains": ["REQ_QUOTA"]
+      }
+    },
+    {
+      "name": "Ловушка 3 — R_AI_BUFF вместо R_LIBRARY_GRANT (аура превышена)",
+      "placements": {
+        "net_l2_auth":  "S_AUTHZ",
+        "st_l2_quota":  "S_QUOTAS",
+        "st_l2_ritual": "R_AI_BUFF"
+      },
+      "installedMatrixIds": ["net_l2"],
+      "expected": {
+        "outcome": "fail",
+        "fatalStatuses": [],
+        "missingRequirements": [],
+        "auraTotalRange": [4, 4]
+      }
+    }
+  ]
+}

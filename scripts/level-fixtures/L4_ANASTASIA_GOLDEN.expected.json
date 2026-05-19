@@ -1,0 +1,92 @@
+{
+  "levelId": "L4_ANASTASIA_GOLDEN",
+  "scenarios": [
+    {
+      "name": "Путь A — Золотой стандарт (LOGGING + LOG_FILTER)",
+      "placements": {
+        "l4_auth": "S_AUTHZ",
+        "l4_tls": "S_TLS_CERT",
+        "l4_disc1": "S_DISCOVERY",
+        "l4_disc2": "S_HEALTHCHECK",
+        "l4_logs": "S_LOGGING",
+        "l4_filters": "S_LOG_FILTER"
+      },
+      "installedMatrixIds": [],
+      "expected": {
+        "outcome": "pass",
+        "missingRequirements": [],
+        "fatalStatuses": [],
+        "coinsSpentRange": [
+          14,
+          14
+        ],
+        "auraTotalRange": [
+          2,
+          2
+        ]
+      }
+    },
+    {
+      "name": "Путь B — Аудит + Канарейка (ACCESS_LOGS + R_CANARY)",
+      "placements": {
+        "l4_auth": "S_AUTHZ",
+        "l4_tls": "S_TLS_CERT",
+        "l4_disc1": "S_DISCOVERY",
+        "l4_disc2": "S_HEALTHCHECK",
+        "l4_logs": "S_ACCESS_LOGS",
+        "l4_obs_rit": "R_CANARY"
+      },
+      "installedMatrixIds": [],
+      "expected": {
+        "outcome": "pass",
+        "missingRequirements": [],
+        "fatalStatuses": [],
+        "coinsSpentRange": [
+          14,
+          14
+        ],
+        "auraTotalRange": [
+          3,
+          3
+        ]
+      }
+    },
+    {
+      "name": "Ловушка 1 — Нет наблюдаемости (F4_BLINDNESS)",
+      "placements": {
+        "l4_auth": "S_AUTHZ",
+        "l4_tls": "S_TLS_CERT",
+        "l4_disc1": "S_DISCOVERY",
+        "l4_disc2": "S_HEALTHCHECK"
+      },
+      "installedMatrixIds": [],
+      "expected": {
+        "outcome": "fail",
+        "fatalStatuses": [
+          "F4_BLINDNESS"
+        ],
+        "missingRequirements": []
+      }
+    },
+    {
+      "name": "Ловушка 2 — LOGGING без LOG_FILTER (аура превышена от F1)",
+      "placements": {
+        "l4_auth": "S_AUTHZ",
+        "l4_tls": "S_TLS_CERT",
+        "l4_disc1": "S_DISCOVERY",
+        "l4_disc2": "S_HEALTHCHECK",
+        "l4_logs": "S_LOGGING"
+      },
+      "installedMatrixIds": [],
+      "expected": {
+        "outcome": "fail",
+        "fatalStatuses": [],
+        "missingRequirements": [],
+        "auraTotalRange": [
+          4,
+          4
+        ]
+      }
+    }
+  ]
+}

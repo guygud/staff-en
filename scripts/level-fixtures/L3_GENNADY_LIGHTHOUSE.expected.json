@@ -1,0 +1,76 @@
+{
+  "levelId": "L3_GENNADY_LIGHTHOUSE",
+  "scenarios": [
+    {
+      "name": "Путь A — простой маяк (TRAFFIC_SPLIT)",
+      "placements": {
+        "l3_dns":    "S_DNS",
+        "l3_tls":    "S_TLS_CERT",
+        "l3_disc1":  "S_DISCOVERY",
+        "l3_disc2":  "S_HEALTHCHECK",
+        "l3_route1": "S_TRAFFIC_SPLIT"
+      },
+      "installedMatrixIds": [],
+      "expected": {
+        "outcome": "pass",
+        "missingRequirements": [],
+        "fatalStatuses": [],
+        "coinsSpentRange": [10, 10],
+        "auraTotalRange":  [2, 2]
+      }
+    },
+    {
+      "name": "Путь B — умный маяк (оба роутинга + Арбитр + Меценат)",
+      "placements": {
+        "l3_dns":    "S_DNS",
+        "l3_tls":    "S_TLS_CERT",
+        "l3_disc1":  "S_DISCOVERY",
+        "l3_disc2":  "S_HEALTHCHECK",
+        "l3_route1": "S_TRAFFIC_SPLIT",
+        "l3_route2": "S_HASH_ROUTING",
+        "l3_route3": "S_POLICY_RESOLVER",
+        "l3_ritual": "R_PATRON_SEAL"
+      },
+      "installedMatrixIds": [],
+      "expected": {
+        "outcome": "pass",
+        "missingRequirements": [],
+        "fatalStatuses": [],
+        "coinsSpentRange": [13, 13],
+        "auraTotalRange":  [3, 3]
+      }
+    },
+    {
+      "name": "Ловушка 1 — конфликт без арбитра (F2_CONTRADICTION)",
+      "placements": {
+        "l3_dns":    "S_DNS",
+        "l3_tls":    "S_TLS_CERT",
+        "l3_disc1":  "S_DISCOVERY",
+        "l3_disc2":  "S_HEALTHCHECK",
+        "l3_route1": "S_TRAFFIC_SPLIT",
+        "l3_route2": "S_HASH_ROUTING"
+      },
+      "installedMatrixIds": [],
+      "expected": {
+        "outcome": "fail",
+        "fatalStatuses": ["F2_CONTRADICTION"],
+        "missingRequirements": []
+      }
+    },
+    {
+      "name": "Ловушка 2 — discovery без healthcheck (F5_FRAGILITY)",
+      "placements": {
+        "l3_dns":    "S_DNS",
+        "l3_tls":    "S_TLS_CERT",
+        "l3_disc1":  "S_DISCOVERY",
+        "l3_route1": "S_TRAFFIC_SPLIT"
+      },
+      "installedMatrixIds": [],
+      "expected": {
+        "outcome": "fail",
+        "fatalStatuses": ["F5_FRAGILITY"],
+        "missingRequirementsContains": ["REQ_FAILOVER"]
+      }
+    }
+  ]
+}

@@ -144,7 +144,7 @@ ul { list-style: none; }
 }
 
 /* Critical statuses — "Князь не простит" */
-.kp-section {
+.debuffs-section {
   background: #1e0e0e;
   border: 1px solid var(--red-dim);
   border-radius: var(--radius-lg);
@@ -152,7 +152,7 @@ ul { list-style: none; }
   margin-bottom: 1.5rem;
 }
 
-.kp-title {
+.debuffs-title {
   color: var(--red);
   font-family: var(--font-main);
   font-size: 0.85rem;
@@ -161,10 +161,15 @@ ul { list-style: none; }
   margin-bottom: 0.6rem;
 }
 
-#briefing-critical {
+#briefing-debuffs {
   display: flex;
   gap: 0.75rem;
   flex-wrap: wrap;
+}
+
+.no-debuffs {
+  color: var(--text-muted);
+  font-size: 0.85rem;
 }
 
 .critical-badge {
@@ -284,8 +289,9 @@ ul { list-style: none; }
   white-space: nowrap;
   transition: var(--transition);
 }
-.hud-resource.warn  { border-color: var(--yellow); color: var(--yellow); }
+.hud-resource.warn   { border-color: var(--yellow); color: var(--yellow); }
 .hud-resource.danger { border-color: var(--red); color: var(--red); animation: pulse 1s ease infinite; }
+.hud-resource.good   { border-color: #4caf7d; color: #4caf7d; }
 
 .hud-divider { color: var(--border); }
 
@@ -453,14 +459,14 @@ ul { list-style: none; }
   color: var(--text-main);
 }
 
-.sidebar-kp {
+.sidebar-debuffs {
   background: #1e0e0e;
   border: 1px solid var(--red-dim);
   border-radius: var(--radius);
   padding: 0.6rem 0.75rem;
 }
 
-.sidebar-kp-title {
+.sidebar-debuffs-title {
   font-size: 0.68rem;
   text-transform: uppercase;
   letter-spacing: 0.1em;
@@ -1023,4 +1029,126 @@ ul { list-style: none; }
   text-align: center;
   border: 2px dashed var(--border);
   border-radius: var(--radius-lg);
+}
+
+/* ── Обряды ─────────────────────────────────────────────────────── */
+.obryad-card {
+  border-color: #3a2a5a;
+  background: #1a1228;
+}
+.obryad-card:hover:not(.spell-placed) {
+  border-color: #7c5cbf;
+}
+.obryad-panel-title {
+  color: #9b72e0;
+}
+.obryad-effect {
+  font-size: 0.72rem;
+  color: #9b72e0;
+  margin-left: 0.4rem;
+}
+
+/* ── Фильтр слота ───────────────────────────────────────────────── */
+.slot-filter-label {
+  font-size: 0.7rem;
+  color: var(--accent);
+  margin-left: 0.5rem;
+  text-transform: none;
+  letter-spacing: 0;
+  opacity: 0.85;
+}
+
+/* ── Снимает долг ───────────────────────────────────────────────── */
+.spell-resolves {
+  font-size: 0.72rem;
+  color: #4caf7d;
+  margin-top: 0.25rem;
+}
+
+/* ── Позитивный баф ─────────────────────────────────────────────── */
+.spell-buff {
+  font-size: 0.72rem;
+  color: #4caf7d;
+  font-weight: 600;
+}
+
+/* ── Эффекты карточки ───────────────────────────────────────────── */
+.spell-effects {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.3rem;
+  margin: 0.3rem 0 0.2rem;
+  min-height: 1.2em;
+}
+.spell-cap {
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: #4caf7d;
+  background: rgba(76, 175, 125, 0.12);
+  border-radius: 4px;
+  padding: 1px 5px;
+}
+.obryad-coins {
+  color: #f0c040;
+  background: rgba(240, 192, 64, 0.12);
+}
+.obryad-aura-neg {
+  color: #e57373;
+  background: rgba(229, 115, 115, 0.12);
+}
+.obryad-aura-pos {
+  color: #81c784;
+  background: rgba(129, 199, 132, 0.12);
+}
+
+/* ── Сборка на result-экране ────────────────────────────────────── */
+.result-assembly-block {
+  margin: 1.2rem auto;
+  max-width: 480px;
+  background: rgba(255,255,255,0.04);
+  border-radius: 8px;
+  padding: 0.8rem 1rem;
+}
+.result-assembly-title {
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: #888;
+  margin: 0 0 0.5rem;
+}
+.result-assembly-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+.assembly-item {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.85rem;
+}
+.assembly-item-matrix {
+  color: #aaa;
+  font-style: italic;
+}
+.assembly-name {
+  flex: 1;
+}
+.assembly-cost {
+  font-size: 0.75rem;
+  color: #f0c040;
+}
+.assembly-buff {
+  font-size: 0.72rem;
+  color: #4caf7d;
+  background: rgba(76,175,125,0.12);
+  border-radius: 4px;
+  padding: 1px 5px;
+}
+.assembly-empty {
+  color: #666;
+  font-style: italic;
 }
