@@ -1,7 +1,8 @@
 # L3 Маяк — Таблица решений
 
 `coinsBudget=14`, `auraLimit=2`, criticalStatuses: F2_CONTRADICTION, F5_FRAGILITY  
-Предустановлено: HAS_AUTHZ
+Предустановлено: HAS_AUTHZ  
+Наследованный долг: D_NEEDS_HEALTHCHECK → F5_FRAGILITY (старый маяк без мониторинга — обязательно закрыть через S_HEALTHCHECK (Сердцебиение))
 
 ---
 
@@ -59,5 +60,7 @@ CP_ROUTING_CONFLICT → fatalStatuses: **F2_CONTRADICTION** → **FAIL**
 | l3_disc1 | S_DISCOVERY (Зов Разведчика) |
 | l3_route1 | S_TRAFFIC_SPLIT (Весы Потоков) |
 
-D_NEEDS_HEALTHCHECK не закрыт → F5_FRAGILITY (крит.)  
-missingRequirements: REQ_FAILOVER → **FAIL**
+D_NEEDS_HEALTHCHECK **унаследован** (defaultInstalled) + усилен S_DISCOVERY (Зов Разведчика) — не закрыт → F5_FRAGILITY (крит.)  
+missingRequirements: REQ_FAILOVER (HAS_FAILOVER даёт только S_HEALTHCHECK (Сердцебиение)) → **FAIL**
+
+**Что игрок узнаёт:** хрупкость была с самого начала — не S_DISCOVERY (Зов Разведчика) её создал, а история маяка. S_DISCOVERY (Зов Разведчика) лишь обнажает то, что уже есть.

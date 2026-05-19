@@ -1,0 +1,92 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "integer",
+      "description": "Отвечает за уровень"
+    },
+    "customer": {
+      "type": "object",
+      "description": "Заказчик. Кто дает задание",
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "Имя заказчика"
+        },
+        "avatar": {
+          "type": "string",
+          "description": "Ссылка на аватар в проекте. Example: images/avatar-1.png"
+        },
+        "description": {
+          "type": "string",
+          "description": "Описание уровня"
+        },
+        "budget": {
+          "$ref": "#/$defs/currencies",
+          "description": "Бюджет заказчика"
+        },
+        "debuff": {
+          "type": "string",
+          "enum": ["slow", "blind", "stun", ""],
+          "description": "Дебафф уровня. Пустая строка = нет дебаффа"
+        }
+      },
+      "required": ["name", "avatar", "description", "budget"],
+      "additionalProperties": false
+    },
+    "matrices": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "minItems": 1,
+        "maxItems": 4,
+        "properties": {
+          "isRequired": {
+            "type": "boolean",
+            "description": "Отвечает за обязательность матрицы"
+          },
+          "currencies": {
+            "gold": {
+              "type": "integer",
+              "description": "Покупка матрицы. Для isRequired = true, то currencies не заполняется или currencies.gold = 0"
+            }
+          },
+          "slots": {
+            "type": "array",
+            "minItems": 1,
+            "maxItems": 5,
+            "items": {
+              "type": "string",
+              "enum": ["observability", "storage", "connectivity", "delivery"]
+            }
+          },
+          "cards": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "string",
+              "description": "['json/cards/x.json']"
+            }
+          }
+        },
+        "required": ["isRequired", "cards", "slots"],
+        "additionalProperties": false
+      }
+    }
+  },
+  "required": ["id", "customer", "matrices"],
+  "additionalProperties": false,
+
+  "$defs": {
+    "currencies": {
+      "type": "object",
+      "properties": {
+        "gold": { "type": "integer" },
+        "aura": { "type": "integer" }
+      },
+      "required": ["gold", "aura"],
+      "additionalProperties": false
+    }
+  }
+}

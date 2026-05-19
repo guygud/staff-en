@@ -1,0 +1,48 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string"
+    },
+    "description": {
+      "type": "string"
+    },
+    "currencies": {
+      "type": "object",
+      "properties": {
+        "gold": { "type": "integer" },
+        "aura": { "type": "integer" }
+      },
+      "required": ["gold", "aura"],
+      "additionalProperties": false
+    },
+    "states": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 3,
+      "items": {
+        "type": "object",
+        "properties": {
+          "name": { "type": "string" },
+          "icon": {
+            "type": "string",
+            "description": "Example: images/debuff.png"
+          },
+          "type": {
+            "type": "string",
+            "enum": ["buff", "debuff"]
+          }
+        },
+        "required": ["name", "icon", "type"],
+        "additionalProperties": false
+      }
+    },
+    "type": {
+      "type": "string",
+      "enum": ["observability", "storage", "connectivity", "delivery"]
+    }
+  },
+  "required": ["name", "description", "currencies", "states", "type"],
+  "additionalProperties": false
+}

@@ -136,8 +136,6 @@
       "allowedSlotTypes": [
         "OBS_LOGS"
       ],
-      "costCoins": 2,
-      "auraDelta": 0,
       "unique": true,
       "effects": [
         {
@@ -156,7 +154,11 @@
       ],
       "buffs": [
         "Ясность"
-      ]
+      ],
+      "currencies": {
+        "gold": 2,
+        "aura": 0
+      }
     },
     {
       "id": "S_NET_JOURNAL",
@@ -165,8 +167,6 @@
       "allowedSlotTypes": [
         "NET_ROUTING"
       ],
-      "costCoins": 4,
-      "auraDelta": 0,
       "unique": true,
       "effects": [
         {
@@ -185,7 +185,11 @@
       ],
       "buffs": [
         "Ясность"
-      ]
+      ],
+      "currencies": {
+        "gold": 4,
+        "aura": 0
+      }
     },
     {
       "id": "S_LIB_LOGS",
@@ -194,8 +198,6 @@
       "allowedSlotTypes": [
         "OBS_LOGS"
       ],
-      "costCoins": 2,
-      "auraDelta": 3,
       "unique": true,
       "effects": [
         {
@@ -214,7 +216,11 @@
       ],
       "buffs": [
         "Ясность"
-      ]
+      ],
+      "currencies": {
+        "gold": 2,
+        "aura": 3
+      }
     },
     {
       "id": "S_LOGGING",
@@ -223,8 +229,6 @@
       "allowedSlotTypes": [
         "OBS_LOGS"
       ],
-      "costCoins": 2,
-      "auraDelta": 1,
       "unique": true,
       "effects": [
         {
@@ -243,7 +247,11 @@
       ],
       "buffs": [
         "Ясность"
-      ]
+      ],
+      "currencies": {
+        "gold": 2,
+        "aura": 1
+      }
     },
     {
       "id": "S_LOG_FILTER",
@@ -252,8 +260,6 @@
       "allowedSlotTypes": [
         "OBS_FILTERS"
       ],
-      "costCoins": 2,
-      "auraDelta": 0,
       "unique": true,
       "effects": [
         {
@@ -267,7 +273,11 @@
       ],
       "buffs": [
         "Чистота"
-      ]
+      ],
+      "currencies": {
+        "gold": 2,
+        "aura": 0
+      }
     },
     {
       "id": "S_ACCESS_LOGS",
@@ -276,8 +286,6 @@
       "allowedSlotTypes": [
         "OBS_LOGS"
       ],
-      "costCoins": 3,
-      "auraDelta": 1,
       "unique": true,
       "effects": [
         {
@@ -297,7 +305,11 @@
       ],
       "buffs": [
         "Ясность"
-      ]
+      ],
+      "currencies": {
+        "gold": 3,
+        "aura": 1
+      }
     },
     {
       "id": "S_ALERTING",
@@ -306,8 +318,6 @@
       "allowedSlotTypes": [
         "OBS_ALERTS"
       ],
-      "costCoins": 2,
-      "auraDelta": 1,
       "unique": true,
       "effects": [
         {
@@ -316,7 +326,11 @@
         }
       ],
       "addsDebts": [],
-      "resolvesDebts": []
+      "resolvesDebts": [],
+      "currencies": {
+        "gold": 2,
+        "aura": 1
+      }
     },
     {
       "id": "S_TTL",
@@ -325,8 +339,6 @@
       "allowedSlotTypes": [
         "ST_RETENTION"
       ],
-      "costCoins": 2,
-      "auraDelta": 2,
       "unique": true,
       "effects": [
         {
@@ -343,7 +355,11 @@
         "D_ACCESS_LOG_VOLUME",
         "D_CACHE_GROWTH",
         "D_INDEX_GROWTH"
-      ]
+      ],
+      "currencies": {
+        "gold": 2,
+        "aura": 2
+      }
     },
     {
       "id": "S_ROTATION",
@@ -352,8 +368,6 @@
       "allowedSlotTypes": [
         "ST_RETENTION"
       ],
-      "costCoins": 2,
-      "auraDelta": 0,
       "unique": true,
       "effects": [
         {
@@ -368,7 +382,11 @@
       "resolvesDebts": [
         "D_LOG_VOLUME",
         "D_ACCESS_LOG_VOLUME"
-      ]
+      ],
+      "currencies": {
+        "gold": 2,
+        "aura": 0
+      }
     },
     {
       "id": "S_QUOTAS",
@@ -377,8 +395,6 @@
       "allowedSlotTypes": [
         "ST_QUOTA"
       ],
-      "costCoins": 2,
-      "auraDelta": 1,
       "unique": true,
       "effects": [
         {
@@ -395,7 +411,11 @@
       ],
       "buffs": [
         "Чистота"
-      ]
+      ],
+      "currencies": {
+        "gold": 2,
+        "aura": 1
+      }
     },
     {
       "id": "S_INDEX",
@@ -404,8 +424,6 @@
       "allowedSlotTypes": [
         "ST_INDEX"
       ],
-      "costCoins": 2,
-      "auraDelta": 1,
       "unique": true,
       "effects": [
         {
@@ -419,7 +437,11 @@
           "statusIfUnresolved": "F1_OVERFLOW"
         }
       ],
-      "resolvesDebts": []
+      "resolvesDebts": [],
+      "currencies": {
+        "gold": 2,
+        "aura": 1
+      }
     },
     {
       "id": "S_SECRETS",
@@ -428,8 +450,6 @@
       "allowedSlotTypes": [
         "ST_SECRETS"
       ],
-      "costCoins": 3,
-      "auraDelta": 0,
       "unique": true,
       "effects": [
         {
@@ -438,7 +458,11 @@
         }
       ],
       "addsDebts": [],
-      "resolvesDebts": []
+      "resolvesDebts": [],
+      "currencies": {
+        "gold": 3,
+        "aura": 0
+      }
     },
     {
       "id": "S_AUTHZ",
@@ -447,8 +471,6 @@
       "allowedSlotTypes": [
         "NET_AUTH"
       ],
-      "costCoins": 4,
-      "auraDelta": 0,
       "unique": true,
       "effects": [
         {
@@ -462,7 +484,11 @@
       ],
       "buffs": [
         "Изоляция"
-      ]
+      ],
+      "currencies": {
+        "gold": 4,
+        "aura": 0
+      }
     },
     {
       "id": "S_DNS",
@@ -471,8 +497,6 @@
       "allowedSlotTypes": [
         "NET_DNS"
       ],
-      "costCoins": 2,
-      "auraDelta": 0,
       "unique": true,
       "effects": [
         {
@@ -481,7 +505,11 @@
         }
       ],
       "addsDebts": [],
-      "resolvesDebts": []
+      "resolvesDebts": [],
+      "currencies": {
+        "gold": 2,
+        "aura": 0
+      }
     },
     {
       "id": "S_TLS_CERT",
@@ -490,8 +518,6 @@
       "allowedSlotTypes": [
         "NET_TLS"
       ],
-      "costCoins": 2,
-      "auraDelta": 0,
       "unique": true,
       "effects": [
         {
@@ -500,7 +526,11 @@
         }
       ],
       "addsDebts": [],
-      "resolvesDebts": []
+      "resolvesDebts": [],
+      "currencies": {
+        "gold": 2,
+        "aura": 0
+      }
     },
     {
       "id": "S_DISCOVERY",
@@ -509,8 +539,6 @@
       "allowedSlotTypes": [
         "NET_DISCOVERY"
       ],
-      "costCoins": 2,
-      "auraDelta": 1,
       "unique": true,
       "effects": [
         {
@@ -524,7 +552,11 @@
           "statusIfUnresolved": "F5_FRAGILITY"
         }
       ],
-      "resolvesDebts": []
+      "resolvesDebts": [],
+      "currencies": {
+        "gold": 2,
+        "aura": 1
+      }
     },
     {
       "id": "S_HEALTHCHECK",
@@ -533,8 +565,6 @@
       "allowedSlotTypes": [
         "NET_DISCOVERY"
       ],
-      "costCoins": 2,
-      "auraDelta": 0,
       "unique": true,
       "effects": [
         {
@@ -552,7 +582,11 @@
       ],
       "buffs": [
         "Надёжность"
-      ]
+      ],
+      "currencies": {
+        "gold": 2,
+        "aura": 0
+      }
     },
     {
       "id": "S_TRAFFIC_SPLIT",
@@ -561,8 +595,6 @@
       "allowedSlotTypes": [
         "NET_ROUTING"
       ],
-      "costCoins": 2,
-      "auraDelta": 1,
       "unique": true,
       "effects": [
         {
@@ -571,7 +603,11 @@
         }
       ],
       "addsDebts": [],
-      "resolvesDebts": []
+      "resolvesDebts": [],
+      "currencies": {
+        "gold": 2,
+        "aura": 1
+      }
     },
     {
       "id": "S_HASH_ROUTING",
@@ -580,8 +616,6 @@
       "allowedSlotTypes": [
         "NET_ROUTING"
       ],
-      "costCoins": 2,
-      "auraDelta": 1,
       "unique": true,
       "effects": [
         {
@@ -590,7 +624,11 @@
         }
       ],
       "addsDebts": [],
-      "resolvesDebts": []
+      "resolvesDebts": [],
+      "currencies": {
+        "gold": 2,
+        "aura": 1
+      }
     },
     {
       "id": "S_POLICY_RESOLVER",
@@ -599,8 +637,6 @@
       "allowedSlotTypes": [
         "NET_ROUTING"
       ],
-      "costCoins": 3,
-      "auraDelta": 0,
       "unique": true,
       "effects": [
         {
@@ -609,7 +645,14 @@
         }
       ],
       "addsDebts": [],
-      "resolvesDebts": []
+      "resolvesDebts": [],
+      "buffs": [
+        "Арбитраж"
+      ],
+      "currencies": {
+        "gold": 3,
+        "aura": 0
+      }
     },
     {
       "id": "S_CICD",
@@ -618,8 +661,6 @@
       "allowedSlotTypes": [
         "CD_PIPELINE"
       ],
-      "costCoins": 2,
-      "auraDelta": 1,
       "unique": true,
       "effects": [
         {
@@ -638,7 +679,11 @@
       ],
       "buffs": [
         "Доставка"
-      ]
+      ],
+      "currencies": {
+        "gold": 2,
+        "aura": 1
+      }
     },
     {
       "id": "S_ROLLBACK",
@@ -647,8 +692,6 @@
       "allowedSlotTypes": [
         "CD_ROLLBACK"
       ],
-      "costCoins": 2,
-      "auraDelta": 0,
       "unique": true,
       "effects": [
         {
@@ -662,7 +705,11 @@
       ],
       "buffs": [
         "Надёжность"
-      ]
+      ],
+      "currencies": {
+        "gold": 2,
+        "aura": 0
+      }
     },
     {
       "id": "S_MR_GATES",
@@ -671,8 +718,6 @@
       "allowedSlotTypes": [
         "CD_GATES"
       ],
-      "costCoins": 2,
-      "auraDelta": 0,
       "unique": true,
       "effects": [
         {
@@ -681,7 +726,11 @@
         }
       ],
       "addsDebts": [],
-      "resolvesDebts": []
+      "resolvesDebts": [],
+      "currencies": {
+        "gold": 2,
+        "aura": 0
+      }
     }
   ],
   "obryadCatalog": [
@@ -692,8 +741,6 @@
       "allowedSlotTypes": [
         "RITUAL_OBS"
       ],
-      "costCoins": 1,
-      "auraDelta": -2,
       "unique": true,
       "addsDebts": [],
       "resolvesDebts": [
@@ -701,7 +748,11 @@
       ],
       "buffs": [
         "Изоляция"
-      ]
+      ],
+      "currencies": {
+        "gold": 1,
+        "aura": -2
+      }
     },
     {
       "id": "R_LIBRARY_GRANT",
@@ -711,12 +762,13 @@
         "RITUAL_ST",
         "RITUAL_OBS"
       ],
-      "costCoins": 1,
-      "coinsDelta": -3,
-      "auraDelta": 0,
       "unique": true,
       "addsDebts": [],
-      "resolvesDebts": []
+      "resolvesDebts": [],
+      "currencies": {
+        "gold": -2,
+        "aura": 0
+      }
     },
     {
       "id": "R_PATRON_SEAL",
@@ -726,12 +778,14 @@
         "RITUAL_NET",
         "RITUAL_CD"
       ],
-      "costCoins": 1,
-      "coinsDelta": -3,
       "auraLimitDelta": 2,
       "unique": true,
       "addsDebts": [],
-      "resolvesDebts": []
+      "resolvesDebts": [],
+      "currencies": {
+        "gold": -2,
+        "aura": 0
+      }
     },
     {
       "id": "R_AI_BUFF",
@@ -743,12 +797,13 @@
         "RITUAL_NET",
         "RITUAL_CD"
       ],
-      "costCoins": 1,
-      "coinsDelta": -3,
-      "auraDelta": 3,
       "unique": true,
       "addsDebts": [],
-      "resolvesDebts": []
+      "resolvesDebts": [],
+      "currencies": {
+        "gold": -2,
+        "aura": 3
+      }
     },
     {
       "id": "R_GUARD_TO_BAR",
@@ -757,11 +812,13 @@
       "allowedSlotTypes": [
         "RITUAL_NET"
       ],
-      "costCoins": 0,
-      "auraDelta": -2,
       "unique": true,
       "addsDebts": [],
-      "resolvesDebts": []
+      "resolvesDebts": [],
+      "currencies": {
+        "gold": 0,
+        "aura": -2
+      }
     },
     {
       "id": "R_CANARY",
@@ -770,11 +827,13 @@
       "allowedSlotTypes": [
         "RITUAL_OBS"
       ],
-      "costCoins": 1,
-      "auraDelta": -1,
       "unique": true,
       "addsDebts": [],
-      "resolvesDebts": []
+      "resolvesDebts": [],
+      "currencies": {
+        "gold": 1,
+        "aura": -1
+      }
     }
   ],
   "conflictPairs": [
@@ -858,8 +917,6 @@
       "order": 1,
       "description": "Из амбара мельника Проспера пропадает мука. Магический замок уже стоит — он пускает только работников мельницы. Но кто именно входил и когда — неизвестно. Нужно добавить журнал доступа, чтобы найти виновного.",
       "clientName": "Мельник Проспер",
-      "coinsBudget": 4,
-      "auraLimit": 5,
       "criticalStatuses": [
         "F1_OVERFLOW",
         "F4_BLINDNESS",
@@ -877,7 +934,6 @@
         {
           "matrixId": "M_OBSERVATION",
           "instanceId": "obs0",
-          "installCostCoins": 0,
           "slots": [
             {
               "slotId": "obs0_logs",
@@ -891,12 +947,12 @@
               "slotId": "obs0_ritual",
               "slotType": "RITUAL_OBS"
             }
-          ]
+          ],
+          "installCostGold": 0
         },
         {
           "matrixId": "M_STORAGE",
           "instanceId": "st0",
-          "installCostCoins": 0,
           "slots": [
             {
               "slotId": "st0_ret",
@@ -906,7 +962,8 @@
               "slotId": "st0_ritual",
               "slotType": "RITUAL_ST"
             }
-          ]
+          ],
+          "installCostGold": 0
         }
       ],
       "defaultInstalled": [
@@ -943,7 +1000,11 @@
         "Перо Всевидящего пишет обо всём: мышах, сквозняках, комарах. В таком потоке вора не найти.",
         "Книга Доступа записывает только тех, кто прошёл через замок — именно это нужно мельнику.",
         "Любой журнал будет расти. Добавь самоочистку — иначе замок рано или поздно заклинит от переполнения."
-      ]
+      ],
+      "budget": {
+        "gold": 4,
+        "aura": 5
+      }
     },
     {
       "id": "L2_KESHA_CACHE",
@@ -951,8 +1012,6 @@
       "order": 2,
       "description": "Старший писец Иннокентий просит превратить личный шар-ускоритель «Редиска» в общий сервис для всех отделов. Шар создавался без изоляции и без контроля роста — теперь каждый отдел хочет его использовать, и всё это одновременно.",
       "clientName": "Иннокентий «Кеша»",
-      "coinsBudget": 6,
-      "auraLimit": 3,
       "maxOptionalMatrices": 1,
       "criticalStatuses": [
         "F1_OVERFLOW",
@@ -970,7 +1029,6 @@
         {
           "matrixId": "M_STORAGE",
           "instanceId": "st_l2",
-          "installCostCoins": 0,
           "slots": [
             {
               "slotId": "st_l2_ret",
@@ -984,12 +1042,12 @@
               "slotId": "st_l2_ritual",
               "slotType": "RITUAL_ST"
             }
-          ]
+          ],
+          "installCostGold": 0
         },
         {
           "matrixId": "M_CONNECTIVITY",
           "instanceId": "net_l2",
-          "installCostCoins": 2,
           "preInstalled": false,
           "slots": [
             {
@@ -1000,12 +1058,12 @@
               "slotId": "net_l2_ritual",
               "slotType": "RITUAL_NET"
             }
-          ]
+          ],
+          "installCostGold": 2
         },
         {
           "matrixId": "M_OBSERVATION",
           "instanceId": "obs_l2",
-          "installCostCoins": 2,
           "preInstalled": false,
           "slots": [
             {
@@ -1020,7 +1078,8 @@
               "slotId": "obs_l2_ritual",
               "slotType": "RITUAL_OBS"
             }
-          ]
+          ],
+          "installCostGold": 2
         }
       ],
       "defaultInstalled": [
@@ -1064,7 +1123,11 @@
         "Редиска изначально не была рассчитана на несколько арендаторов — у неё два унаследованных долга, которые нужно закрыть.",
         "Квоты — единственный способ доказать, что шар умеет 'справедливо делиться'. TTL только чистит старое, но не ограничивает нынешних потребителей.",
         "Путь через Связи стоит ровно на монету больше бюджета — ищи способ сдвинуть экономику в ритуальной зоне."
-      ]
+      ],
+      "budget": {
+        "gold": 6,
+        "aura": 3
+      }
     },
     {
       "id": "L3_GENNADY_LIGHTHOUSE",
@@ -1072,8 +1135,6 @@
       "order": 3,
       "description": "Геннадий держит сторожевой маяк на перевале. Посланники жалуются: одни ждут в очереди, другие теряют сессию на полпути. Геннадий хочет умную точку входа, которая помнит своих и не падает от одного убитого узла.",
       "clientName": "Геннадий (смотритель маяка)",
-      "coinsBudget": 14,
-      "auraLimit": 2,
       "criticalStatuses": [
         "F2_CONTRADICTION",
         "F5_FRAGILITY"
@@ -1108,7 +1169,6 @@
         {
           "matrixId": "M_CONNECTIVITY",
           "instanceId": "net_l3",
-          "installCostCoins": 0,
           "slots": [
             {
               "slotId": "l3_dns",
@@ -1142,7 +1202,8 @@
               "slotId": "l3_ritual",
               "slotType": "RITUAL_NET"
             }
-          ]
+          ],
+          "installCostGold": 0
         }
       ],
       "defaultInstalled": [
@@ -1150,6 +1211,12 @@
           "note": "Ворота маяка защищены — пропускают только известных посланников. AuthZ предустановлен.",
           "grantsCapabilities": [
             "HAS_AUTHZ"
+          ],
+          "addsDebts": [
+            {
+              "id": "D_NEEDS_HEALTHCHECK",
+              "statusIfUnresolved": "F5_FRAGILITY"
+            }
           ]
         }
       ],
@@ -1176,7 +1243,11 @@
         "Discovery без Healthcheck — хрупкость: мёртвые узлы будут получать трафик.",
         "Весовое распределение и sticky-роутинг работают по-разному — вместе они конфликтуют без Арбитра Печатей.",
         "Печать Мецената не просто субсидирует монеты — она также расширяет твой допустимый лимит ауры."
-      ]
+      ],
+      "budget": {
+        "gold": 14,
+        "aura": 2
+      }
     },
     {
       "id": "L4_ANASTASIA_GOLDEN",
@@ -1184,8 +1255,6 @@
       "order": 4,
       "description": "Анастасия строит платформу: единый шаблон для новых сервисов её команды. Сервисы появляются без TLS, без логов и без healthcheck — каждый на своё усмотрение. Нужен «Золотой путь» — стандарт, который работает из коробки.",
       "clientName": "Анастасия (платформенная команда)",
-      "coinsBudget": 15,
-      "auraLimit": 3,
       "criticalStatuses": [
         "F4_BLINDNESS",
         "F5_FRAGILITY"
@@ -1214,7 +1283,6 @@
         {
           "matrixId": "M_CONNECTIVITY",
           "instanceId": "net_l4",
-          "installCostCoins": 0,
           "slots": [
             {
               "slotId": "l4_auth",
@@ -1236,12 +1304,12 @@
               "slotId": "l4_net_rit",
               "slotType": "RITUAL_NET"
             }
-          ]
+          ],
+          "installCostGold": 0
         },
         {
           "matrixId": "M_OBSERVATION",
           "instanceId": "obs_l4",
-          "installCostCoins": 0,
           "slots": [
             {
               "slotId": "l4_logs",
@@ -1255,7 +1323,8 @@
               "slotId": "l4_obs_rit",
               "slotType": "RITUAL_OBS"
             }
-          ]
+          ],
+          "installCostGold": 0
         }
       ],
       "defaultInstalled": [
@@ -1294,7 +1363,11 @@
         "Золотой путь начинается с наблюдаемости — без логов ты слеп.",
         "Discovery без Healthcheck — красивая иллюзия: сервис «найден», но никто не знает, жив ли он.",
         "Канарейка — дёшево и тихо снижает ауру: иногда этого достаточно, чтобы уложиться в лимит."
-      ]
+      ],
+      "budget": {
+        "gold": 15,
+        "aura": 3
+      }
     },
     {
       "id": "L5_KIRA_API",
@@ -1302,8 +1375,6 @@
       "order": 5,
       "description": "Кира Морозова строит единый API-шлюз для партнёров. Сервис стоит, но без контуров доставки и аудита. Хаотичные деплои ломают стабильность, а кто когда что делал — непонятно.",
       "clientName": "Кира Морозова (партнёрская платформа)",
-      "coinsBudget": 18,
-      "auraLimit": 4,
       "criticalStatuses": [
         "F3_COMPROMISE",
         "F5_FRAGILITY",
@@ -1345,7 +1416,6 @@
         {
           "matrixId": "M_CONNECTIVITY",
           "instanceId": "net_l5",
-          "installCostCoins": 0,
           "slots": [
             {
               "slotId": "l5_auth",
@@ -1367,12 +1437,12 @@
               "slotId": "l5_net_rit",
               "slotType": "RITUAL_NET"
             }
-          ]
+          ],
+          "installCostGold": 0
         },
         {
           "matrixId": "M_OBSERVATION",
           "instanceId": "obs_l5",
-          "installCostCoins": 0,
           "slots": [
             {
               "slotId": "l5_logs",
@@ -1386,12 +1456,12 @@
               "slotId": "l5_obs_rit",
               "slotType": "RITUAL_OBS"
             }
-          ]
+          ],
+          "installCostGold": 0
         },
         {
           "matrixId": "M_DELIVERY",
           "instanceId": "cd_l5",
-          "installCostCoins": 0,
           "slots": [
             {
               "slotId": "l5_pipe",
@@ -1405,7 +1475,8 @@
               "slotId": "l5_cd_rit",
               "slotType": "RITUAL_CD"
             }
-          ]
+          ],
+          "installCostGold": 0
         }
       ],
       "defaultInstalled": [
@@ -1445,7 +1516,11 @@
         "D_NO_CICD унаследован — без ритуала доставки Кира не примет работу.",
         "CICD без ROLLBACK — хрупкость: одна ошибка деплоя рушит всё.",
         "DISCOVERY без HEALTHCHECK — то же самое: мёртвые узлы получают трафик."
-      ]
+      ],
+      "budget": {
+        "gold": 18,
+        "aura": 4
+      }
     },
     {
       "id": "L6_MARK_SHARDING",
@@ -1453,8 +1528,6 @@
       "order": 6,
       "description": "Марк Игоревич создаёт систему шардированных хранилищ. Механические голуби должны знать, куда нести свитки — по постоянному ключу, без переспросов. Система должна выдерживать рост и обеспечивать воспроизводимые деплои.",
       "clientName": "Марк Игоревич (архив)",
-      "coinsBudget": 17,
-      "auraLimit": 4,
       "maxOptionalMatrices": 1,
       "criticalStatuses": [
         "F1_OVERFLOW",
@@ -1490,7 +1563,6 @@
         {
           "matrixId": "M_CONNECTIVITY",
           "instanceId": "net_l6",
-          "installCostCoins": 0,
           "slots": [
             {
               "slotId": "l6_disc1",
@@ -1512,12 +1584,12 @@
               "slotId": "l6_net_rit",
               "slotType": "RITUAL_NET"
             }
-          ]
+          ],
+          "installCostGold": 0
         },
         {
           "matrixId": "M_OBSERVATION",
           "instanceId": "obs_l6",
-          "installCostCoins": 0,
           "slots": [
             {
               "slotId": "l6_logs",
@@ -1531,12 +1603,12 @@
               "slotId": "l6_obs_rit",
               "slotType": "RITUAL_OBS"
             }
-          ]
+          ],
+          "installCostGold": 0
         },
         {
           "matrixId": "M_DELIVERY",
           "instanceId": "cd_l6",
-          "installCostCoins": 0,
           "slots": [
             {
               "slotId": "l6_pipe",
@@ -1550,12 +1622,12 @@
               "slotId": "l6_cd_rit",
               "slotType": "RITUAL_CD"
             }
-          ]
+          ],
+          "installCostGold": 0
         },
         {
           "matrixId": "M_STORAGE",
           "instanceId": "st_l6",
-          "installCostCoins": 2,
           "preInstalled": false,
           "slots": [
             {
@@ -1570,7 +1642,8 @@
               "slotId": "l6_st_rit",
               "slotType": "RITUAL_ST"
             }
-          ]
+          ],
+          "installCostGold": 2
         }
       ],
       "defaultInstalled": [],
@@ -1602,7 +1675,11 @@
         "Шардированный роутинг без Healthcheck — мёртвый шард будет получать трафик.",
         "Наблюдаемость нужна — без логов непонятно, куда улетают голуби.",
         "Опциональную матрицу выбирай осознанно: Взгляд даёт логи, Хранение — квоты для контроля роста."
-      ]
+      ],
+      "budget": {
+        "gold": 17,
+        "aura": 4
+      }
     },
     {
       "id": "L7_EDWARD_MULTIDC",
@@ -1610,8 +1687,6 @@
       "order": 7,
       "description": "Эдуард строит резервные обелиски в двух локациях. Система должна пережить полное падение одного дата-центра — без героизма, без ручного вмешательства. Все метрики, все доставки, весь доступ — под контролем.",
       "clientName": "Эдуард (инфраструктура)",
-      "coinsBudget": 24,
-      "auraLimit": 5,
       "criticalStatuses": [
         "F5_FRAGILITY",
         "F1_OVERFLOW",
@@ -1659,7 +1734,6 @@
         {
           "matrixId": "M_CONNECTIVITY",
           "instanceId": "net_l7",
-          "installCostCoins": 0,
           "slots": [
             {
               "slotId": "l7_auth",
@@ -1681,12 +1755,12 @@
               "slotId": "l7_net_rit",
               "slotType": "RITUAL_NET"
             }
-          ]
+          ],
+          "installCostGold": 0
         },
         {
           "matrixId": "M_OBSERVATION",
           "instanceId": "obs_l7",
-          "installCostCoins": 0,
           "slots": [
             {
               "slotId": "l7_logs",
@@ -1700,12 +1774,12 @@
               "slotId": "l7_obs_rit",
               "slotType": "RITUAL_OBS"
             }
-          ]
+          ],
+          "installCostGold": 0
         },
         {
           "matrixId": "M_STORAGE",
           "instanceId": "st_l7",
-          "installCostCoins": 0,
           "slots": [
             {
               "slotId": "l7_ret",
@@ -1719,12 +1793,12 @@
               "slotId": "l7_st_rit",
               "slotType": "RITUAL_ST"
             }
-          ]
+          ],
+          "installCostGold": 0
         },
         {
           "matrixId": "M_DELIVERY",
           "instanceId": "cd_l7",
-          "installCostCoins": 0,
           "slots": [
             {
               "slotId": "l7_pipe",
@@ -1742,7 +1816,8 @@
               "slotId": "l7_cd_rit",
               "slotType": "RITUAL_CD"
             }
-          ]
+          ],
+          "installCostGold": 0
         }
       ],
       "defaultInstalled": [
@@ -1788,7 +1863,11 @@
         "Failover между DC — это не просто Discovery: нужен Healthcheck, иначе мёртвый DC будет получать трафик.",
         "Квоты критичны: без них один DC захлебнётся, а второй не поможет.",
         "Ковчег унаследовал долг D_NO_CICD — без ритуала доставки нельзя синхронизировать оба DC."
-      ]
+      ],
+      "budget": {
+        "gold": 24,
+        "aura": 5
+      }
     },
     {
       "id": "L1_LIBRARY_ORBS",
@@ -1797,8 +1876,6 @@
       "hidden": true,
       "description": "Библиотекарь Мирослава жалуется: шар поиска всегда показывает одну и ту же книгу. Предыдущий маг оставил неуправляемый индекс и незакрытый аудит. Выбери один путь: сетевой журнал через Матрицу Связей или прямые логи через Матрицу Взгляда.",
       "clientName": "Библиотекарь Мирослава",
-      "coinsBudget": 9,
-      "auraLimit": 4,
       "maxOptionalMatrices": 1,
       "criticalStatuses": [
         "F1_OVERFLOW",
@@ -1822,7 +1899,6 @@
         {
           "matrixId": "M_STORAGE",
           "instanceId": "st1",
-          "installCostCoins": 0,
           "preInstalled": true,
           "slots": [
             {
@@ -1837,24 +1913,24 @@
               "slotId": "st1_quota",
               "slotType": "ST_QUOTA"
             }
-          ]
+          ],
+          "installCostGold": 0
         },
         {
           "matrixId": "M_CONNECTIVITY",
           "instanceId": "net1",
-          "installCostCoins": 2,
           "preInstalled": false,
           "slots": [
             {
               "slotId": "net1_route",
               "slotType": "NET_ROUTING"
             }
-          ]
+          ],
+          "installCostGold": 2
         },
         {
           "matrixId": "M_OBSERVATION",
           "instanceId": "obs1",
-          "installCostCoins": 2,
           "preInstalled": false,
           "slots": [
             {
@@ -1865,7 +1941,8 @@
               "slotId": "obs1_filters",
               "slotType": "OBS_FILTERS"
             }
-          ]
+          ],
+          "installCostGold": 2
         }
       ],
       "defaultInstalled": [
@@ -1907,7 +1984,11 @@
         "Уровень стартует с двумя долгами от предыдущего мага — закрой их.",
         "Можно взять только одну опциональную матрицу: Связи дороже, но предсказуемы; Взгляд дешевле, но токсичнее.",
         "Каждый путь имеет свою карту поддержки — ищи её в ритуальной зоне."
-      ]
+      ],
+      "budget": {
+        "gold": 9,
+        "aura": 4
+      }
     },
     {
       "id": "L2_GATEWAY_PASS",
@@ -1916,8 +1997,6 @@
       "hidden": true,
       "description": "На Карванном перевале стоит сторожевая башня. Посланники жалуются: то не достучаться, то утекли письма, то никто не знает, кто приходил. Нужна единая точка входа с базовой устойчивостью и следами. Матриц можно поставить только две — выбирай с умом.",
       "clientName": "Смотритель Башни",
-      "coinsBudget": 18,
-      "auraLimit": 4,
       "maxOptionalMatrices": 2,
       "criticalStatuses": [
         "F3_COMPROMISE",
@@ -1960,7 +2039,6 @@
         {
           "matrixId": "M_CONNECTIVITY",
           "instanceId": "net_pass",
-          "installCostCoins": 2,
           "preInstalled": false,
           "slots": [
             {
@@ -1983,12 +2061,12 @@
               "slotId": "pass_route",
               "slotType": "NET_ROUTING"
             }
-          ]
+          ],
+          "installCostGold": 2
         },
         {
           "matrixId": "M_OBSERVATION",
           "instanceId": "obs_pass",
-          "installCostCoins": 2,
           "preInstalled": false,
           "slots": [
             {
@@ -1999,12 +2077,12 @@
               "slotId": "pass_filters",
               "slotType": "OBS_FILTERS"
             }
-          ]
+          ],
+          "installCostGold": 2
         },
         {
           "matrixId": "M_STORAGE",
           "instanceId": "st_pass",
-          "installCostCoins": 2,
           "preInstalled": false,
           "slots": [
             {
@@ -2015,12 +2093,12 @@
               "slotId": "pass_quota",
               "slotType": "ST_QUOTA"
             }
-          ]
+          ],
+          "installCostGold": 2
         },
         {
           "matrixId": "M_DELIVERY",
           "instanceId": "cd_pass",
-          "installCostCoins": 2,
           "preInstalled": false,
           "slots": [
             {
@@ -2031,7 +2109,8 @@
               "slotId": "pass_rb",
               "slotType": "CD_ROLLBACK"
             }
-          ]
+          ],
+          "installCostGold": 2
         }
       ],
       "defaultInstalled": [
@@ -2073,7 +2152,11 @@
         "Только 2 матрицы. Матрица Связей закрывает TLS, доступ и живучесть — без неё не выжить.",
         "Discovery без Healthcheck — хрупкость: мёртвые узлы будут получать трафик.",
         "Матрица Копирования — ловушка: она не даёт ни безопасности, ни следов, ни живучести."
-      ]
+      ],
+      "budget": {
+        "gold": 18,
+        "aura": 4
+      }
     },
     {
       "id": "L2_LBAAS_FAIR_GATE",
@@ -2082,8 +2165,6 @@
       "hidden": true,
       "description": "Ярмарочный союз требует единую точку входа: домен, TLS, обнаружение узлов, failover, аудит доступа.",
       "clientName": "Ярмарочный Союз",
-      "coinsBudget": 16,
-      "auraLimit": 6,
       "criticalStatuses": [
         "F3_COMPROMISE",
         "F5_FRAGILITY",
@@ -2125,7 +2206,6 @@
         {
           "matrixId": "M_CONNECTIVITY",
           "instanceId": "net1",
-          "installCostCoins": 0,
           "slots": [
             {
               "slotId": "net1_dns",
@@ -2143,12 +2223,12 @@
               "slotId": "net1_disc2",
               "slotType": "NET_DISCOVERY"
             }
-          ]
+          ],
+          "installCostGold": 0
         },
         {
           "matrixId": "M_OBSERVATION",
           "instanceId": "obs1",
-          "installCostCoins": 0,
           "slots": [
             {
               "slotId": "obs1_logs1",
@@ -2162,12 +2242,12 @@
               "slotId": "obs1_filters",
               "slotType": "OBS_FILTERS"
             }
-          ]
+          ],
+          "installCostGold": 0
         },
         {
           "matrixId": "M_STORAGE",
           "instanceId": "st1",
-          "installCostCoins": 0,
           "slots": [
             {
               "slotId": "st1_ret",
@@ -2177,12 +2257,12 @@
               "slotId": "st1_quota",
               "slotType": "ST_QUOTA"
             }
-          ]
+          ],
+          "installCostGold": 0
         },
         {
           "matrixId": "M_DELIVERY",
           "instanceId": "cd1",
-          "installCostCoins": 0,
           "slots": [
             {
               "slotId": "cd1_pipe",
@@ -2196,7 +2276,8 @@
               "slotId": "cd1_rb",
               "slotType": "CD_ROLLBACK"
             }
-          ]
+          ],
+          "installCostGold": 0
         }
       ],
       "defaultInstalled": [],
@@ -2223,7 +2304,11 @@
       "hints": [
         "Service discovery без healthcheck — хрупкость.",
         "Access-логи без контроля роста переполнят хранилище."
-      ]
+      ],
+      "budget": {
+        "gold": 16,
+        "aura": 6
+      }
     },
     {
       "id": "L3_NEW_CASTLE",
@@ -2232,8 +2317,6 @@
       "hidden": true,
       "description": "Торговый Союз трёх королевств заказал полную инфраструктуру для своей новой цитадели. Ничего нет — выбираешь всё сам.",
       "clientName": "Торговый Союз трёх королевств",
-      "coinsBudget": 25,
-      "auraLimit": 7,
       "criticalStatuses": [
         "F3_COMPROMISE",
         "F5_FRAGILITY",
@@ -2276,7 +2359,6 @@
         {
           "matrixId": "M_CONNECTIVITY",
           "instanceId": "net3",
-          "installCostCoins": 2,
           "preInstalled": false,
           "slots": [
             {
@@ -2295,12 +2377,12 @@
               "slotId": "net3_disc2",
               "slotType": "NET_DISCOVERY"
             }
-          ]
+          ],
+          "installCostGold": 2
         },
         {
           "matrixId": "M_OBSERVATION",
           "instanceId": "obs3",
-          "installCostCoins": 2,
           "preInstalled": false,
           "slots": [
             {
@@ -2315,12 +2397,12 @@
               "slotId": "obs3_alerts",
               "slotType": "OBS_ALERTS"
             }
-          ]
+          ],
+          "installCostGold": 2
         },
         {
           "matrixId": "M_STORAGE",
           "instanceId": "st3",
-          "installCostCoins": 2,
           "preInstalled": false,
           "slots": [
             {
@@ -2331,12 +2413,12 @@
               "slotId": "st3_quota",
               "slotType": "ST_QUOTA"
             }
-          ]
+          ],
+          "installCostGold": 2
         },
         {
           "matrixId": "M_DELIVERY",
           "instanceId": "cd3",
-          "installCostCoins": 3,
           "preInstalled": false,
           "slots": [
             {
@@ -2351,7 +2433,8 @@
               "slotId": "cd3_rb",
               "slotType": "CD_ROLLBACK"
             }
-          ]
+          ],
+          "installCostGold": 3
         }
       ],
       "defaultInstalled": [],
@@ -2380,7 +2463,11 @@
       "hints": [
         "Матрицы стоят монеты — устанавливай только те, которые нужны.",
         "CI/CD без rollback — это F5."
-      ]
+      ],
+      "budget": {
+        "gold": 25,
+        "aura": 7
+      }
     }
   ]
 }

@@ -79,8 +79,8 @@ function renderBriefing() {
   }
 
   // Budget & risk
-  qs('#briefing-budget').textContent = `${level.coinsBudget} ⚗ монет`;
-  qs('#briefing-risk').textContent = `до ${level.auraLimit} ☠ ауры`;
+  qs('#briefing-budget').textContent = `${level.budget?.gold} ⚗ монет`;
+  qs('#briefing-risk').textContent = `до ${level.budget?.aura} ☠ ауры`;
 
   // Стартовые дебафы (из defaultInstalled.addsDebts)
   const debuffsContainer = qs('#briefing-debuffs');
@@ -344,7 +344,7 @@ function renderMatrixPanel() {
       <div class="matrix-card-header">
         <span class="matrix-card-icon">${matDef.icon}</span>
         <span class="matrix-card-name">${matDef.name}</span>
-        <span class="matrix-card-cost">⚗ ${matInst.installCostCoins ?? 0}</span>
+        <span class="matrix-card-cost">⚗ ${matInst.installCostGold ?? 0}</span>
       </div>
       <div class="matrix-card-desc">${matDef.description}</div>
       <div class="matrix-card-slots">${matInst.slots.map(s => slotTypeLabel(s.slotType)).join(' · ')}</div>
@@ -387,7 +387,7 @@ function buildSlotEl(slot) {
   if (spell) {
     slotEl.innerHTML = `
       <div class="slot-spell-name">${spell.name}</div>
-      <div class="slot-spell-cost">⚗${spell.costCoins} ☠+${spell.auraDelta ?? 0}</div>
+      <div class="slot-spell-cost">⚗${spell.currencies?.gold ?? 0} ☠+${spell.currencies?.aura ?? 0}</div>
     `;
     slotEl.title = spell.description;
     slotEl.onclick = () => {
@@ -487,8 +487,8 @@ function renderSpellPanel() {
         ${buffHints}
       </div>
       <div class="spell-meta">
-        <span class="spell-cost">⚗ ${spell.costCoins}</span>
-        <span class="spell-risk ${(spell.auraDelta ?? 0) > 0 ? 'has-risk' : ''}">☠ +${spell.auraDelta ?? 0}</span>
+        <span class="spell-cost">⚗ ${spell.currencies?.gold ?? 0}</span>
+        <span class="spell-risk ${(spell.currencies?.aura ?? 0) > 0 ? 'has-risk' : ''}">☠ +${spell.currencies?.aura ?? 0}</span>
         ${debtHints ? `<span class="spell-debt" title="Добавляет долг">${debtHints}</span>` : ''}
       </div>
       <div class="spell-slots">${spell.allowedSlotTypes.map(slotTypeLabel).join(' · ')}</div>
@@ -545,8 +545,10 @@ function renderSpellPanel() {
       card.draggable = !isPlaced;
 
       const effectParts = [];
-      if (obryad.coinsDelta)      effectParts.push(`<span class="spell-cap obryad-coins">✨ ${obryad.coinsDelta > 0 ? '+' : ''}${obryad.coinsDelta} монет</span>`);
-      if (obryad.auraDelta)       effectParts.push(`<span class="spell-cap ${obryad.auraDelta > 0 ? 'obryad-aura-neg' : 'obryad-aura-pos'}">✨ ${obryad.auraDelta > 0 ? '+' : ''}${obryad.auraDelta} ауры</span>`);
+      const oGold = obryad.currencies?.gold ?? 0;
+      const oAura = obryad.currencies?.aura ?? 0;
+      if (oGold !== 0) effectParts.push(`<span class="spell-cap obryad-coins">✨ ${oGold > 0 ? '+' : ''}${oGold} монет</span>`);
+      if (oAura !== 0) effectParts.push(`<span class="spell-cap ${oAura > 0 ? 'obryad-aura-neg' : 'obryad-aura-pos'}">✨ ${oAura > 0 ? '+' : ''}${oAura} ауры</span>`);
       if (obryad.auraLimitDelta)  effectParts.push(`<span class="spell-cap obryad-coins">✨ лимит ауры +${obryad.auraLimitDelta}</span>`);
       const obryadBuffHints = (obryad.buffs ?? []).map(b => `<span class="spell-buff">✨ ${b}</span>`).join('');
 
@@ -562,7 +564,7 @@ function renderSpellPanel() {
           ${effectParts.join('')}${obryadBuffHints}
         </div>
         <div class="spell-meta">
-          <span class="spell-cost">⚗ ${obryad.costCoins ?? 0}</span>
+          <span class="spell-cost">⚗ ${obryad.currencies?.gold ?? 0}</span>
           ${obryadDebtHints ? `<span class="spell-debt">${obryadDebtHints}</span>` : ''}
         </div>
         <div class="spell-slots">${(obryad.allowedSlotTypes ?? []).map(slotTypeLabel).join(' · ')}</div>
@@ -645,7 +647,7 @@ function renderResult() {
 
     qs('#result-client-report').textContent = result.successReport ?? '';
     qs('#result-success-stats').innerHTML =
-      `Монеты: ${result.coinsSpent} / ${level.coinsBudget} ⚗ &nbsp;·&nbsp; Аура: ${result.auraTotal} / ${result.auraLimitFinal} ☠`;
+      `Монеты: ${result.coinsSpent} / ${level.budget?.gold} ⚗ &nbsp;·&nbsp; Аура: ${result.auraTotal} / ${result.auraLimitFinal} ☠`;
 
     qs('#result-all-done').style.display = 'none';
     const btnNext = qs('#btn-next-level');
@@ -691,7 +693,7 @@ function renderAssemblySummary() {
     if (!installedIds.has(matInst.instanceId)) continue;
     const matDef = engine.matrixById(matInst.matrixId);
     const li = el('li', 'assembly-item assembly-item-matrix');
-    li.innerHTML = `<span class="assembly-icon">${matDef?.icon ?? '🔷'}</span> <span class="assembly-name">${matDef?.name ?? matInst.matrixId}</span> <span class="assembly-cost">⚗ ${matInst.installCostCoins ?? 0}</span>`;
+    li.innerHTML = `<span class="assembly-icon">${matDef?.icon ?? '🔷'}</span> <span class="assembly-name">${matDef?.name ?? matInst.matrixId}</span> <span class="assembly-cost">⚗ ${matInst.installCostGold ?? 0}</span>`;
     list.appendChild(li);
   }
 
@@ -791,7 +793,7 @@ function renderFailReport(result, level) {
   } else {
     resBlock.style.display = '';
     resList.innerHTML = `<li class="fail-item fail-info">
-      <span class="fail-icon">ℹ</span> Монеты: ${result.coinsSpent} / ${level.coinsBudget} ⚗ &nbsp;·&nbsp; Аура: ${result.auraTotal} / ${result.auraLimitFinal} ☠
+      <span class="fail-icon">ℹ</span> Монеты: ${result.coinsSpent} / ${level.budget?.gold} ⚗ &nbsp;·&nbsp; Аура: ${result.auraTotal} / ${result.auraLimitFinal} ☠
     </li>`;
   }
 }

@@ -1,6 +1,6 @@
-// TechnoMage Platform — Game Engine (v0.2)
+// TechnoMage Platform — Game Engine (v0.3)
 // Pure data-driven engine. No DOM dependencies.
-// Terminology: coinsBudget / auraLimit (v0.2 schema). See game-data.json version.
+// Schema v0.3: cards use currencies.{gold,aura}; levels use budget.{gold,aura}.
 
 export class Engine {
   constructor() {
@@ -198,20 +198,20 @@ export class Engine {
     const fatalStatuses    = [...allFiredStatuses].filter(s => criticalSet.has(s));
     const nonCriticalStatuses = [...allFiredStatuses].filter(s => !criticalSet.has(s));
 
-    // 7. Aura = sum of auraDelta from all cards + penalty per non-critical status
+    // 7. Aura = sum of currencies.aura from all cards + penalty per non-critical status
     //    auraLimit can be raised by obryad auraLimitDelta
     const auraLimitModifier = cards.reduce((sum, c) => sum + (c.auraLimitDelta ?? 0), 0);
-    const auraLimitFinal = (level.auraLimit ?? 0) + auraLimitModifier;
-    let auraTotal = cards.reduce((sum, c) => sum + (c.auraDelta ?? 0), 0);
+    const auraLimitFinal = (level.budget?.aura ?? 0) + auraLimitModifier;
+    let auraTotal = cards.reduce((sum, c) => sum + (c.currencies?.aura ?? 0), 0);
     auraTotal += nonCriticalStatuses.length * (level.nonCriticalStatusAuraPenalty ?? 2);
 
-    // 8. Coins = sum of (costCoins + coinsDelta) for all cards + installed optional matrix costs
+    // 8. Coins = sum of currencies.gold for all cards + installed optional matrix costs
     const matrixInstallCost = (level.availableMatrices ?? [])
       .filter(m => m.preInstalled === false && installedMatrixIds.includes(m.instanceId))
-      .reduce((sum, m) => sum + (m.installCostCoins ?? 0), 0);
+      .reduce((sum, m) => sum + (m.installCostGold ?? 0), 0);
 
     const coinsSpent = cards.reduce(
-      (sum, c) => sum + (c.costCoins ?? 0) + (c.coinsDelta ?? 0), 0
+      (sum, c) => sum + (c.currencies?.gold ?? 0), 0
     ) + matrixInstallCost;
 
     // 9. Missing requirements
@@ -229,7 +229,7 @@ export class Engine {
       auraTotal,
       auraLimitFinal,
       coinsSpent,
-      coinsRemaining: (level.coinsBudget ?? 0) - coinsSpent,
+      coinsRemaining: (level.budget?.gold ?? 0) - coinsSpent,
       missingRequirements,
     };
   }
@@ -259,8 +259,8 @@ export class Engine {
     }
 
     // Category 3: budget / aura
-    if (c.coinsSpent > (level.coinsBudget ?? 0)) {
-      failReasons.push({ type: 'BUDGET_EXCEEDED', coinsSpent: c.coinsSpent, coinsBudget: level.coinsBudget });
+    if (c.coinsSpent > (level.budget?.gold ?? 0)) {
+      failReasons.push({ type: 'BUDGET_EXCEEDED', coinsSpent: c.coinsSpent, coinsBudget: level.budget?.gold });
     }
     if (c.auraTotal > c.auraLimitFinal) {
       failReasons.push({ type: 'AURA_EXCEEDED', auraTotal: c.auraTotal, auraLimit: c.auraLimitFinal });
@@ -295,7 +295,7 @@ export class Engine {
     return {
       coinsSpent:    c.coinsSpent,
       coinsRemaining: c.coinsRemaining,
-      coinsBudget:   level.coinsBudget ?? 0,
+      coinsBudget:   level.budget?.gold ?? 0,
       auraTotal:     c.auraTotal,
       auraLimit:     c.auraLimitFinal,
       activeStatuses:     c.allFiredStatuses,

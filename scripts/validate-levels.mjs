@@ -125,17 +125,17 @@ function simulate(level, placements, installedMatrixIds) {
 
   // 6. Aura
   const auraLimitModifier = cards.reduce((sum, c) => sum + (c.auraLimitDelta ?? 0), 0);
-  const auraLimitFinal = (level.auraLimit ?? 0) + auraLimitModifier;
-  let auraTotal = cards.reduce((sum, c) => sum + (c.auraDelta ?? 0), 0);
+  const auraLimitFinal = (level.budget?.aura ?? 0) + auraLimitModifier;
+  let auraTotal = cards.reduce((sum, c) => sum + (c.currencies?.aura ?? 0), 0);
   auraTotal += nonCriticalStatuses.length * (level.nonCriticalStatusAuraPenalty ?? 2);
 
   // 7. Coins
   const matrixInstallCost = (level.availableMatrices ?? [])
     .filter(m => m.preInstalled === false && installedMatrixIds.includes(m.instanceId))
-    .reduce((sum, m) => sum + (m.installCostCoins ?? 0), 0);
+    .reduce((sum, m) => sum + (m.installCostGold ?? 0), 0);
 
   const coinsSpent = cards.reduce(
-    (sum, c) => sum + (c.costCoins ?? 0) + (c.coinsDelta ?? 0), 0
+    (sum, c) => sum + (c.currencies?.gold ?? 0), 0
   ) + matrixInstallCost;
 
   // 8. Missing requirements
@@ -147,7 +147,7 @@ function simulate(level, placements, installedMatrixIds) {
   const failReasons = [];
   if (missingRequirements.length)  failReasons.push({ type: 'REQ_MISSING' });
   if (fatalStatuses.length)        failReasons.push({ type: 'FATAL_STATUS' });
-  if (coinsSpent > (level.coinsBudget ?? 0)) failReasons.push({ type: 'BUDGET_EXCEEDED' });
+  if (coinsSpent > (level.budget?.gold ?? 0)) failReasons.push({ type: 'BUDGET_EXCEEDED' });
   if (auraTotal  > auraLimitFinal)           failReasons.push({ type: 'AURA_EXCEEDED' });
 
   return {
@@ -168,14 +168,14 @@ section('Group A — Static data integrity');
 for (const level of levels) {
   const lid = level.id;
 
-  // A1: No legacy field names
-  if ('budgetGold' in level) fail(lid, `uses deprecated field "budgetGold" — use "coinsBudget"`);
-  else if ('coinsBudget' in level) pass(lid, `field terminology: coinsBudget ✓`);
-  else fail(lid, `missing "coinsBudget"`);
-
-  if ('riskLimit' in level) fail(lid, `uses deprecated field "riskLimit" — use "auraLimit"`);
-  else if ('auraLimit' in level) pass(lid, `field terminology: auraLimit ✓`);
-  else fail(lid, `missing "auraLimit"`);
+  // A1: Schema v0.3 field names
+  if ('budgetGold' in level || 'coinsBudget' in level || 'auraLimit' in level) {
+    fail(lid, `uses legacy field names — migrate to budget.{gold,aura}`);
+  } else if (level.budget?.gold != null && level.budget?.aura != null) {
+    pass(lid, `field terminology: budget.{gold,aura} ✓`);
+  } else {
+    fail(lid, `missing budget.{gold,aura}`);
+  }
 
   // A2: Each requirement's capabilityId is reachable
   const reachable = new Set([
