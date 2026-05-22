@@ -1,72 +1,93 @@
-# L6 — Марк: таблица решений
+# L6 — Голуби Марка: Дизайн-документ
 
-## Путь A — Классический шардинг (S_LOG_FILTER (Сито Смыслов), без M_STORAGE (Матрица Хранения))
+**Источник истины по числам:** `game-data.json` + `scripts/level-fixtures/L6_MARK_SHARDING.expected.json`.
 
-Чистое решение без опциональной матрицы: S_LOGGING (Перо Летописца) + S_LOG_FILTER (Сито Смыслов) закрывают долг журналирования.
+## Стартовые долги
 
-| Слот | Карта | Монеты | Аура |
+| Долг | Статус если не закрыт | Нарратив |
+|---|---|---|
+| `D_ROUTING_AMBIGUITY` | `F11_HOTSPOT` | Голуби не знают, в какой шард лететь, и перегревают случайный диапазон |
+| `D_SCHEMA_DRIFT` | `F12_SPLIT_BRAIN` | Разные шарды отвечают разной схемой |
+| `D_NO_OBSERVABILITY` | `F13_DARK_SHARD` | Шард работает в темноте, полёты не записываются |
+
+## Критические статусы
+
+`F1_OVERFLOW`, `F2_CONTRADICTION`, `F5_FRAGILITY`, `F7_CONFUSION`, `F11_HOTSPOT`, `F12_SPLIT_BRAIN`, `F13_DARK_SHARD`.
+
+Конфликт `CP_SHARD_KEY_VS_HASH`: одновременно `S_SHARD_KEY` и `S_HASH_ROUTING` без `S_POLICY_RESOLVER` -> `F2_CONTRADICTION`.
+
+## Каскадные цепочки
+
+```text
+D_ROUTING_AMBIGUITY
+  -> S_SHARD_KEY
+    -> D_SHARD_IMBALANCE -> S_REBALANCER
+      -> D_REBALANCE_WINDOW -> S_MIGRATION_DRY_RUN
+      -> D_HOT_PARTITION -> S_HOT_KEY_SPLITTER
+
+D_SCHEMA_DRIFT
+  -> S_SCHEMA_GUARD
+    -> D_NEEDS_MIGRATION -> S_CICD -> D_NEEDS_ROLLBACK -> S_ROLLBACK
+    -> D_BACKFILL_UNVERIFIED -> S_MIGRATION_DRY_RUN
+
+D_SCHEMA_DRIFT
+  -> S_REPLICATION_MANAGER
+    -> D_REPLICATION_LAG -> S_REPLICA_SYNC
+    -> D_SPLIT_BRAIN -> S_QUORUM_KEEPER
+
+D_NO_OBSERVABILITY
+  -> S_LOGGING
+    -> D_LOG_VOLUME -> S_LOG_FILTER или R_GUARD_TO_BAR
+```
+
+## Матрицы
+
+| ID | Название | Слоты | Стоимость |
 |---|---|---|---|
-| l6_disc1 | S_DISCOVERY (Зов Разведчика) | 2 | +1 |
-| l6_disc2 | S_HEALTHCHECK (Сердцебиение) | 2 | 0 |
-| l6_route1 | S_HASH_ROUTING (Якорь Сессии) | 2 | +1 |
-| l6_logs | S_LOGGING (Перо Летописца) | 2 | +1 |
-| l6_filters | S_LOG_FILTER (Сито Смыслов) | 2 | 0 |
-| l6_pipe | S_CICD (Ритуал Доставки) | 2 | +1 |
-| l6_rb | S_ROLLBACK (Ключ Отката) | 2 | 0 |
-| **Итого** | | **14** | **4** |
+| `net_l6` | Маршрутизатор Шардов | `NET_ROUTING` x2, `RITUAL_NET` | 2 |
+| `obs_l6` | Летопись Событий | `OBS_LOGS`, `OBS_FILTERS`, `RITUAL_OBS` | 1 |
+| `st_l6` | Погреб Шардов | `ST_RETENTION`, `ST_QUOTA`, `RITUAL_ST` | 2 |
+| `cd_l6` | Конвейер Миграций | `CD_PIPELINE`, `CD_TESTING`, `CD_ROLLBACK`, `RITUAL_CD` | 1 |
+| `buffer_l6` | Маршрутно-Складской Буфер | `NET_ROUTING`, `ST_QUOTA`, `RITUAL_NET` | 2 |
 
-**Активные долги**: нет
-**Capabilities**: HAS_DISCOVERY, HAS_HEALTHCHECK, HAS_FAILOVER, HAS_HASH_ROUTING, HAS_LOGS, HAS_LOG_FILTERING, HAS_CICD, HAS_ROLLBACK
-**DoD**: HAS_HASH_ROUTING ✓, HAS_FAILOVER ✓, HAS_LOGS ✓, HAS_CICD ✓
-**Итог**: PASS (14 монет / 4 ауры = лимит)
+Бюджет: **24 монеты / 5 ауры**.
 
-**Что понимает игрок**: стандартный путь работает без опциональной матрицы. Аура ровно на лимите — свободных монет много (17-14=3), но аура не позволяет добавить что-то тяжёлое.
+## Валидные пути
 
----
+### Путь A — Технический
 
-## Путь B — Субсидия (M_STORAGE (Матрица Хранения) + R_LIBRARY_GRANT (Академический Грант) + R_GUARD_TO_BAR (Стражника в бар))
+`S_SHARD_KEY` + `S_REBALANCER` + `S_HOT_KEY_SPLITTER`, схема через `S_SCHEMA_GUARD`, миграции через `S_CICD` + `S_MIGRATION_DRY_RUN` + `S_ROLLBACK`, наблюдаемость через `S_LOGGING` + `S_LOG_FILTER`.
 
-M_STORAGE (Матрица Хранения) открывает S_QUOTAS (резолвер D_LOG_VOLUME) и RITUAL_ST для R_LIBRARY_GRANT (-3 монеты). R_GUARD_TO_BAR (Стражника в бар) снижает ауру на 2, компенсируя доп. расходы по ауре.
+Итог: **24 монеты / 5 ауры**.
 
-| Слот | Карта | Монеты | Аура |
-|---|---|---|---|
-| l6_disc1 | S_DISCOVERY (Зов Разведчика) | 2 | +1 |
-| l6_disc2 | S_HEALTHCHECK (Сердцебиение) | 2 | 0 |
-| l6_route1 | S_HASH_ROUTING (Якорь Сессии) | 2 | +1 |
-| l6_logs | S_LOGGING (Перо Летописца) | 2 | +1 |
-| l6_quota | S_QUOTAS (Предел Закромов) | 2 | +1 |
-| l6_pipe | S_CICD (Ритуал Доставки) | 2 | +1 |
-| l6_rb | S_ROLLBACK (Ключ Отката) | 2 | 0 |
-| l6_st_rit | R_LIBRARY_GRANT (Академический Грант) | 1 (−3 coinsDelta) | 0 |
-| l6_net_rit | R_GUARD_TO_BAR (Стражника в бар) | 0 | −2 |
-| M_STORAGE (st_l6) | — | +2 | — |
-| **Итого** | | **15** | **3** |
+### Путь B — Ритуал вместо фильтра
 
-*Расчёт монет: (2+2+2+2+2+2+2) + (1−3) + 0 + 2 = 13 + (−2) + 2 = 13c... wait:*
-*Карты: 2+2+2+2+2+2+2+1+0 = 15, coinsDelta = −3, matrix = 2 → итого 15−3+2 = 14*
+То же ядро шардирования и миграций, но `D_LOG_VOLUME` закрывается через `R_GUARD_TO_BAR` вместо `S_LOG_FILTER`.
 
-| **Пересчёт** | | **14** | **3** |
+Итог: **24 монеты / 4 ауры**.
 
-**Активные долги**: нет (D_LOG_VOLUME закрыт S_QUOTAS (Предел Закромов))
-**DoD**: HAS_HASH_ROUTING ✓, HAS_FAILOVER ✓, HAS_LOGS ✓, HAS_CICD ✓
-**Итог**: PASS (14 монет / 3 ауры)
+Репликация и ограда больше не считаются валидными путями уровня. Они остаются в колоде как приманки и ловушки: игрок может увидеть, какие дополнительные долги они создают, но два зачётных решения — только A и B.
 
-**Что понимает игрок**: покупка M_STORAGE (Матрица Хранения) + R_LIBRARY_GRANT (Академический Грант) суммарно «стоит» -1 монету (2 за матрицу − 3 от обряда), но открывает слот для S_QUOTAS (Предел Закромов). Два обряда вместе (R_LIBRARY_GRANT (Академический Грант) + R_GUARD_TO_BAR (Стражника в бар)) — первый пример многосоставной стратегии с обрядами.
+## Ловушки
 
----
+| # | Что делает игрок | Результат |
+|---|---|---|
+| 1 | Берёт `buffer_l6` без `obs_l6` | `F13_DARK_SHARD` |
+| 2 | Ставит `S_SHARD_KEY`, но забывает `S_REBALANCER` | `F1_OVERFLOW` |
+| 3 | Ставит `S_SCHEMA_GUARD`, но не запускает `S_CICD` | `F5_FRAGILITY` |
+| 4 | Ставит `S_SHARD_FENCE` без `S_SHARD_PROBE` | `F7_CONFUSION` |
+| 5 | Ставит `S_REPLICATION_MANAGER` без `S_REPLICA_SYNC` | `F5_FRAGILITY` |
+| 6 | Смешивает `S_SHARD_KEY` и `S_HASH_ROUTING` без арбитра | `F11_HOTSPOT` + `F2_CONTRADICTION` |
+| 7 | Закрывает imbalance через `S_REBALANCER`, но забывает `S_HOT_KEY_SPLITTER` | `F11_HOTSPOT` |
+| 8 | Ставит `S_SCHEMA_GUARD` без `S_MIGRATION_DRY_RUN` | `F11_HOTSPOT` |
+| 9 | Реплицирует без `S_QUORUM_KEEPER` | `F12_SPLIT_BRAIN` |
 
-## Ловушка — S_DISCOVERY (Зов Разведчика) без S_HEALTHCHECK (F5_FRAGILITY)
+## Новые карты L6
 
-| Слот | Карта |
-|---|---|
-| l6_disc1 | S_DISCOVERY (Зов Разведчика) |
-| l6_route1 | S_HASH_ROUTING (Якорь Сессии) |
-| l6_logs | S_LOGGING (Перо Летописца) |
-| l6_filters | S_LOG_FILTER (Сито Смыслов) |
-| l6_pipe | S_CICD (Ритуал Доставки) |
-| l6_rb | S_ROLLBACK (Ключ Отката) |
+| Карта | Слот | Роль |
+|---|---|---|
+| `S_HOT_KEY_SPLITTER` | `NET_ROUTING` | Лечит `D_HOT_PARTITION` |
+| `S_MIGRATION_DRY_RUN` | `CD_TESTING` | Лечит `D_REBALANCE_WINDOW` и `D_BACKFILL_UNVERIFIED` |
+| `S_QUORUM_KEEPER` | `NET_ROUTING` | Лечит `D_SPLIT_BRAIN` |
 
-**Активные долги**: D_NEEDS_HEALTHCHECK → F5_FRAGILITY (критический!), D_LOG_VOLUME → закрыт S_LOG_FILTER (Сито Смыслов)
-**Итог**: FAIL — F5_FRAGILITY + REQ_FAILOVER не закрыт
-
-**Что понимает игрок**: шардинг без healthcheck — хрупкость. При падении шарда нет механизма failover. DISCOVERY всегда нужен HEALTHCHECK.
+Главный урок уровня: лечение на масштабе часто не завершает проблему, а вскрывает следующий технический долг. Игрок должен читать не только стартовые долги, но и хвосты, которые создают выбранные карты.

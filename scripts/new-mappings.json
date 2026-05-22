@@ -1,0 +1,5 @@
+{
+  "statusNameAliases": {},
+  "cardNameAliases": {},
+  "_comment": "Optional: map display names in new/*.csv to ids in game-data.json when names diverge. Empty object = unused."
+}

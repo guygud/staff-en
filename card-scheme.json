@@ -2,12 +2,8 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "type": "object",
   "properties": {
-    "name": {
-      "type": "string"
-    },
-    "description": {
-      "type": "string"
-    },
+    "name":        { "type": "string" },
+    "description": { "type": "string" },
     "currencies": {
       "type": "object",
       "properties": {
@@ -19,30 +15,43 @@
     },
     "states": {
       "type": "array",
-      "minItems": 1,
-      "maxItems": 3,
+      "description": "Баффы которые карта даёт + дебаффы которые добавляет (каскад)",
       "items": {
         "type": "object",
         "properties": {
           "name": { "type": "string" },
-          "icon": {
-            "type": "string",
-            "description": "Example: images/debuff.png"
-          },
-          "type": {
-            "type": "string",
-            "enum": ["buff", "debuff"]
-          }
+          "icon": { "type": "string", "description": "Example: images/icons/чистота" },
+          "type": { "type": "string", "enum": ["buff", "debuff"] }
         },
         "required": ["name", "icon", "type"],
         "additionalProperties": false
       }
     },
-    "type": {
-      "type": "string",
-      "enum": ["observability", "storage", "connectivity", "delivery"]
+    "resolves": {
+      "type": "array",
+      "description": "Статусы которые карта снимает",
+      "items": {
+        "type": "object",
+        "properties": {
+          "name": { "type": "string" },
+          "icon": { "type": "string", "description": "Example: images/icons/f3_compromise" }
+        },
+        "required": ["name", "icon"],
+        "additionalProperties": false
+      }
+    },
+    "types": {
+      "type": "array",
+      "description": "Типы слотов в которые карту можно положить. Cocos сравнивает с slot в матрице.",
+      "minItems": 1,
+      "items": {
+        "type": "string",
+        "enum": ["logs", "filters", "retention", "quota",
+                 "dns", "tls", "auth", "routing", "discovery",
+                 "cicd", "canary", "ritual"]
+      }
     }
   },
-  "required": ["name", "description", "currencies", "states", "type"],
+  "required": ["name", "description", "currencies", "states", "resolves", "types"],
   "additionalProperties": false
 }

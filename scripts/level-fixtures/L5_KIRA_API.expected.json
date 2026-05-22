@@ -2,96 +2,187 @@
   "levelId": "L5_KIRA_API",
   "scenarios": [
     {
-      "name": "Путь A — Полный контур + R_CANARY",
+      "name": "Путь A — Стандарт (Аудитный журнал + S_LOG_FILTER)",
       "placements": {
-        "l5_tls": "S_TLS_CERT",
-        "l5_auth": "S_AUTHZ",
-        "l5_disc1": "S_DISCOVERY",
-        "l5_disc2": "S_HEALTHCHECK",
-        "l5_logs": "S_ACCESS_LOGS",
-        "l5_pipe": "S_CICD",
-        "l5_rb": "S_ROLLBACK",
-        "l5_obs_rit": "R_CANARY"
+        "l5_auth":    "S_AUTHZ",
+        "l5_logs":    "S_ACCESS_LOGS",
+        "l5_filters": "S_LOG_FILTER",
+        "l5_pipe":    "S_API_CICD",
+        "l5_gate":    "S_API_MR_GATES",
+        "l5_contract": "S_CONTRACT_TESTS",
+        "l5_rb":      "S_ROLLBACK",
+        "l5_cd_rit":  "R_PATRON_SEAL"
       },
-      "installedMatrixIds": [],
+      "installedMatrixIds": ["net_l5", "obs_l5", "cd_l5"],
       "expected": {
         "outcome": "pass",
         "missingRequirements": [],
         "fatalStatuses": [],
-        "coinsSpentRange": [
-          18,
-          18
-        ],
-        "auraTotalRange": [
-          4,
-          4
-        ]
+        "coinsSpentRange": [18, 18],
+        "auraTotalRange":  [5, 5]
       }
     },
     {
-      "name": "Путь B — Полный контур + R_GUARD_TO_BAR",
+      "name": "Путь B — Релизный контур (MR gates + Печать Мецената)",
       "placements": {
-        "l5_tls": "S_TLS_CERT",
-        "l5_auth": "S_AUTHZ",
-        "l5_disc1": "S_DISCOVERY",
-        "l5_disc2": "S_HEALTHCHECK",
-        "l5_logs": "S_ACCESS_LOGS",
-        "l5_pipe": "S_CICD",
-        "l5_rb": "S_ROLLBACK",
-        "l5_net_rit": "R_GUARD_TO_BAR"
+        "l5_auth":     "S_AUTHZ",
+        "l5_logs":     "S_ACCESS_LOGS",
+        "l5_obs_rit":  "R_LOG_ARCHIVE",
+        "l5_pipe":     "S_API_CICD",
+        "l5_gate":     "S_API_MR_GATES",
+        "l5_contract": "S_CONTRACT_TESTS",
+        "l5_rb":       "S_ROLLBACK",
+        "l5_cd_rit":   "R_PATRON_SEAL"
       },
-      "installedMatrixIds": [],
+      "installedMatrixIds": ["net_l5", "obs_l5", "cd_l5"],
       "expected": {
         "outcome": "pass",
         "missingRequirements": [],
         "fatalStatuses": [],
-        "coinsSpentRange": [
-          17,
-          17
-        ],
-        "auraTotalRange": [
-          3,
-          3
-        ]
+        "coinsSpentRange": [18, 18],
+        "auraTotalRange":  [4, 4]
       }
     },
     {
-      "name": "Ловушка 1 — Нет CICD (F6_NONDELIVERY)",
+      "name": "Ловушка 1 — Контур надёжности: S_DISCOVERY без S_HEALTHCHECK → F5_FRAGILITY",
       "placements": {
-        "l5_tls": "S_TLS_CERT",
-        "l5_auth": "S_AUTHZ",
-        "l5_disc1": "S_DISCOVERY",
-        "l5_disc2": "S_HEALTHCHECK",
-        "l5_logs": "S_ACCESS_LOGS"
+        "l5_res_auth":  "S_AUTHZ",
+        "l5_res_disc1": "S_DISCOVERY",
+        "l5_logs":      "S_ACCESS_LOGS",
+        "l5_filters":   "S_LOG_FILTER",
+        "l5_pipe":      "S_API_CICD",
+        "l5_gate":      "S_API_MR_GATES",
+        "l5_contract":  "S_CONTRACT_TESTS",
+        "l5_rb":        "S_ROLLBACK",
+        "l5_cd_rit":    "R_PATRON_SEAL"
       },
-      "installedMatrixIds": [],
+      "installedMatrixIds": ["resilience_l5", "obs_l5", "cd_l5"],
       "expected": {
         "outcome": "fail",
-        "fatalStatuses": [
-          "F6_NONDELIVERY"
-        ],
-        "missingRequirementsContains": [
-          "REQ_CICD"
-        ]
+        "fatalStatuses": ["F5_FRAGILITY"],
+        "missingRequirements": []
       }
     },
     {
-      "name": "Ловушка 2 — CICD без ROLLBACK (F5_FRAGILITY)",
+      "name": "Ловушка 2 — Хроника без R_LOG_ARCHIVE (D_ACCESS_LOG_VOLUME → аура превышена)",
       "placements": {
-        "l5_tls": "S_TLS_CERT",
-        "l5_auth": "S_AUTHZ",
-        "l5_disc1": "S_DISCOVERY",
-        "l5_disc2": "S_HEALTHCHECK",
-        "l5_logs": "S_ACCESS_LOGS",
-        "l5_pipe": "S_CICD",
-        "l5_net_rit": "R_GUARD_TO_BAR"
+        "l5_auth":     "S_AUTHZ",
+        "l5_chr_log1": "S_ACCESS_LOGS",
+        "l5_pipe":     "S_API_CICD",
+        "l5_gate":     "S_API_MR_GATES",
+        "l5_contract": "S_CONTRACT_TESTS",
+        "l5_rb":       "S_ROLLBACK"
       },
-      "installedMatrixIds": [],
+      "installedMatrixIds": ["net_l5", "chronicle_l5", "cd_l5"],
       "expected": {
         "outcome": "fail",
-        "fatalStatuses": [
-          "F5_FRAGILITY"
-        ],
+        "fatalStatuses": [],
+        "missingRequirements": [],
+        "auraTotalRange": [7, 7]
+      }
+    },
+    {
+      "name": "Ловушка 3 — S_API_CICD без S_ROLLBACK → D_NEEDS_ROLLBACK → F5_FRAGILITY",
+      "placements": {
+        "l5_auth":    "S_AUTHZ",
+        "l5_logs":    "S_ACCESS_LOGS",
+        "l5_filters": "S_LOG_FILTER",
+        "l5_pipe":    "S_API_CICD",
+        "l5_gate":    "S_API_MR_GATES",
+        "l5_contract": "S_CONTRACT_TESTS"
+      },
+      "installedMatrixIds": ["net_l5", "obs_l5", "cd_l5"],
+      "expected": {
+        "outcome": "fail",
+        "fatalStatuses": ["F5_FRAGILITY"],
+        "missingRequirements": []
+      }
+    },
+    {
+      "name": "Ловушка 4 — Нет S_AUTHZ → D_OPEN_ACCESS → F3_COMPROMISE",
+      "placements": {
+        "l5_logs":    "S_ACCESS_LOGS",
+        "l5_filters": "S_LOG_FILTER",
+        "l5_pipe":    "S_API_CICD",
+        "l5_gate":    "S_API_MR_GATES",
+        "l5_contract": "S_CONTRACT_TESTS",
+        "l5_rb":      "S_ROLLBACK"
+      },
+      "installedMatrixIds": ["net_l5", "obs_l5", "cd_l5"],
+      "expected": {
+        "outcome": "fail",
+        "fatalStatuses": ["F3_COMPROMISE"],
+        "missingRequirements": []
+      }
+    },
+    {
+      "name": "Ловушка 5 — Страж Врат MR без пайплайна (D_NO_CICD → F6_NONDELIVERY)",
+      "placements": {
+        "l5_auth":    "S_AUTHZ",
+        "l5_logs":    "S_ACCESS_LOGS",
+        "l5_filters": "S_LOG_FILTER",
+        "l5_gate":    "S_API_MR_GATES",
+        "l5_contract": "S_CONTRACT_TESTS",
+        "l5_rb":      "S_ROLLBACK"
+      },
+      "installedMatrixIds": ["net_l5", "obs_l5", "cd_l5"],
+      "expected": {
+        "outcome": "fail",
+        "fatalStatuses": ["F6_NONDELIVERY"],
+        "missingRequirements": []
+      }
+    },
+    {
+      "name": "Ловушка 6 — Широкие логи вместо аудита (D_AUDIT_NEEDED → F8_AUDIT_GAP)",
+      "placements": {
+        "l5_auth":    "S_AUTHZ",
+        "l5_logs":    "S_LOGGING",
+        "l5_filters": "S_LOG_FILTER",
+        "l5_pipe":    "S_API_CICD",
+        "l5_gate":    "S_API_MR_GATES",
+        "l5_contract": "S_CONTRACT_TESTS",
+        "l5_rb":      "S_ROLLBACK"
+      },
+      "installedMatrixIds": ["net_l5", "obs_l5", "cd_l5"],
+      "expected": {
+        "outcome": "fail",
+        "fatalStatuses": ["F8_AUDIT_GAP"],
+        "missingRequirements": []
+      }
+    },
+    {
+      "name": "Ловушка 7 — S_API_CICD породил D_NO_REVIEW_GATES, но MR-гейта нет → F9_UNREVIEWED_RELEASE",
+      "placements": {
+        "l5_auth":     "S_AUTHZ",
+        "l5_logs":     "S_ACCESS_LOGS",
+        "l5_filters":  "S_LOG_FILTER",
+        "l5_pipe":     "S_API_CICD",
+        "l5_contract": "S_CONTRACT_TESTS",
+        "l5_rb":       "S_ROLLBACK",
+        "l5_cd_rit":   "R_PATRON_SEAL"
+      },
+      "installedMatrixIds": ["net_l5", "obs_l5", "cd_l5"],
+      "expected": {
+        "outcome": "fail",
+        "fatalStatuses": ["F9_UNREVIEWED_RELEASE"],
+        "missingRequirements": []
+      }
+    },
+    {
+      "name": "Ловушка 8 — S_API_MR_GATES породил D_PARTNER_CONTRACT_DRIFT, но тестов нет → F10_CONTRACT_DRIFT",
+      "placements": {
+        "l5_auth":    "S_AUTHZ",
+        "l5_logs":    "S_ACCESS_LOGS",
+        "l5_filters": "S_LOG_FILTER",
+        "l5_pipe":    "S_API_CICD",
+        "l5_gate":    "S_API_MR_GATES",
+        "l5_rb":      "S_ROLLBACK",
+        "l5_cd_rit":  "R_PATRON_SEAL"
+      },
+      "installedMatrixIds": ["net_l5", "obs_l5", "cd_l5"],
+      "expected": {
+        "outcome": "fail",
+        "fatalStatuses": ["F10_CONTRACT_DRIFT"],
         "missingRequirements": []
       }
     }

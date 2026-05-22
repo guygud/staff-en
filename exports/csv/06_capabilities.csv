@@ -1,0 +1,27 @@
+﻿capability_id,label
+HAS_ACCESS_LOGS,Журнал доступа
+HAS_ALERTING,Алерты
+HAS_AUTHZ,Изоляция доступа
+HAS_CICD,Пайплайн CI/CD
+HAS_CONTRACT_TESTS,Контрактные тесты
+HAS_DISCOVERY,Сервис-дискавери
+HAS_DNS,DNS-резолвер
+HAS_DR_DRILL,Учение аварийного переключения
+HAS_FAILOVER,Аварийное переключение
+HAS_HASH_ROUTING,Хэш-роутинг
+HAS_HEALTHCHECK,Проверка здоровья
+HAS_INDEX,Индексирование
+HAS_LOG_FILTERING,Фильтр логов
+HAS_LOGS,Широкое логирование
+HAS_MR_GATES,Гейты на влитие
+HAS_POLICY_RESOLVER,Арбитр конфликтов
+HAS_QUOTAS,Квоты арендаторов
+HAS_REGION_RECONCILE,Сверка регионов
+HAS_RESERVE_CAPACITY,Резервная ёмкость
+HAS_ROLLBACK,Откат изменений
+HAS_ROTATION,Ротация данных
+HAS_STABLE_ROUTING,Стабильные маршруты
+HAS_STORAGE_SECRETS,Хранилище секретов
+HAS_TLS,Шифрование TLS
+HAS_TRAFFIC_SPLIT,Разделение трафика
+HAS_TTL,Автоочистка по времени

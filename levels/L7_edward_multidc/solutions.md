@@ -1,73 +1,66 @@
 # L7 — Эдуард: таблица решений
 
-## Путь A — Классический Multi-DC (без обрядов)
+## Путь A — Edge + Audit + Capacity + Release
 
-Стандартная сборка: S_LOGGING (Перо Летописца) + S_QUOTAS (Предел Закромов) закрывают D_LOG_VOLUME через M_STORAGE (Матрица Хранения). D_NO_CICD закрыт S_CICD (Ритуал Доставки) + S_ROLLBACK (Ключ Отката).
-
-| Слот | Карта | Монеты | Аура |
-|---|---|---|---|
-| l7_auth | S_AUTHZ (Страж Порогов) | 3 | 0 |
-| l7_tls | S_TLS_CERT (Печать Серта) | 2 | 0 |
-| l7_disc1 | S_DISCOVERY (Зов Разведчика) | 2 | +1 |
-| l7_disc2 | S_HEALTHCHECK (Сердцебиение) | 2 | 0 |
-| l7_logs | S_LOGGING (Перо Летописца) | 2 | +1 |
-| l7_quota | S_QUOTAS (Предел Закромов) | 2 | +1 |
-| l7_pipe | S_CICD (Ритуал Доставки) | 2 | +1 |
-| l7_rb | S_ROLLBACK (Ключ Отката) | 2 | 0 |
-| **Итого** | | **17** | **4** |
-
-**Активные долги**: нет
-**Capabilities**: HAS_AUTHZ, HAS_TLS, HAS_DISCOVERY, HAS_HEALTHCHECK, HAS_FAILOVER, HAS_LOGS, HAS_QUOTAS, HAS_CICD, HAS_ROLLBACK
-**DoD**: HAS_TLS ✓, HAS_AUTHZ ✓, HAS_FAILOVER ✓, HAS_CICD ✓, HAS_LOGS ✓, HAS_QUOTAS ✓
-**Итог**: PASS (17 монет / 4 ауры)
-
-**Что понимает игрок**: минималистичный путь оставляет 7 монет запаса. Аура = 4 из 5. Есть пространство для обрядов и дополнительных карт, если нужен S_MR_GATES (Страж Врат MR).
-
----
-
-## Путь B — Multi-DC с Канарейкой и LOG_FILTER
-
-Расширенная сборка: добавляет S_LOG_FILTER (фильтрация логов) и R_CANARY (-1 ауры) для максимального контроля наблюдаемости.
+Устанавливаем четыре матрицы: `edge_l7`, `audit_l7`, `capacity_l7`, `release_l7`. Это «полный инженерный» путь: отдельный периметр, отдельная наблюдаемость, отдельная ёмкость и полный release-контур.
 
 | Слот | Карта | Монеты | Аура |
 |---|---|---|---|
-| l7_auth | S_AUTHZ (Страж Порогов) | 3 | 0 |
-| l7_tls | S_TLS_CERT (Печать Серта) | 2 | 0 |
-| l7_disc1 | S_DISCOVERY (Зов Разведчика) | 2 | +1 |
-| l7_disc2 | S_HEALTHCHECK (Сердцебиение) | 2 | 0 |
-| l7_logs | S_LOGGING (Перо Летописца) | 2 | +1 |
-| l7_filters | S_LOG_FILTER (Сито Смыслов) | 2 | 0 |
-| l7_quota | S_QUOTAS (Предел Закромов) | 2 | +1 |
-| l7_pipe | S_CICD (Ритуал Доставки) | 2 | +1 |
-| l7_rb | S_ROLLBACK (Ключ Отката) | 2 | 0 |
-| l7_obs_rit | R_CANARY (Канарейка в шахте) | 1 | −1 |
-| **Итого** | | **20** | **3** |
+| `l7_auth` | `S_AUTHZ` | 4 | 1 |
+| `l7_tls` | `S_TLS_CERT` | 2 | 1 |
+| `l7_disc` | `S_DISCOVERY` | 2 | 1 |
+| `l7_heart` | `S_GLOBAL_HEALTHCHECK` | 2 | 0 |
+| `l7_logs` | `S_LOGGING` | 2 | 1 |
+| `l7_filters` | `S_LOG_FILTER` | 2 | 0 |
+| `l7_capacity` | `S_CAPACITY_MIRROR` | 2 | 0 |
+| `l7_quota` | `S_QUOTAS` | 2 | 1 |
+| `l7_pipe` | `S_CICD` | 2 | 1 |
+| `l7_rb` | `S_ROLLBACK` | 2 | 1 |
+| `l7_gate` | `S_REGION_RECONCILER` | 2 | 0 |
+| `l7_drill` | `S_MULTI_REGION_DRILL` | 2 | 0 |
+| Матрицы | 4 × 1 | 4 | 0 |
+| **Итого** | | **30** | **7** |
 
-**Активные долги**: нет (D_LOG_VOLUME закрыт S_LOG_FILTER (Сито Смыслов) и S_QUOTAS (Предел Закромов))
-**DoD**: HAS_TLS ✓, HAS_AUTHZ ✓, HAS_FAILOVER ✓, HAS_CICD ✓, HAS_LOGS ✓, HAS_QUOTAS ✓
-**Итог**: PASS (20 монет / 3 ауры)
+**Активные долги**: нет.
 
-**Что понимает игрок**: добавление S_LOG_FILTER (Сито Смыслов) стоит 2 монеты и ничего по ауре — это «бесплатное» улучшение по ауре. R_CANARY (Канарейка в шахте) снижает аура-давление, давая запас для будущих долгов. Комфортный запас ауры (2 единицы).
+**DoD**: TLS ✓, AuthZ ✓, Failover ✓, CI/CD ✓, Logs ✓, Quotas ✓, Region reconcile ✓, DR drill ✓, Reserve capacity ✓.
 
----
+**Итог**: PASS (30 монет / 7 ауры).
 
-## Ловушка — Нет квот (F1_OVERFLOW + REQ_QUOTA)
+## Путь B — Edge + Compliance + Reserve + Release
 
-| Слот | Карта |
-|---|---|
-| l7_auth | S_AUTHZ (Страж Порогов) |
-| l7_tls | S_TLS_CERT (Печать Серта) |
-| l7_disc1 | S_DISCOVERY (Зов Разведчика) |
-| l7_disc2 | S_HEALTHCHECK (Сердцебиение) |
-| l7_logs | S_LOGGING (Перо Летописца) |
-| l7_pipe | S_CICD (Ритуал Доставки) |
-| l7_rb | S_ROLLBACK (Ключ Отката) |
+Устанавливаем `edge_l7`, `compliance_l7`, `reserve_l7`, `release_l7`. Это более плотный путь: логи, сверка регионов и DR-учение сидят в комплаенс-контуре, а резервная матрица совмещает ёмкость, квоты и аварийный routing.
 
-**Активные долги**: D_LOG_VOLUME → F1_OVERFLOW (критический!); D_NO_CICD закрыт
-**Аура**: 1(DISC)+1(LOG)+1(CICD) + 2(F1_OVERFLOW non-crit? или crit?) ...
+| Слот | Карта | Монеты | Аура |
+|---|---|---|---|
+| `l7_auth` | `S_AUTHZ` | 4 | 1 |
+| `l7_tls` | `S_TLS_CERT` | 2 | 1 |
+| `l7_disc` | `S_DISCOVERY` | 2 | 1 |
+| `l7_heart` | `S_GLOBAL_HEALTHCHECK` | 2 | 0 |
+| `l7_comp_logs` | `S_LOGGING` | 2 | 1 |
+| `l7_comp_gate` | `S_REGION_RECONCILER` | 2 | 0 |
+| `l7_comp_drill` | `S_MULTI_REGION_DRILL` | 2 | 0 |
+| `l7_reserve_capacity` | `S_CAPACITY_MIRROR` | 2 | 0 |
+| `l7_reserve_quota` | `S_QUOTAS` | 2 | 1 |
+| `l7_pipe` | `S_CICD` | 2 | 1 |
+| `l7_rb` | `S_ROLLBACK` | 2 | 1 |
+| Матрицы | 4 × 1 | 4 | 0 |
+| **Итого** | | **28** | **8** |
 
-> F1_OVERFLOW входит в criticalStatuses L7 → это критический статус!
+**Активные долги**: нет (`D_LOG_VOLUME` и `D_MIRROR_QUOTA_GAP` закрыты `S_QUOTAS`).
 
-**Итог**: FAIL — F1_OVERFLOW (критический) + REQ_QUOTA не закрыт (HAS_QUOTAS отсутствует)
+**Итог**: PASS (28 монет / 8 ауры).
 
-**Что понимает игрок**: в Multi-DC без квот рост данных немедленно критичен. S_QUOTAS (Предел Закромов) — обязательная карта, а не опциональная. D_LOG_VOLUME без резолвера убивает систему.
+## Ловушки
+
+| Ловушка | Что пропущено | Итог |
+|---|---|---|
+| Нет `S_GLOBAL_HEALTHCHECK` | `D_FAILOVER_LOOP` и хвост `D_NEEDS_HEALTHCHECK` | FAIL: `F15_FAILOVER_LOOP`, `F5_FRAGILITY`, нет `REQ_FAIL` |
+| Нет `S_REGION_RECONCILER` | Не выполнена обязательная сверка перед релизом | FAIL: нет `REQ_REGION_RECONCILE` |
+| Нет `S_MULTI_REGION_DRILL` | Хвост `D_UNTESTED_FAILOVER` после глобального healthcheck | FAIL: `F5_FRAGILITY`, нет `REQ_DR_DRILL` |
+| Нет `S_CAPACITY_MIRROR` | Стартовый `D_RESERVE_CAPACITY_GAP` | FAIL: `F16_CAPACITY_GAP`, нет `REQ_RESERVE_CAPACITY` |
+| Есть `S_CAPACITY_MIRROR`, но нет `S_QUOTAS` | `D_MIRROR_QUOTA_GAP` и `D_LOG_VOLUME` | FAIL: `F1_OVERFLOW`, нет `REQ_QUOTA` |
+
+## Что должен понять игрок
+
+L7 не про «поставь всё». Семь матриц создают давление выбора: четыре контура должны одновременно закрыть стартовые долги, DoD и каскады от собственных решений. Самые важные хвосты: global healthcheck требует DR drill, capacity mirror требует квоты.

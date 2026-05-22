@@ -1,0 +1,44 @@
+﻿level_id,instance_id,preset_id,preset_name,install_cost_gold,preset_default_cost,cost_override,pre_installed
+L1_MILLER_BARN,obs0,MP_OBS_AUDIT_BASIC,Аудитный журнал,1,1,,yes
+L1_MILLER_BARN,st0,MP_STORAGE_RETENTION_RITUAL,Малый погреб,1,1,,yes
+L2_KESHA_CACHE,st_l2,MP_STORAGE_KEEPER,Хранилище-Хранитель,1,1,,yes
+L2_KESHA_CACHE,net_l2,MP_NET_AUTH_ONLY,Калитка с печатью,2,2,,no
+L2_KESHA_CACHE,obs_l2,MP_OBS_AUDIT_BASIC,Аудитный журнал,2,1,1→2,no
+L3_GENNADY_LIGHTHOUSE,net_l3_infra,MP_NET_INFRA_POST,Инфраструктурный пост,1,1,,no
+L3_GENNADY_LIGHTHOUSE,net_l3_routing,MP_NET_ROUTING_STAND,Стойка маршрутов,2,2,,no
+L3_GENNADY_LIGHTHOUSE,net_l3_relay,MP_NET_POSTAL,Почтовая станция,2,2,,no
+L4_ANASTASIA_GOLDEN,net_l4,MP_NET_EDGE,Край Обелисков,2,2,,no
+L4_ANASTASIA_GOLDEN,obs_l4,MP_OBS_AUDIT_BASIC,Аудитный журнал,1,1,,no
+L4_ANASTASIA_GOLDEN,net_l4_lite,MP_NET_GATE_BASIC,Базовый шлюз,1,1,,no
+L5_KIRA_API,net_l5,MP_NET_GATE_BASIC,Базовый шлюз,2,1,1→2,no
+L5_KIRA_API,obs_l5,MP_OBS_AUDIT_BASIC,Аудитный журнал,1,1,,no
+L5_KIRA_API,cd_l5,MP_DELIVERY_FULL,Конвейер доставки,1,1,,no
+L5_KIRA_API,resilience_l5,MP_NET_RELIABILITY,Контур надёжности,2,2,,no
+L5_KIRA_API,chronicle_l5,MP_OBS_CHRONICLE,Хроника,1,1,,no
+L6_MARK_SHARDING,net_l6,MP_NET_SHARD_ROUTING,Маршрутизатор Шардов,2,2,,no
+L6_MARK_SHARDING,obs_l6,MP_OBS_AUDIT_BASIC,Аудитный журнал,1,1,,no
+L6_MARK_SHARDING,st_l6,MP_STORAGE_KEEPER,Хранилище-Хранитель,2,1,1→2,no
+L6_MARK_SHARDING,cd_l6,MP_DELIVERY_TESTING,Конвейер Миграций,1,1,,no
+L6_MARK_SHARDING,buffer_l6,MP_STORAGE_BUFFER,Маршрутно-Складской Буфер,2,2,,no
+L7_EDWARD_MULTIDC,edge_l7,MP_NET_EDGE,Край Обелисков,1,2,2→1,no
+L7_EDWARD_MULTIDC,audit_l7,MP_OBS_AUDIT_BASIC,Аудитный журнал,1,1,,no
+L7_EDWARD_MULTIDC,capacity_l7,MP_STORAGE_KEEPER,Хранилище-Хранитель,1,1,,no
+L7_EDWARD_MULTIDC,release_l7,MP_DELIVERY_FULL,Конвейер доставки,1,1,,no
+L7_EDWARD_MULTIDC,traffic_l7,MP_NET_TRAFFIC,Весы Трафика,1,1,,no
+L7_EDWARD_MULTIDC,compliance_l7,MP_OBS_COMPLIANCE,Палата Комплаенса,1,1,,no
+L7_EDWARD_MULTIDC,reserve_l7,MP_STORAGE_RESERVE,Резервный Перевал,1,1,,no
+L1_LIBRARY_ORBS,st1,MP_STORAGE_INDEXED,Индексированный архив,0,0,,yes
+L1_LIBRARY_ORBS,net1,MP_NET_ROUTING_ONLY,Голый маршрут,2,2,,no
+L1_LIBRARY_ORBS,obs1,MP_OBS_AUDIT_BASIC,Аудитный журнал,2,1,1→2,no
+L2_GATEWAY_PASS,net_pass,MP_NET_EDGE_ROUTING,Шлюз с роутингом,2,2,,no
+L2_GATEWAY_PASS,obs_pass,MP_OBS_AUDIT_BASIC,Аудитный журнал,2,1,1→2,no
+L2_GATEWAY_PASS,st_pass,MP_STORAGE_KEEPER,Хранилище-Хранитель,2,1,1→2,no
+L2_GATEWAY_PASS,cd_pass,MP_DELIVERY_MINIMAL,Малый конвейер,2,2,,no
+L2_LBAAS_FAIR_GATE,net1,MP_NET_INFRA_POST,Инфраструктурный пост,0,1,1→0,no
+L2_LBAAS_FAIR_GATE,obs1,MP_OBS_DOUBLE_LOG_FILTER,Двойная летопись,0,0,,no
+L2_LBAAS_FAIR_GATE,st1,MP_STORAGE_KEEPER,Хранилище-Хранитель,0,1,1→0,no
+L2_LBAAS_FAIR_GATE,cd1,MP_DELIVERY_GATES,Гейтовый конвейер,0,0,,no
+L3_NEW_CASTLE,net3,MP_NET_EDGE,Край Обелисков,2,2,,no
+L3_NEW_CASTLE,obs3,MP_OBS_ALERTING,Сторожевая башня,2,2,,no
+L3_NEW_CASTLE,st3,MP_STORAGE_KEEPER,Хранилище-Хранитель,2,1,1→2,no
+L3_NEW_CASTLE,cd3,MP_DELIVERY_GATES,Гейтовый конвейер,3,0,0→3,no

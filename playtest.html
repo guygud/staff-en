@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Плейтест — CSV</title>
+  <style>
+    :root {
+      --bg: #111;
+      --card: #1a1a1a;
+      --border: #333;
+      --text: #e8e8e8;
+      --dim: #888;
+      --gold: #f5c518;
+      --gold-dim: #c9a227;
+      --pink: #ff6b9d;
+      --green: #4ade80;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100dvh;
+    }
+    .screen { display: none; padding: 1rem; max-width: 28rem; margin: 0 auto; min-height: 100dvh; }
+    .screen.active { display: flex; flex-direction: column; }
+    h1 { font-size: 1.25rem; margin: 0 0 1rem; }
+    .btn {
+      display: inline-block;
+      padding: 0.75rem 1rem;
+      border: none;
+      font-weight: 600;
+      cursor: pointer;
+      font-size: 0.95rem;
+      border-radius: 2px;
+    }
+    .btn-dark { background: #000; color: var(--text); border: 1px solid var(--text); }
+    .btn-gold { background: var(--gold); color: #000; }
+    .btn-row { display: flex; gap: 0.75rem; margin-top: auto; padding-top: 1.5rem; flex-wrap: wrap; }
+    .btn-row .btn { flex: 1; min-width: 7rem; text-align: center; }
+    .lobby-list { list-style: none; padding: 0; margin: 0; }
+    .lobby-list li {
+      margin-bottom: 0.5rem;
+      padding: 0.85rem 1rem;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    .lobby-list li:hover { border-color: var(--gold-dim); }
+    .brief-hero {
+      background: var(--gold);
+      color: #000;
+      padding: 1rem 1.25rem;
+      border-radius: 4px;
+      margin-bottom: 1rem;
+    }
+    .brief-hero .tag { font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.08em; opacity: 0.85; }
+    .brief-hero h2 { margin: 0.35rem 0 0; font-size: 1.1rem; line-height: 1.25; }
+    .brief-meta { font-size: 0.85rem; margin-top: 0.5rem; opacity: 0.9; }
+    .budget-pills { display: flex; gap: 0.5rem; margin-top: 0.75rem; flex-wrap: wrap; }
+    .pill {
+      background: #000;
+      color: var(--gold);
+      padding: 0.25rem 0.6rem;
+      font-size: 0.8rem;
+      border-radius: 2px;
+    }
+    .brief-desc {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-left: 3px solid var(--gold-dim);
+      padding: 1rem;
+      font-style: italic;
+      margin-bottom: 1rem;
+      border-radius: 4px;
+      font-size: 0.95rem;
+    }
+    .section-title {
+      color: var(--gold);
+      font-size: 0.72rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      margin-bottom: 0.5rem;
+    }
+    .status-slots { display: flex; gap: 0.5rem; margin-bottom: 1.25rem; }
+    .status-slot {
+      flex: 1;
+      min-height: 4rem;
+      border: 2px solid var(--border);
+      border-radius: 4px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 0.35rem;
+      font-size: 0.75rem;
+      text-align: center;
+      background: #161616;
+    }
+    .status-slot.filled { border-color: var(--pink); }
+    .status-slot .ic { font-size: 1.25rem; line-height: 1; }
+    .status-slot.muted { color: var(--dim); }
+    .assembly-layout {
+      display: grid;
+      grid-template-columns: 5.5rem 1fr 2.75rem;
+      gap: 0.5rem;
+      flex: 1;
+      align-content: start;
+    }
+    .side-panel {
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+      align-items: stretch;
+    }
+    .aura-box {
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 0.4rem;
+      text-align: center;
+      font-size: 0.75rem;
+      color: var(--dim);
+    }
+    .aura-box strong { color: var(--pink); font-size: 1rem; display: block; }
+    .slot-list { display: flex; flex-direction: column; gap: 0.45rem; }
+    .slot-btn {
+      text-align: left;
+      padding: 0.65rem 0.75rem;
+      background: #0a0a0a;
+      border: 1px solid var(--border);
+      color: var(--text);
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 0.82rem;
+    }
+    .slot-btn:hover { border-color: var(--gold-dim); }
+    .slot-btn.selected { border-color: var(--gold); box-shadow: 0 0 0 1px var(--gold); }
+    .slot-btn .st { font-size: 0.65rem; color: var(--dim); text-transform: uppercase; letter-spacing: 0.06em; }
+    .slot-btn .cn { font-weight: 600; margin-top: 0.15rem; }
+    .slot-btn .heal-mini {
+      font-size: 0.68rem;
+      color: var(--green);
+      margin-top: 0.25rem;
+      line-height: 1.2;
+      font-weight: 500;
+    }
+    .commit-col { display: flex; flex-direction: column; gap: 0.5rem; align-items: stretch; }
+    .commit-up {
+      flex: 1;
+      min-height: 4rem;
+      background: linear-gradient(145deg, #d97706, #ea580c);
+      border: none;
+      color: #fff;
+      font-size: 1.5rem;
+      cursor: pointer;
+      border-radius: 4px;
+      font-weight: 700;
+    }
+    .commit-up:hover { filter: brightness(1.08); }
+    .clear-slot {
+      font-size: 0.7rem;
+      padding: 0.35rem;
+      background: transparent;
+      border: 1px solid var(--border);
+      color: var(--dim);
+      cursor: pointer;
+      border-radius: 4px;
+    }
+    .clear-slot:hover { color: var(--pink); border-color: var(--pink); }
+    .picker-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.75);
+      z-index: 50;
+      padding: 1rem;
+      overflow-y: auto;
+    }
+    .picker-overlay.open { display: block; }
+    .picker-inner {
+      max-width: 26rem;
+      margin: 0 auto;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 1rem;
+      max-height: 90vh;
+      overflow-y: auto;
+    }
+    .picker-card {
+      display: block;
+      width: 100%;
+      text-align: left;
+      padding: 0.75rem;
+      margin-bottom: 0.5rem;
+      background: #0d0d0d;
+      border: 1px solid var(--border);
+      color: var(--text);
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    .picker-card:hover { border-color: var(--gold); }
+    .picker-card .nm { font-weight: 700; }
+    .picker-card .cost { font-size: 0.8rem; color: var(--dim); margin: 0.25rem 0; }
+    .picker-card .heal-tags { font-size: 0.74rem; color: var(--green); margin: 0.15rem 0 0.1rem; font-weight: 500; }
+    .picker-card .desc { font-size: 0.78rem; color: var(--dim); line-height: 1.35; }
+    .result-title { font-size: 2rem; font-weight: 800; letter-spacing: 0.04em; margin: 0.5rem 0 1rem; }
+    .result-title.win { color: var(--gold); }
+    .result-title.lose { color: var(--pink); }
+    .result-body { background: var(--card); border: 1px solid var(--border); padding: 1rem; border-radius: 4px; line-height: 1.45; margin-bottom: 1rem; }
+    .fail-blocks { display: flex; flex-direction: column; gap: 1rem; }
+    .fail-block { border-left: 3px solid var(--pink); padding-left: 0.75rem; }
+    .fail-h3 { margin: 0 0 0.35rem; font-size: 1rem; color: var(--pink); }
+    .fail-answer {
+      margin: 0.35rem 0 0;
+      font-size: 1rem;
+      line-height: 1.45;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      word-break: break-word;
+      color: var(--text);
+    }
+    .err { color: var(--pink); padding: 1rem; background: #2a1518; border-radius: 4px; }
+    .top-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem; }
+    .gold-line { font-size: 0.8rem; color: var(--dim); margin-bottom: 0.5rem; }
+    .gold-line strong { color: var(--gold); }
+    .gold-line .gold-meta { font-weight: 400; color: #777; font-size: 0.72rem; }
+    .gold-line .gold-meta strong { color: var(--gold-dim); font-weight: 600; }
+    .matrix-inline-hint {
+      font-size: 0.72rem;
+      color: var(--dim);
+      line-height: 1.35;
+      margin-bottom: 0.5rem;
+      padding: 0.45rem 0.5rem;
+      background: #141414;
+      border-radius: 4px;
+      border: 1px solid var(--border);
+    }
+    .matrix-rack-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.45rem;
+      margin-top: 0.35rem;
+      margin-bottom: 0.65rem;
+    }
+    .matrix-slot-btn {
+      flex: 1;
+      min-width: 5.5rem;
+      text-align: left;
+      padding: 0.65rem 0.75rem;
+      background: #0a0a0a;
+      border: 1px solid var(--border);
+      color: var(--text);
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 0.82rem;
+    }
+    .matrix-slot-btn:hover { border-color: var(--gold-dim); }
+    .matrix-slot-btn.selected { border-color: var(--gold); box-shadow: 0 0 0 1px var(--gold); }
+    .matrix-slot-btn .st { font-size: 0.65rem; color: var(--dim); text-transform: uppercase; letter-spacing: 0.06em; }
+    .matrix-slot-btn .cn { font-weight: 600; margin-top: 0.15rem; display: block; }
+    .matrix-slot-sub { font-size: 0.68rem; color: var(--green); margin-top: 0.25rem; display: block; line-height: 1.2; font-weight: 500; }
+    .matrix-slot-sub.muted { color: var(--dim); font-weight: 400; }
+    .matrix-block-head {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 0.5rem;
+      margin-top: 0.5rem;
+    }
+    .matrix-block-title-col { flex: 1; min-width: 8rem; }
+    .matrix-block-cost-row { font-size: 0.72rem; color: var(--green); margin-top: 0.25rem; font-weight: 500; }
+    .matrix-block-actions { margin-top: 0 !important; flex-shrink: 0; }
+    .matrix-slot-actions {
+      display: flex;
+      gap: 0.35rem;
+      margin-top: 0.5rem;
+      flex-wrap: wrap;
+    }
+    .matrix-slot-action {
+      font-size: 0.72rem;
+      padding: 0.3rem 0.5rem;
+      border-radius: 3px;
+      border: 1px solid var(--border);
+      background: #121212;
+      color: var(--text);
+      cursor: pointer;
+    }
+    .matrix-slot-action:hover { border-color: var(--gold-dim); color: var(--gold); }
+    .matrix-slot-action.danger:hover { border-color: var(--pink); color: var(--pink); }
+    .asm-slots-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.5rem;
+      margin-bottom: 0.35rem;
+    }
+    .btn-solutions {
+      font-size: 0.72rem;
+      padding: 0.35rem 0.55rem;
+      border-radius: 3px;
+      border: 1px solid var(--gold-dim);
+      background: #1a1508;
+      color: var(--gold);
+      cursor: pointer;
+      font-weight: 600;
+      white-space: nowrap;
+    }
+    .btn-solutions:hover { border-color: var(--gold); color: #fff; }
+    .sol-intro { font-size: 0.78rem; color: var(--dim); line-height: 1.4; margin: 0 0 0.75rem; }
+    .sol-block {
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 0.85rem;
+      margin-bottom: 0.85rem;
+    }
+    .sol-block:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
+    .sol-name { font-weight: 700; color: var(--gold); font-size: 0.92rem; margin-bottom: 0.35rem; }
+    .sol-why { margin: 0 0 0.5rem; font-size: 0.84rem; line-height: 1.45; color: var(--text); }
+    .sol-budget { font-size: 0.78rem; color: var(--dim); margin-bottom: 0.45rem; }
+    .sol-budget strong { color: var(--gold-dim); }
+    .sol-label {
+      font-size: 0.68rem;
+      color: var(--dim);
+      margin-top: 0.45rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    .sol-subblock:first-of-type .sol-label { margin-top: 0.25rem; }
+    .sol-ul { margin: 0.25rem 0 0; padding-left: 1.1rem; font-size: 0.8rem; line-height: 1.42; color: var(--text); }
+  </style>
+</head>
+<body>
+  <p id="boot-msg" style="text-align:center;padding:2rem;color:#888;">Загрузка CSV…</p>
+
+  <div id="load-error" class="screen">
+    <p class="err" id="load-error-text"></p>
+  </div>
+
+  <div id="screen-lobby" class="screen">
+    <div class="top-bar">
+      <h1>Уровни</h1>
+    </div>
+    <p style="color:var(--dim);font-size:0.85rem;margin-top:0">Данные только из <code>new/*.csv</code></p>
+    <ul class="lobby-list" id="lobby-list"></ul>
+  </div>
+
+  <div id="screen-briefing" class="screen">
+    <div id="brief-hero" class="brief-hero"></div>
+    <div class="brief-desc" id="brief-desc"></div>
+    <div class="section-title">Пришедшие статусы</div>
+    <div class="status-slots" id="brief-status-slots"></div>
+    <div class="btn-row">
+      <button type="button" class="btn btn-dark" id="brief-back">В меню</button>
+      <button type="button" class="btn btn-gold" id="brief-play">К игре</button>
+    </div>
+  </div>
+
+  <div id="screen-assembly" class="screen">
+    <div class="top-bar">
+      <strong id="asm-title">Сборка</strong>
+      <button type="button" class="btn btn-dark" id="asm-menu" style="padding:0.4rem 0.65rem;font-size:0.8rem">Меню</button>
+    </div>
+    <p class="gold-line" id="asm-gold"></p>
+    <div class="assembly-layout">
+      <div class="side-panel">
+        <div class="section-title" style="font-size:0.65rem">Статусы</div>
+        <div class="status-slots" id="asm-status-slots" style="flex-direction:column;min-height:auto;"></div>
+        <div class="aura-box">Аура <strong id="asm-aura">0 / 0</strong></div>
+        <button type="button" class="clear-slot" id="asm-clear">Снять выбранный слот</button>
+      </div>
+      <div>
+        <div class="asm-slots-head">
+          <span class="section-title" style="color:var(--dim);margin:0">Слоты матриц</span>
+          <button type="button" class="btn-solutions" id="asm-solutions-btn">Как пройти</button>
+        </div>
+        <div class="slot-list" id="asm-slots"></div>
+      </div>
+      <div class="commit-col">
+        <button type="button" class="commit-up" id="asm-commit" title="Проверить решение">↑</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="screen-result" class="screen">
+    <div id="result-tags" style="text-align:center;font-size:0.75rem;color:var(--dim);margin-bottom:0.25rem;"></div>
+    <h2 class="result-title" id="result-title"></h2>
+    <div class="result-body" id="result-body"></div>
+    <div class="btn-row">
+      <button type="button" class="btn btn-dark" id="result-lobby">В лобби</button>
+      <button type="button" class="btn btn-gold" id="result-next">Ещё раз</button>
+    </div>
+  </div>
+
+  <div class="picker-overlay" id="picker-overlay">
+    <div class="picker-inner">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:0.75rem;">
+        <strong id="picker-title">Карта</strong>
+        <button type="button" class="btn btn-dark" id="picker-close" style="padding:0.35rem 0.6rem">✕</button>
+      </div>
+      <div id="picker-list"></div>
+    </div>
+  </div>
+
+  <script type="module" src="./playtest.js"></script>
+</body>
+</html>

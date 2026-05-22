@@ -1,0 +1,3 @@
+﻿pair_id,spell_a,spell_b,symptom_if_unresolved,symptom_name,resolved_by_spell_ids,description
+CP_ROUTING_CONFLICT,S_TRAFFIC_SPLIT,S_HASH_ROUTING,F2_CONTRADICTION,Противоречие,S_POLICY_RESOLVER,Весовое и sticky-распределение несовместимы без арбитра
+CP_SHARD_KEY_VS_HASH,S_SHARD_KEY,S_HASH_ROUTING,F2_CONTRADICTION,Противоречие,S_POLICY_RESOLVER,Два разных закона маршрутизации по ключу несовместимы без арбитра

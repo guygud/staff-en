@@ -1,66 +1,104 @@
-# L3 Маяк — Таблица решений
+# L3 — Указатель на перепутье: решения
 
-`coinsBudget=14`, `auraLimit=2`, criticalStatuses: F2_CONTRADICTION, F5_FRAGILITY  
-Предустановлено: HAS_AUTHZ  
-Наследованный долг: D_NEEDS_HEALTHCHECK → F5_FRAGILITY (старый маяк без мониторинга — обязательно закрыть через S_HEALTHCHECK (Сердцебиение))
-
----
-
-## Путь A — Простой маяк (TRAFFIC_SPLIT)
-
-| Слот | Карта | Монеты | Аура | Эффект |
-|---|---|---|---|---|
-| l3_dns | S_DNS (Глашатай Домена) | 2 | 0 | HAS_DNS |
-| l3_tls | S_TLS_CERT (Печать Серта) | 2 | 0 | HAS_TLS |
-| l3_disc1 | S_DISCOVERY (Зов Разведчика) | 2 | +1 | HAS_DISCOVERY, D_NEEDS_HEALTHCHECK |
-| l3_disc2 | S_HEALTHCHECK (Сердцебиение) | 2 | 0 | HAS_FAILOVER, resolves D_NEEDS_HEALTHCHECK |
-| l3_route1 | S_TRAFFIC_SPLIT (Весы Потоков) | 2 | +1 | HAS_TRAFFIC_SPLIT |
-
-coinsSpent: **10** ≤ 14 ✓ · auraTotal: **2** ≤ 2 ✓ · fatalStatuses: нет → **PASS**
+**Клиент:** Геннадий (смотритель перекрёстка)  
+**Задача:** Закрепить маршруты и идентифицировать указатель, чтобы посланники не блуждали.
 
 ---
 
-## Путь B — Умный маяк (оба роутинга + Арбитр + Меценат)
+## Унаследованные долги
 
-| Слот | Карта | Монеты | coinsDelta | Аура | auraLimitDelta |
-|---|---|---|---|---|---|
-| l3_dns | S_DNS (Глашатай Домена) | 2 | — | 0 | — |
-| l3_tls | S_TLS_CERT (Печать Серта) | 2 | — | 0 | — |
-| l3_disc1 | S_DISCOVERY (Зов Разведчика) | 2 | — | +1 | — |
-| l3_disc2 | S_HEALTHCHECK (Сердцебиение) | 2 | — | 0 | — |
-| l3_route1 | S_TRAFFIC_SPLIT (Весы Потоков) | 2 | — | +1 | — |
-| l3_route2 | S_HASH_ROUTING (Якорь Сессии) | 2 | — | +1 | — |
-| l3_route3 | S_POLICY_RESOLVER (Арбитр Печатей) | 3 | — | 0 | — |
-| l3_ritual | R_PATRON_SEAL (Печать Мецената) | 1 | -3 | 0 | +2 |
+| ID | Дебаф | Статус |
+|----|-------|--------|
+| `D_SIGN_UNCLEAR` | Указатель безымянный → посланники его не находят | `F4_BLINDNESS` (критический) |
+| `D_ROUTING_AMBIGUITY` | Маршруты не закреплены → посланники блуждают | `F7_CONFUSION` (критический) |
 
-coinsSpent: 2+2+2+2+2+2+3+1-3 = **13** ≤ 14 ✓  
-auraTotal: 1+0+1+1+0 = **3**, auraLimitFinal: 2+2 = **4** → 3 ≤ 4 ✓ · **PASS**
+**Условие прохождения:** оба унаследованных долга должны быть закрыты (критические статусы F4 и F7 недопустимы).
 
 ---
 
-## Ловушка 1 — Конфликт без арбитра (F2_CONTRADICTION)
+## Матрицы (3 на выбор, установить 2)
 
-| Слот | Карта |
-|---|---|
-| l3_dns, l3_tls, l3_disc1, l3_disc2 | DNS, TLS, DISCOVERY, HEALTHCHECK (как в пути A) |
-| l3_route1 | S_TRAFFIC_SPLIT (Весы Потоков) |
-| l3_route2 | S_HASH_ROUTING (Якорь Сессии) |
+| Инстанс | Название | Слоты | Стоимость |
+|---------|---------|-------|-----------|
+| `net_l3_infra` | Инфраструктурный пост | NET_DNS, NET_TLS, NET_DISCOVERY×2, RITUAL_NET | 0g |
+| `net_l3_routing` | Стойка маршрутов | NET_ROUTING×3, NET_AUTH, RITUAL_NET | 2g |
+| `net_l3_relay` | Почтовая станция | NET_DNS, NET_ROUTING×2, RITUAL_NET | 1g |
 
-coinsSpent: 12 ≤ 14 ✓ · auraTotal: **3** > 2 → аура превышена  
-CP_ROUTING_CONFLICT → fatalStatuses: **F2_CONTRADICTION** → **FAIL**
+### Валидные комбинации
+
+| Комбо | Стоимость | Что умеет |
+|-------|-----------|-----------|
+| `infra + routing` | 2g | Полный набор, Path A и B |
+| `infra + relay` | 1g | Аналог full, дешевле на 1g (нет NET_AUTH и лишних ROUTING) |
+| `relay` (одна) | 1g | DNS+ROUTING+RITUAL → минималистичный Path B |
+| `relay + routing` | 3g | **Ловушка**: нет TLS и DISCOVERY — ни один путь не работает |
 
 ---
 
-## Ловушка 2 — Discovery без Healthcheck (F5_FRAGILITY)
+## Путь A — Дешёвые карты (двойной каскад)
 
-| Слот | Карта |
-|---|---|
-| l3_dns | S_DNS (Глашатай Домена) |
-| l3_tls | S_TLS_CERT (Печать Серта) |
-| l3_disc1 | S_DISCOVERY (Зов Разведчика) |
-| l3_route1 | S_TRAFFIC_SPLIT (Весы Потоков) |
+**Логика игрока:** Геннадий хочет простое решение. DNS дешёвый, но публичный — придётся добавить TLS. Весы Потоков распределяют трафик, но узлы без проверки могут зависнуть — нужен Сердцебиение.
 
-D_NEEDS_HEALTHCHECK **унаследован** (defaultInstalled) + усилен S_DISCOVERY (Зов Разведчика) — не закрыт → F5_FRAGILITY (крит.)  
-missingRequirements: REQ_FAILOVER (HAS_FAILOVER даёт только S_HEALTHCHECK (Сердцебиение)) → **FAIL**
+### Карты
 
-**Что игрок узнаёт:** хрупкость была с самого начала — не S_DISCOVERY (Зов Разведчика) её создал, а история маяка. S_DISCOVERY (Зов Разведчика) лишь обнажает то, что уже есть.
+| Слот | Карта | Стоимость | Действие |
+|------|-------|-----------|----------|
+| `l3_dns` | **Глашатай Домена** (`S_DNS`) | 2g | Снимает `D_SIGN_UNCLEAR`, *каскад* → `D_DNS_EXPOSED` |
+| `l3_tls` | **Печать Серта** (`S_TLS_CERT`) | 2g | Снимает каскадный `D_DNS_EXPOSED` (F3_COMPROMISE) |
+| `l3_route1` | **Весы Потоков** (`S_TRAFFIC_SPLIT`) | 2g + 1 aura | Снимает `D_ROUTING_AMBIGUITY`, даёт буфф «Равновесие», *каскад* → `D_SPLIT_OVERLOAD` |
+| `l3_disc1` | **Сердцебиение** (`S_HEALTHCHECK`) | 2g | Снимает каскадный `D_SPLIT_OVERLOAD` (F5_FRAGILITY) |
+
+**Итого:** `0 (infra) + 2 (routing) + 2 + 2 + 2 + 2 = 10g / 1 aura`  
+**Ритуал:** не нужен (10g ≤ 16g)  
+**Финал:** Окончание A — «Ты собрал это из простого»
+
+### Цепочка каскадов
+
+```
+S_DNS → +D_DNS_EXPOSED (F3) → S_TLS_CERT гасит
+S_TRAFFIC_SPLIT → +D_SPLIT_OVERLOAD (F5) → S_HEALTHCHECK гасит
+```
+
+---
+
+## Путь B — Дорогие карты (ритуал) · `infra + routing` или `relay`
+
+**Логика игрока:** Не хочется бороться с побочными эффектами. Есть дорогие карты без каскадов — но вместе они превышают бюджет. Нужна Печать Мецената.
+
+### Карты
+
+| Слот | Карта | Стоимость | Действие |
+|------|-------|-----------|----------|
+| `l3_base_rit` | **Печать Мецената** (`R_PATRON_SEAL`) | −2g, +2 aura limit | Снижает затраты, расширяет лимит ауры |
+| `l3_dns` | **Тайный Адрес** (`S_PRIVATE_DNS`) | 8g | Снимает `D_SIGN_UNCLEAR`, без каскадов |
+| `l3_route1` | **Карта Земель** (`S_LOCALITY_ROUTING`) | 8g | Снимает `D_ROUTING_AMBIGUITY`, даёт буфф «Равновесие», без каскадов |
+
+**Итого (infra+routing):** `0 + 2 + 8 + 8 − 2 = 16g / 0 aura`  
+**Итого (relay alone):** `1 + 8 + 8 − 2 = 15g / 0 aura` (слоты: `l3_r_dns`, `l3_r_route1`, `l3_r_rit`)  
+**Без ритуала:** `18g > 16g` → провал  
+**Финал:** Окончание B — «Каждый посланник знает свой путь заранее»
+
+---
+
+## Ловушки
+
+| № | Сценарий | Ошибка |
+|---|----------|--------|
+| 1 | Путь B без ритуала (`S_PRIVATE_DNS` + `S_LOCALITY_ROUTING`, нет `R_PATRON_SEAL`) | Бюджет превышен: 18g > 16g |
+| 2 | DNS без TLS (`S_DNS` + `S_TRAFFIC_SPLIT` + `S_HEALTHCHECK`, нет `S_TLS_CERT`) | `D_DNS_EXPOSED` → `F3_COMPROMISE` (критический) |
+| 3 | TrafficSplit без HealthCheck (`S_DNS` + `S_TLS_CERT` + `S_TRAFFIC_SPLIT`) | `D_SPLIT_OVERLOAD` → `F5_FRAGILITY` (критический) |
+| 4 | Нет карты маршрутизации (`S_DNS` + `S_TLS_CERT` + `S_HEALTHCHECK`) | `D_ROUTING_AMBIGUITY` → `F7_CONFUSION`, буфф «Равновесие» не выдан |
+| 5 | Нет матрицы маршрутов (только `net_l3_infra`) | NET_ROUTING слотов нет — карту маршрутизации некуда поставить |
+| 6 | **`relay + routing`** — нет TLS и DISCOVERY | `S_DNS` → каскад `D_DNS_EXPOSED` → нет NET_TLS слота → `F3_COMPROMISE` |
+
+---
+
+## Ценовой разрыв
+
+| Тип карты | Стоимость | Примеры |
+|-----------|-----------|---------|
+| Дешёвая | **2g** | S_DNS, S_TLS_CERT, S_TRAFFIC_SPLIT, S_HEALTHCHECK |
+| Дорогая | **8g** | S_PRIVATE_DNS, S_LOCALITY_ROUTING |
+| Разрыв | **4×** | Дорогие карты без каскадов, но требуют ритуала |
+
+**Правило ритуала:** `R_AI_BUFF` (Печать Прогресса, −2g / +3 aura) тоже может помочь с бюджетом, но стоит ауры. `R_PATRON_SEAL` (−2g / +2 aura limit) безопаснее.

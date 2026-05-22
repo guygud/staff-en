@@ -1,0 +1,8 @@
+level_id,debuff_1,debuff_2,debuff_3
+L1_MILLER_BARN,🙈 Слепота,,
+L2_KESHA_CACHE,⚗️ Переполнение, 🔓 Компрометация,
+L3_GENNADY_LIGHTHOUSE,🙈 Слепота,🪰 Путаница,
+L4_ANASTASIA_GOLDEN,🔓 Компрометация,🙈 Слепота,🕸️ Хрупкость
+L5_KIRA_API,🔓 Компрометация,🌀 Недоставка,🕳️ Дыра аудита
+L6_MARK_SHARDING,🔥 Горячий шард,🧠 Раскол кворума,🌑 Тёмный шард
+L7_EDWARD_MULTIDC,🌀 Недоставка, 🔁 Петля failover,🏚️ Провал резерва

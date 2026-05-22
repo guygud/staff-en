@@ -1,0 +1,28 @@
+﻿treatment_tag,narrative_only,heals_status_ids,heals_status_names,design_note
+Ясность,no,F4_BLINDNESS | F13_DARK_SHARD,Слепота | Тёмный шард,
+Чистота,no,F1_OVERFLOW,Переполнение,
+Надёжность,no,F15_FAILOVER_LOOP,Петля failover,
+Изоляция,no,F3_COMPROMISE,Компрометация,
+Шифрование,no,F3_COMPROMISE,Компрометация,
+Конфиденциальность,no,F3_COMPROMISE,Компрометация,
+Доставка,no,F6_NONDELIVERY,Недоставка,
+Арбитраж,no,F2_CONTRADICTION,Противоречие,
+Охлаждение,no,F11_HOTSPOT,Горячий шард,
+Аудит,no,F8_AUDIT_GAP,Дыра аудита,
+Проверка,no,F9_UNREVIEWED_RELEASE | F10_CONTRACT_DRIFT,Непроверенный релиз | Разъезд контрактов,
+Баланс,no,F11_HOTSPOT,Горячий шард,
+Кворум,no,F12_SPLIT_BRAIN,Раскол кворума,
+Синхронность,no,F5_FRAGILITY,Хрупкость,
+Совместимость,no,F10_CONTRACT_DRIFT,Разъезд контрактов,
+Резерв,no,F16_CAPACITY_GAP,Провал резерва,
+Адресность,no,F4_BLINDNESS,Слепота,
+Обнаружение,yes,,,narrative-only (не лечит симптомы по каталогу)
+Равновесие,no,F7_CONFUSION,Путаница,
+Привязка,no,F11_HOTSPOT,Горячий шард,
+Распределение,no,F1_OVERFLOW,Переполнение,
+Согласованность,no,F10_CONTRACT_DRIFT | F12_SPLIT_BRAIN,Разъезд контрактов | Раскол кворума,
+Живость,yes,,,narrative-only (не лечит симптомы по каталогу)
+Устойчивость,no,F5_FRAGILITY | F15_FAILOVER_LOOP,Хрупкость | Петля failover,
+Порядок,no,F7_CONFUSION,Путаница,
+Согласование,no,F7_CONFUSION | F12_SPLIT_BRAIN,Путаница | Раскол кворума,
+Откат,yes,,,narrative-only (не лечит симптомы по каталогу)

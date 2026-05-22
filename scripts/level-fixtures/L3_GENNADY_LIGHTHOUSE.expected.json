@@ -2,74 +2,127 @@
   "levelId": "L3_GENNADY_LIGHTHOUSE",
   "scenarios": [
     {
-      "name": "Путь A — простой маяк (TRAFFIC_SPLIT)",
+      "name": "Путь A — дешёвые карты, двойной каскад (Ending A)",
       "placements": {
         "l3_dns":    "S_DNS",
         "l3_tls":    "S_TLS_CERT",
-        "l3_disc1":  "S_DISCOVERY",
-        "l3_disc2":  "S_HEALTHCHECK",
-        "l3_route1": "S_TRAFFIC_SPLIT"
+        "l3_route1": "S_TRAFFIC_SPLIT",
+        "l3_disc1":  "S_HEALTHCHECK"
       },
-      "installedMatrixIds": [],
+      "installedMatrixIds": ["net_l3_infra", "net_l3_routing"],
       "expected": {
         "outcome": "pass",
         "missingRequirements": [],
         "fatalStatuses": [],
-        "coinsSpentRange": [10, 10],
-        "auraTotalRange":  [2, 2]
+        "coinsSpentRange": [11, 11],
+        "auraTotalRange":  [4, 4]
       }
     },
     {
-      "name": "Путь B — умный маяк (оба роутинга + Арбитр + Меценат)",
+      "name": "Путь B — дорогие карты, ритуал (Ending B)",
       "placements": {
-        "l3_dns":    "S_DNS",
-        "l3_tls":    "S_TLS_CERT",
-        "l3_disc1":  "S_DISCOVERY",
-        "l3_disc2":  "S_HEALTHCHECK",
-        "l3_route1": "S_TRAFFIC_SPLIT",
-        "l3_route2": "S_HASH_ROUTING",
-        "l3_route3": "S_POLICY_RESOLVER",
-        "l3_ritual": "R_PATRON_SEAL"
+        "l3_base_rit": "R_PATRON_SEAL",
+        "l3_dns":      "S_PRIVATE_DNS",
+        "l3_route1":   "S_LOCALITY_ROUTING"
       },
-      "installedMatrixIds": [],
+      "installedMatrixIds": ["net_l3_infra", "net_l3_routing"],
       "expected": {
         "outcome": "pass",
         "missingRequirements": [],
         "fatalStatuses": [],
-        "coinsSpentRange": [13, 13],
+        "coinsSpentRange": [17, 17],
         "auraTotalRange":  [3, 3]
       }
     },
     {
-      "name": "Ловушка 1 — конфликт без арбитра (F2_CONTRADICTION)",
+      "name": "Путь B (alt) — Почтовая станция + ритуал (минималистичный)",
       "placements": {
-        "l3_dns":    "S_DNS",
-        "l3_tls":    "S_TLS_CERT",
-        "l3_disc1":  "S_DISCOVERY",
-        "l3_disc2":  "S_HEALTHCHECK",
-        "l3_route1": "S_TRAFFIC_SPLIT",
-        "l3_route2": "S_HASH_ROUTING"
+        "l3_r_rit":    "R_PATRON_SEAL",
+        "l3_r_dns":    "S_PRIVATE_DNS",
+        "l3_r_route1": "S_LOCALITY_ROUTING"
       },
-      "installedMatrixIds": [],
+      "installedMatrixIds": ["net_l3_relay"],
       "expected": {
-        "outcome": "fail",
-        "fatalStatuses": ["F2_CONTRADICTION"],
-        "missingRequirements": []
+        "outcome": "pass",
+        "missingRequirements": [],
+        "fatalStatuses": [],
+        "coinsSpentRange": [16, 16],
+        "auraTotalRange":  [3, 3]
       }
     },
     {
-      "name": "Ловушка 2 — discovery без healthcheck (F5_FRAGILITY)",
+      "name": "Ловушка 1 — Путь B без ритуала (бюджет превышен)",
+      "placements": {
+        "l3_dns":    "S_PRIVATE_DNS",
+        "l3_route1": "S_LOCALITY_ROUTING"
+      },
+      "installedMatrixIds": ["net_l3_infra", "net_l3_routing"],
+      "expected": {
+        "outcome": "fail"
+      }
+    },
+    {
+      "name": "Ловушка 2 — DNS без TLS (каскад D_DNS_EXPOSED → F3_COMPROMISE)",
+      "placements": {
+        "l3_dns":    "S_DNS",
+        "l3_route1": "S_TRAFFIC_SPLIT",
+        "l3_disc1":  "S_HEALTHCHECK"
+      },
+      "installedMatrixIds": ["net_l3_infra", "net_l3_routing"],
+      "expected": {
+        "outcome": "fail",
+        "fatalStatusesContains": ["F3_COMPROMISE"]
+      }
+    },
+    {
+      "name": "Ловушка 3 — TrafficSplit без HealthCheck (D_SPLIT_OVERLOAD → F5_FRAGILITY)",
       "placements": {
         "l3_dns":    "S_DNS",
         "l3_tls":    "S_TLS_CERT",
-        "l3_disc1":  "S_DISCOVERY",
         "l3_route1": "S_TRAFFIC_SPLIT"
       },
-      "installedMatrixIds": [],
+      "installedMatrixIds": ["net_l3_infra", "net_l3_routing"],
       "expected": {
         "outcome": "fail",
-        "fatalStatuses": ["F5_FRAGILITY"],
-        "missingRequirementsContains": ["REQ_FAILOVER"]
+        "fatalStatusesContains": ["F5_FRAGILITY"]
+      }
+    },
+    {
+      "name": "Ловушка 4 — без карты маршрутизации (D_ROUTING_AMBIGUITY → F7, буф не выдан)",
+      "placements": {
+        "l3_dns":   "S_DNS",
+        "l3_tls":   "S_TLS_CERT",
+        "l3_disc1": "S_HEALTHCHECK"
+      },
+      "installedMatrixIds": ["net_l3_infra", "net_l3_routing"],
+      "expected": {
+        "outcome": "fail",
+        "fatalStatusesContains": ["F7_CONFUSION"]
+      }
+    },
+    {
+      "name": "Ловушка 5 — без матрицы маршрутов (нет NET_ROUTING слота)",
+      "placements": {
+        "l3_dns":   "S_DNS",
+        "l3_tls":   "S_TLS_CERT",
+        "l3_disc1": "S_HEALTHCHECK"
+      },
+      "installedMatrixIds": ["net_l3_infra"],
+      "expected": {
+        "outcome": "fail",
+        "fatalStatusesContains": ["F7_CONFUSION"]
+      }
+    },
+    {
+      "name": "Ловушка 6 — Relay + Routing (нет TLS и DISCOVERY — ловушка)",
+      "placements": {
+        "l3_r_dns":    "S_DNS",
+        "l3_r_route1": "S_TRAFFIC_SPLIT"
+      },
+      "installedMatrixIds": ["net_l3_relay", "net_l3_routing"],
+      "expected": {
+        "outcome": "fail",
+        "fatalStatusesContains": ["F3_COMPROMISE"]
       }
     }
   ]

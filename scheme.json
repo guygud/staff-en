@@ -4,78 +4,67 @@
   "properties": {
     "id": {
       "type": "integer",
-      "description": "Отвечает за уровень"
+      "description": "Номер уровня"
     },
     "customer": {
       "type": "object",
-      "description": "Заказчик. Кто дает задание",
+      "description": "Заказчик — кто даёт задание",
       "properties": {
-        "name": {
-          "type": "string",
-          "description": "Имя заказчика"
-        },
-        "avatar": {
-          "type": "string",
-          "description": "Ссылка на аватар в проекте. Example: images/avatar-1.png"
-        },
-        "description": {
-          "type": "string",
-          "description": "Описание уровня"
-        },
-        "budget": {
-          "$ref": "#/$defs/currencies",
-          "description": "Бюджет заказчика"
-        },
+        "name":        { "type": "string", "description": "Имя заказчика" },
+        "avatar":      { "type": "string", "description": "Ссылка на аватар. Example: images/avatars/level-1.png" },
+        "description": { "type": "string", "description": "Описание задания" },
+        "budget":      { "$ref": "#/$defs/currencies", "description": "Бюджет заказчика" },
         "debuff": {
           "type": "string",
           "enum": ["slow", "blind", "stun", ""],
-          "description": "Дебафф уровня. Пустая строка = нет дебаффа"
+          "description": "Визуальный дебафф уровня. Пустая строка = нет дебаффа"
         }
       },
       "required": ["name", "avatar", "description", "budget"],
       "additionalProperties": false
     },
+    "cards": {
+      "type": "array",
+      "description": "ID карт доступных на уровне (ключи из cards.json). Cocos фильтрует по совпадению card.types со слотом матрицы.",
+      "minItems": 1,
+      "items": { "type": "string" }
+    },
     "matrices": {
       "type": "array",
+      "description": "Матрицы уровня",
+      "minItems": 1,
       "items": {
         "type": "object",
-        "minItems": 1,
-        "maxItems": 4,
         "properties": {
+          "name":        { "type": "string", "description": "Отображаемое название матрицы" },
+          "description": { "type": "string", "description": "Краткое описание назначения матрицы" },
           "isRequired": {
             "type": "boolean",
-            "description": "Отвечает за обязательность матрицы"
+            "description": "true — предустановлена, не стоит монет; false — игрок выбирает и покупает"
           },
           "currencies": {
-            "gold": {
-              "type": "integer",
-              "description": "Покупка матрицы. Для isRequired = true, то currencies не заполняется или currencies.gold = 0"
-            }
+            "$ref": "#/$defs/goldOnly",
+            "description": "Стоимость установки. Только для isRequired = false"
           },
           "slots": {
             "type": "array",
+            "description": "Конкретные типы слотов. Cocos подставляет карты у которых card.types содержит этот тип.",
             "minItems": 1,
             "maxItems": 5,
             "items": {
               "type": "string",
-              "enum": ["observability", "storage", "connectivity", "delivery"]
-            }
-          },
-          "cards": {
-            "type": "array",
-            "minItems": 1,
-            "items": {
-              "type": "string",
-              "description": "['json/cards/x.json']"
+              "enum": ["logs", "filters", "retention", "quota",
+                       "dns", "tls", "auth", "routing", "discovery",
+                       "cicd", "canary", "ritual"]
             }
           }
         },
-        "required": ["isRequired", "cards", "slots"],
+        "required": ["isRequired", "slots"],
         "additionalProperties": false
       }
     }
   },
-  "required": ["id", "customer", "matrices"],
+  "required": ["id", "customer", "cards", "matrices"],
   "additionalProperties": false,
 
   "$defs": {
@@ -86,6 +75,14 @@
         "aura": { "type": "integer" }
       },
       "required": ["gold", "aura"],
+      "additionalProperties": false
+    },
+    "goldOnly": {
+      "type": "object",
+      "properties": {
+        "gold": { "type": "integer" }
+      },
+      "required": ["gold"],
       "additionalProperties": false
     }
   }

@@ -1,0 +1,22 @@
+﻿debt_id,status_id,status_name,origin,introduced_at_levels,source_card_id,distinct_from_card_debts,narrative
+D_AUDIT_NEEDED,F8_AUDIT_GAP,Дыра аудита,level,L5_KIRA_API | L1_LIBRARY_ORBS | L2_GATEWAY_PASS,,D_ACCESS_LOG_VOLUME,"Наследственный долг уровня: нужен аудит доступа, не путать с переполнением от объёма логов карты."
+D_BACKFILL_UNVERIFIED,F11_HOTSPOT,Горячий шард,card,,S_SCHEMA_GUARD,,Долг от Schema Guard: backfill не проверен dry-run.
+D_CACHE_GROWTH,F1_OVERFLOW,Переполнение,level,L2_KESHA_CACHE,,,
+D_COLD_SHARD,F7_CONFUSION,Путаница,card,,S_SHARD_FENCE,,"Долг от Shard Fence: замороженный шард; лечится Зондом, не общим «Живостью»."
+D_FAILOVER_LOOP,F15_FAILOVER_LOOP,Петля failover,level,L7_EDWARD_MULTIDC,,,Наследственный долг уровня: петля failover между DC.
+D_HIDDEN_NODES,F5_FRAGILITY,Хрупкость,level,L4_ANASTASIA_GOLDEN,,,"Наследственный долг уровня: узлы не обнаружены; лечится явной привязкой, не симптом-классом."
+D_INDEX_GROWTH,F1_OVERFLOW,Переполнение,level,L1_LIBRARY_ORBS,,,
+D_NEEDS_HEALTHCHECK,F5_FRAGILITY,Хрупкость,card,,S_DISCOVERY,D_SPLIT_OVERLOAD,"Долг от соседней карты (Discovery) или уровня: нужен healthcheck, не путать с перегрузкой от Traffic Split."
+D_NEEDS_MIGRATION,F5_FRAGILITY,Хрупкость,card,,S_SCHEMA_GUARD,,Долг от Schema Guard: требуется миграция перед пайплайном.
+D_NEEDS_ROLLBACK,F5_FRAGILITY,Хрупкость,card,,S_CICD,,Долг от CI/CD без отката: релиз без пути назад.
+D_NO_CICD,F6_NONDELIVERY,Недоставка,level,L5_KIRA_API | L7_EDWARD_MULTIDC,,,
+D_NO_OBSERVABILITY,F4_BLINDNESS,Слепота,level,L1_MILLER_BARN | L4_ANASTASIA_GOLDEN | L6_MARK_SHARDING,,,Наследственный долг уровня: система слепа до появления наблюдаемости.
+D_OPEN_ACCESS,F3_COMPROMISE,Компрометация,level,L2_KESHA_CACHE | L5_KIRA_API,,,
+D_REBALANCE_WINDOW,F5_FRAGILITY,Хрупкость,card,,S_REBALANCER,,Долг от Rebalancer: окно перераспределения без проверки миграции.
+D_RESERVE_CAPACITY_GAP,F16_CAPACITY_GAP,Провал резерва,level,L7_EDWARD_MULTIDC,,,
+D_ROUTING_AMBIGUITY,F7_CONFUSION,Путаница,level,L3_GENNADY_LIGHTHOUSE | L6_MARK_SHARDING,,,
+D_SCHEMA_DRIFT,F12_SPLIT_BRAIN,Раскол кворума,level,L6_MARK_SHARDING,,,
+D_SIGN_UNCLEAR,F4_BLINDNESS,Слепота,level,L3_GENNADY_LIGHTHOUSE,,,
+D_SPLIT_OVERLOAD,F5_FRAGILITY,Хрупкость,card,,S_TRAFFIC_SPLIT,,Долг от Traffic Split: перегрузка после разделения потоков.
+D_TRANSPORT_EXPOSED,F3_COMPROMISE,Компрометация,level,L4_ANASTASIA_GOLDEN,,,
+D_UNTESTED_FAILOVER,F5_FRAGILITY,Хрупкость,card,,S_GLOBAL_HEALTHCHECK,,Долг от Global Healthcheck: failover не обкатан DR-учением.

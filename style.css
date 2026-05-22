@@ -99,6 +99,12 @@ ul { list-style: none; }
   font-style: italic;
 }
 
+.briefing-item {
+  color: var(--text-dim);
+  font-size: 0.9rem;
+  margin: -0.75rem 0 1.25rem;
+}
+
 .section-title {
   font-family: var(--font-main);
   color: var(--text-label);
@@ -300,6 +306,27 @@ ul { list-style: none; }
   gap: 0.3rem;
   align-items: center;
   flex-wrap: wrap;
+}
+
+.hud-treat-label {
+  margin-left: 0.35rem;
+}
+
+#hud-treatments {
+  display: flex;
+  gap: 0.25rem;
+  align-items: center;
+  flex-wrap: wrap;
+  max-width: 420px;
+}
+
+.treatment-live-badge {
+  font-size: 0.68rem;
+  color: #7ec8e3;
+  background: rgba(126, 200, 227, 0.12);
+  border-radius: 4px;
+  padding: 1px 5px;
+  cursor: default;
 }
 
 .status-clear { color: var(--text-dim); font-size: 0.8rem; }
@@ -1065,7 +1092,40 @@ ul { list-style: none; }
   margin-top: 0.25rem;
 }
 
-/* ── Позитивный баф ─────────────────────────────────────────────── */
+/* ── Лечение (treatmentTags) ───────────────────────────────────── */
+.spell-treat-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.25rem;
+  width: 100%;
+}
+.spell-meta-label {
+  font-size: 0.65rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-dim);
+}
+.spell-treatment {
+  font-size: 0.72rem;
+  color: #7ec8e3;
+  font-weight: 600;
+  background: rgba(126, 200, 227, 0.12);
+  border-radius: 4px;
+  padding: 1px 5px;
+}
+.spell-explicit-resolve {
+  font-size: 0.68rem;
+  color: #c9a227;
+  margin: 0.15rem 0 0.1rem;
+}
+.spell-resolve {
+  font-size: 0.7rem;
+  color: #81c784;
+  margin-left: 0.35rem;
+}
+
+/* ── Позитивный баф (legacy) ─────────────────────────────────────── */
 .spell-buff {
   font-size: 0.72rem;
   color: #4caf7d;
@@ -1141,6 +1201,15 @@ ul { list-style: none; }
   font-size: 0.75rem;
   color: #f0c040;
 }
+.assembly-treat-wrap {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.2rem;
+}
+.assembly-explicit {
+  font-size: 0.7rem;
+  color: #c9a227;
+}
 .assembly-buff {
   font-size: 0.72rem;
   color: #4caf7d;
@@ -1151,4 +1220,128 @@ ul { list-style: none; }
 .assembly-empty {
   color: #666;
   font-style: italic;
+}
+
+/* ─── Solution Modal ─────────────────────────────────────────────────────── */
+
+.btn-hint-hud {
+  margin-left: auto;
+  background: rgba(230,200,76,0.12);
+  border: 1px solid var(--gold-dim);
+  color: var(--gold);
+  font-size: 1rem;
+  padding: 2px 10px;
+  border-radius: var(--radius);
+  cursor: pointer;
+  transition: background var(--transition);
+  flex-shrink: 0;
+}
+.btn-hint-hud:hover { background: rgba(230,200,76,0.25); }
+
+.solution-modal {
+  position: fixed; inset: 0; z-index: 1000;
+  display: flex; align-items: center; justify-content: center;
+}
+.solution-modal-backdrop {
+  position: absolute; inset: 0;
+  background: rgba(5,5,18,0.82);
+  backdrop-filter: blur(3px);
+}
+.solution-modal-box {
+  position: relative; z-index: 1;
+  background: var(--bg-base);
+  border: 1px solid var(--border-glow);
+  border-radius: var(--radius-lg);
+  width: min(780px, 95vw);
+  max-height: 88vh;
+  display: flex; flex-direction: column;
+  box-shadow: 0 8px 48px rgba(0,0,0,0.7);
+}
+.solution-modal-header {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 14px 20px 12px;
+  border-bottom: 1px solid var(--border);
+  flex-shrink: 0;
+}
+.solution-modal-title {
+  margin: 0; font-size: 1.15rem;
+  color: var(--gold); font-family: var(--font-main);
+}
+.solution-modal-close {
+  background: transparent; border: none;
+  color: var(--text-dim); font-size: 1.1rem; cursor: pointer;
+  padding: 2px 6px; border-radius: 4px;
+  transition: color var(--transition);
+}
+.solution-modal-close:hover { color: var(--text-main); }
+
+.solution-modal-body {
+  overflow-y: auto; padding: 16px 20px;
+  display: flex; flex-direction: column; gap: 14px;
+}
+
+/* Solution card */
+.sol-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+}
+.sol-card-header {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 10px 14px;
+  background: var(--bg-raised);
+  border-bottom: 1px solid var(--border);
+}
+.sol-card-name {
+  font-size: 0.95rem; font-weight: 600;
+  color: var(--text-main);
+}
+.sol-apply-btn {
+  background: var(--gold);
+  color: #111; border: none; cursor: pointer;
+  font-size: 0.8rem; font-weight: 700;
+  padding: 4px 12px; border-radius: var(--radius);
+  transition: opacity var(--transition);
+  white-space: nowrap;
+}
+.sol-apply-btn:hover { opacity: 0.85; }
+
+.sol-card-body {
+  padding: 10px 14px;
+  display: flex; flex-direction: column; gap: 6px;
+}
+.sol-placements {
+  display: flex; flex-wrap: wrap; gap: 6px;
+}
+.sol-placement {
+  display: flex; align-items: center; gap: 5px;
+  background: var(--bg-raised);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 4px 9px;
+  font-size: 0.8rem;
+}
+.sol-placement-slot {
+  color: var(--text-dim); font-family: var(--font-ui);
+  font-size: 0.72rem;
+}
+.sol-placement-arrow { color: var(--border-glow); font-size: 0.75rem; }
+.sol-placement-card { color: var(--text-main); font-weight: 500; }
+
+.sol-note {
+  font-size: 0.8rem; color: var(--text-dim);
+  font-style: italic; line-height: 1.4;
+  padding-top: 4px;
+  border-top: 1px solid var(--border);
+  margin-top: 2px;
+}
+
+.sol-matrix-badge {
+  display: inline-flex; align-items: center; gap: 4px;
+  font-size: 0.75rem; color: var(--yellow);
+  background: rgba(230,168,60,0.1);
+  border: 1px solid rgba(230,168,60,0.25);
+  border-radius: 5px; padding: 2px 8px;
+  margin-bottom: 4px;
 }

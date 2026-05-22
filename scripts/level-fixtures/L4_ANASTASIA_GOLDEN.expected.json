@@ -2,90 +2,122 @@
   "levelId": "L4_ANASTASIA_GOLDEN",
   "scenarios": [
     {
-      "name": "Путь A — Золотой стандарт (LOGGING + LOG_FILTER)",
+      "name": "Путь A — каскад (GATEWAY_SEAL→AUTHZ + LOGGING→LOG_FILTER)",
       "placements": {
-        "l4_auth": "S_AUTHZ",
-        "l4_tls": "S_TLS_CERT",
-        "l4_disc1": "S_DISCOVERY",
-        "l4_disc2": "S_HEALTHCHECK",
-        "l4_logs": "S_LOGGING",
+        "l4_auth":    "S_AUTHZ",
+        "l4_tls":     "S_GATEWAY_SEAL",
+        "l4_disc1":   "S_DISCOVERY",
+        "l4_disc2":   "S_HEALTHCHECK",
+        "l4_logs":    "S_LOGGING",
         "l4_filters": "S_LOG_FILTER"
       },
-      "installedMatrixIds": [],
+      "installedMatrixIds": ["net_l4", "obs_l4"],
       "expected": {
         "outcome": "pass",
         "missingRequirements": [],
         "fatalStatuses": [],
-        "coinsSpentRange": [
-          14,
-          14
-        ],
-        "auraTotalRange": [
-          2,
-          2
-        ]
+        "coinsSpentRange": [17, 17],
+        "auraTotalRange":  [4, 4]
       }
     },
     {
-      "name": "Путь B — Аудит + Канарейка (ACCESS_LOGS + R_CANARY)",
+      "name": "Путь B — ритуал (GATEWAY_SEAL→AUTHZ + LOGGING + R_GUARD_TO_BAR)",
       "placements": {
-        "l4_auth": "S_AUTHZ",
-        "l4_tls": "S_TLS_CERT",
-        "l4_disc1": "S_DISCOVERY",
-        "l4_disc2": "S_HEALTHCHECK",
-        "l4_logs": "S_ACCESS_LOGS",
-        "l4_obs_rit": "R_CANARY"
+        "l4_auth":    "S_AUTHZ",
+        "l4_tls":     "S_GATEWAY_SEAL",
+        "l4_disc1":   "S_DISCOVERY",
+        "l4_disc2":   "S_HEALTHCHECK",
+        "l4_net_rit": "R_GUARD_TO_BAR",
+        "l4_logs":    "S_LOGGING"
       },
-      "installedMatrixIds": [],
+      "installedMatrixIds": ["net_l4", "obs_l4"],
       "expected": {
         "outcome": "pass",
         "missingRequirements": [],
         "fatalStatuses": [],
-        "coinsSpentRange": [
-          14,
-          14
-        ],
-        "auraTotalRange": [
-          3,
-          3
-        ]
+        "coinsSpentRange": [17, 17],
+        "auraTotalRange":  [3, 3]
       }
     },
     {
-      "name": "Ловушка 1 — Нет наблюдаемости (F4_BLINDNESS)",
+      "name": "Ловушка 1 — нет наблюдаемости (F4_BLINDNESS)",
       "placements": {
-        "l4_auth": "S_AUTHZ",
-        "l4_tls": "S_TLS_CERT",
+        "l4_auth":  "S_AUTHZ",
+        "l4_tls":   "S_GATEWAY_SEAL",
         "l4_disc1": "S_DISCOVERY",
         "l4_disc2": "S_HEALTHCHECK"
       },
-      "installedMatrixIds": [],
+      "installedMatrixIds": ["net_l4", "obs_l4"],
       "expected": {
         "outcome": "fail",
-        "fatalStatuses": [
-          "F4_BLINDNESS"
-        ],
+        "fatalStatuses": ["F4_BLINDNESS"],
         "missingRequirements": []
       }
     },
     {
-      "name": "Ловушка 2 — LOGGING без LOG_FILTER (аура превышена от F1)",
+      "name": "Ловушка 2 — нет Healthcheck (D_NEEDS_HEALTHCHECK → F5_FRAGILITY)",
       "placements": {
-        "l4_auth": "S_AUTHZ",
-        "l4_tls": "S_TLS_CERT",
+        "l4_auth":    "S_AUTHZ",
+        "l4_tls":     "S_GATEWAY_SEAL",
+        "l4_disc1":   "S_DISCOVERY",
+        "l4_logs":    "S_LOGGING",
+        "l4_filters": "S_LOG_FILTER"
+      },
+      "installedMatrixIds": ["net_l4", "obs_l4"],
+      "expected": {
+        "outcome": "fail",
+        "fatalStatuses": ["F5_FRAGILITY"],
+        "missingRequirementsContains": ["REQ_FAILOVER"]
+      }
+    },
+    {
+      "name": "Ловушка 3 — LOGGING без фильтра и без ритуала (аура превышена)",
+      "placements": {
+        "l4_auth":  "S_AUTHZ",
+        "l4_tls":   "S_GATEWAY_SEAL",
         "l4_disc1": "S_DISCOVERY",
         "l4_disc2": "S_HEALTHCHECK",
-        "l4_logs": "S_LOGGING"
+        "l4_logs":  "S_LOGGING"
       },
-      "installedMatrixIds": [],
+      "installedMatrixIds": ["net_l4", "obs_l4"],
       "expected": {
         "outcome": "fail",
         "fatalStatuses": [],
         "missingRequirements": [],
-        "auraTotalRange": [
-          4,
-          4
-        ]
+        "auraTotalRange": [7, 7]
+      }
+    },
+    {
+      "name": "Ловушка 4 — R_CANARY вместо R_GUARD_TO_BAR (−1 ауры недостаточно)",
+      "placements": {
+        "l4_auth":    "S_AUTHZ",
+        "l4_tls":     "S_GATEWAY_SEAL",
+        "l4_disc1":   "S_DISCOVERY",
+        "l4_disc2":   "S_HEALTHCHECK",
+        "l4_obs_rit": "R_CANARY",
+        "l4_logs":    "S_LOGGING"
+      },
+      "installedMatrixIds": ["net_l4", "obs_l4"],
+      "expected": {
+        "outcome": "fail",
+        "fatalStatuses": [],
+        "missingRequirements": [],
+        "auraTotalRange": [6, 6]
+      }
+    },
+    {
+      "name": "Ловушка 5 — Базовый шлюз вместо Сетевого контура (нет слотов discovery)",
+      "placements": {
+        "l4_lite_auth": "S_AUTHZ",
+        "l4_lite_tls":  "S_GATEWAY_SEAL",
+        "l4_logs":      "S_LOGGING",
+        "l4_filters":   "S_LOG_FILTER"
+      },
+      "installedMatrixIds": ["net_l4_lite", "obs_l4"],
+      "expected": {
+        "outcome": "fail",
+        "fatalStatuses": ["F5_FRAGILITY"],
+        "missingRequirementsContains": ["REQ_FAILOVER"]
       }
     }
   ]

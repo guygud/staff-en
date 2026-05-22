@@ -1,0 +1,16 @@
+﻿level_id,block_index,note,grants_capabilities,adds_debt_ids,adds_symptoms
+L1_MILLER_BARN,1,Магический замок уже стоит — пускает только работников мельницы.,HAS_AUTHZ,D_NO_OBSERVABILITY,🙈 Слепота
+L2_KESHA_CACHE,1,Редиска создавалась для одного отдела — без изоляции между арендаторами и без контроля роста кэша.,HAS_CACHE_REDIS,D_CACHE_GROWTH | D_OPEN_ACCESS,⚗️ Переполнение | 🔓 Компрометация
+L3_GENNADY_LIGHTHOUSE,1,Указатель безымянный и маршруты не закреплены. HAS_AUTHZ предустановлен.,HAS_AUTHZ,D_SIGN_UNCLEAR | D_ROUTING_AMBIGUITY,🙈 Слепота | 🪰 Путаница
+L4_ANASTASIA_GOLDEN,1,Трафик сервисов не шифруется — данные видны в сети.,,D_TRANSPORT_EXPOSED,🔓 Компрометация
+L4_ANASTASIA_GOLDEN,2,"Новые сервисы деплоятся без наблюдаемости — никто не знает, что внутри.",,D_NO_OBSERVABILITY,🙈 Слепота
+L4_ANASTASIA_GOLDEN,3,"Сервисы не зарегистрированы — посланники не знают, куда идти и живы ли узлы.",,D_HIDDEN_NODES,🕸️ Хрупкость
+L5_KIRA_API,1,Шлюз открыт всем — авторизации нет.,,D_OPEN_ACCESS,🔓 Компрометация
+L5_KIRA_API,2,Сервис деплоился вручную — воспроизводимой доставки нет.,,D_NO_CICD,🌀 Недоставка
+L5_KIRA_API,3,"Кто и когда обращался к шлюзу — неизвестно, аудита нет.",,D_AUDIT_NEEDED,🕳️ Дыра аудита
+L6_MARK_SHARDING,1,Голуби не знают в какой шард лететь — алгоритм маршрутизации не задан.,,D_ROUTING_AMBIGUITY,🪰 Путаница
+L6_MARK_SHARDING,2,Схема данных разошлась между шардами — запросы к разным шардам дают разные поля.,,D_SCHEMA_DRIFT,🧠 Раскол кворума
+L6_MARK_SHARDING,3,Ни одного лога — никто не знает куда уходят свитки и есть ли ошибки.,,D_NO_OBSERVABILITY,🙈 Слепота
+L7_EDWARD_MULTIDC,1,Первый ковчег деплоился вручную без стандарта — нет ритуала доставки.,,D_NO_CICD | D_FAILOVER_LOOP | D_RESERVE_CAPACITY_GAP,🌀 Недоставка | 🔁 Петля failover | 🏚️ Провал резерва
+L1_LIBRARY_ORBS,1,Предыдущий маг оставил неуправляемый индекс.,,D_INDEX_GROWTH | D_AUDIT_NEEDED,⚗️ Переполнение | 🕳️ Дыра аудита
+L2_GATEWAY_PASS,1,"Башня работает, но никто не ведёт записей о посетителях.",,D_AUDIT_NEEDED,🕳️ Дыра аудита

@@ -2,62 +2,199 @@
   "levelId": "L6_MARK_SHARDING",
   "scenarios": [
     {
-      "name": "Путь A — LOG_FILTER (классическая фильтрация)",
+      "name": "Путь A — Технический (S_SHARD_KEY + S_LOG_FILTER)",
       "placements": {
-        "l6_disc1":   "S_DISCOVERY",
-        "l6_disc2":   "S_HEALTHCHECK",
-        "l6_route1":  "S_HASH_ROUTING",
-        "l6_logs":    "S_LOGGING",
-        "l6_filters": "S_LOG_FILTER",
+        "l6_route1":  "S_SHARD_KEY",
+        "l6_route2":  "S_HOT_KEY_SPLITTER",
+        "l6_quota":   "S_REBALANCER",
+        "l6_ret":     "S_SCHEMA_GUARD",
         "l6_pipe":    "S_CICD",
-        "l6_rb":      "S_ROLLBACK"
+        "l6_test":    "S_MIGRATION_DRY_RUN",
+        "l6_rb":      "S_ROLLBACK",
+        "l6_logs":    "S_LOGGING",
+        "l6_filters": "S_LOG_FILTER"
       },
-      "installedMatrixIds": [],
+      "installedMatrixIds": ["net_l6", "obs_l6", "st_l6", "cd_l6"],
       "expected": {
         "outcome": "pass",
         "missingRequirements": [],
         "fatalStatuses": [],
-        "coinsSpentRange": [14, 14],
+        "coinsSpentRange": [24, 24],
+        "auraTotalRange":  [5, 5]
+      }
+    },
+    {
+      "name": "Путь B — Ритуал (R_GUARD_TO_BAR вместо S_LOG_FILTER)",
+      "placements": {
+        "l6_route1":  "S_SHARD_KEY",
+        "l6_route2":  "S_HOT_KEY_SPLITTER",
+        "l6_quota":   "S_REBALANCER",
+        "l6_ret":     "S_SCHEMA_GUARD",
+        "l6_pipe":    "S_CICD",
+        "l6_test":    "S_MIGRATION_DRY_RUN",
+        "l6_rb":      "S_ROLLBACK",
+        "l6_logs":    "S_LOGGING",
+        "l6_net_rit": "R_GUARD_TO_BAR"
+      },
+      "installedMatrixIds": ["net_l6", "obs_l6", "st_l6", "cd_l6"],
+      "expected": {
+        "outcome": "pass",
+        "missingRequirements": [],
+        "fatalStatuses": [],
+        "coinsSpentRange": [24, 24],
         "auraTotalRange":  [4, 4]
       }
     },
     {
-      "name": "Путь B — Субсидия (M_STORAGE + R_LIBRARY_GRANT + R_GUARD_TO_BAR)",
+      "name": "Ловушка 1 — Буфер вместо obs_l6 (F13_DARK_SHARD)",
       "placements": {
-        "l6_disc1":   "S_DISCOVERY",
-        "l6_disc2":   "S_HEALTHCHECK",
-        "l6_route1":  "S_HASH_ROUTING",
-        "l6_logs":    "S_LOGGING",
-        "l6_quota":   "S_QUOTAS",
-        "l6_pipe":    "S_CICD",
-        "l6_rb":      "S_ROLLBACK",
-        "l6_st_rit":  "R_LIBRARY_GRANT",
-        "l6_net_rit": "R_GUARD_TO_BAR"
+        "l6_buf_route": "S_SHARD_KEY",
+        "l6_route2":    "S_HOT_KEY_SPLITTER",
+        "l6_buf_quota": "S_REBALANCER",
+        "l6_ret":       "S_SCHEMA_GUARD",
+        "l6_pipe":      "S_CICD",
+        "l6_test":      "S_MIGRATION_DRY_RUN",
+        "l6_rb":        "S_ROLLBACK"
       },
-      "installedMatrixIds": ["st_l6"],
+      "installedMatrixIds": ["net_l6", "st_l6", "cd_l6", "buffer_l6"],
       "expected": {
-        "outcome": "pass",
-        "missingRequirements": [],
-        "fatalStatuses": [],
-        "coinsSpentRange": [14, 14],
-        "auraTotalRange":  [3, 3]
+        "outcome": "fail",
+        "fatalStatuses": ["F1_OVERFLOW"]
       }
     },
     {
-      "name": "Ловушка — DISCOVERY без HEALTHCHECK (F5_FRAGILITY)",
+      "name": "Ловушка 2 — S_SHARD_KEY без S_REBALANCER (F1_OVERFLOW)",
       "placements": {
-        "l6_disc1":   "S_DISCOVERY",
-        "l6_route1":  "S_HASH_ROUTING",
-        "l6_logs":    "S_LOGGING",
-        "l6_filters": "S_LOG_FILTER",
+        "l6_route1":  "S_SHARD_KEY",
+        "l6_route2":  "S_HOT_KEY_SPLITTER",
+        "l6_ret":     "S_SCHEMA_GUARD",
         "l6_pipe":    "S_CICD",
+        "l6_test":    "S_MIGRATION_DRY_RUN",
         "l6_rb":      "S_ROLLBACK"
       },
-      "installedMatrixIds": [],
+      "installedMatrixIds": ["net_l6", "obs_l6", "st_l6", "cd_l6"],
       "expected": {
         "outcome": "fail",
-        "fatalStatuses": ["F5_FRAGILITY"],
-        "missingRequirementsContains": ["REQ_FAILOVER"]
+        "fatalStatuses": ["F1_OVERFLOW"]
+      }
+    },
+    {
+      "name": "Ловушка 3 — S_SCHEMA_GUARD без S_CICD (F5_FRAGILITY)",
+      "placements": {
+        "l6_route1":  "S_SHARD_KEY",
+        "l6_route2":  "S_HOT_KEY_SPLITTER",
+        "l6_quota":   "S_REBALANCER",
+        "l6_ret":     "S_SCHEMA_GUARD",
+        "l6_test":    "S_MIGRATION_DRY_RUN",
+        "l6_rb":      "S_ROLLBACK",
+        "l6_logs":    "S_LOGGING",
+        "l6_filters": "S_LOG_FILTER"
+      },
+      "installedMatrixIds": ["net_l6", "obs_l6", "st_l6", "cd_l6"],
+      "expected": {
+        "outcome": "fail",
+        "fatalStatuses": ["F5_FRAGILITY"]
+      }
+    },
+    {
+      "name": "Ловушка 4 — S_SHARD_FENCE без S_SHARD_PROBE (F7_CONFUSION)",
+      "placements": {
+        "l6_route1":  "S_SHARD_FENCE",
+        "l6_ret":     "S_SCHEMA_GUARD",
+        "l6_pipe":    "S_CICD",
+        "l6_test":    "S_MIGRATION_DRY_RUN",
+        "l6_rb":      "S_ROLLBACK",
+        "l6_logs":    "S_LOGGING",
+        "l6_filters": "S_LOG_FILTER"
+      },
+      "installedMatrixIds": ["net_l6", "obs_l6", "st_l6", "cd_l6"],
+      "expected": {
+        "outcome": "fail",
+        "fatalStatuses": ["F7_CONFUSION"]
+      }
+    },
+    {
+      "name": "Ловушка 5 — S_REPLICATION_MANAGER без S_REPLICA_SYNC (F5_FRAGILITY)",
+      "placements": {
+        "l6_route1":  "S_HASH_ROUTING",
+        "l6_route2":  "S_QUORUM_KEEPER",
+        "l6_ret":     "S_REPLICATION_MANAGER",
+        "l6_logs":    "S_LOGGING",
+        "l6_filters": "S_LOG_FILTER"
+      },
+      "installedMatrixIds": ["net_l6", "obs_l6", "st_l6"],
+      "expected": {
+        "outcome": "fail",
+        "fatalStatuses": ["F5_FRAGILITY"]
+      }
+    },
+    {
+      "name": "Ловушка 6 — S_SHARD_KEY + S_HASH_ROUTING без Арбитра (F2_CONTRADICTION)",
+      "placements": {
+        "l6_route1":  "S_SHARD_KEY",
+        "l6_route2":  "S_HASH_ROUTING",
+        "l6_quota":   "S_REBALANCER",
+        "l6_ret":     "S_SCHEMA_GUARD",
+        "l6_pipe":    "S_CICD",
+        "l6_test":    "S_MIGRATION_DRY_RUN",
+        "l6_rb":      "S_ROLLBACK",
+        "l6_logs":    "S_LOGGING",
+        "l6_filters": "S_LOG_FILTER"
+      },
+      "installedMatrixIds": ["net_l6", "obs_l6", "st_l6", "cd_l6"],
+      "expected": {
+        "outcome": "fail",
+        "fatalStatuses": ["F2_CONTRADICTION"]
+      }
+    },
+    {
+      "name": "Ловушка 7 — S_REBALANCER без S_HOT_KEY_SPLITTER (D_HOT_PARTITION → F11_HOTSPOT)",
+      "placements": {
+        "l6_route1":  "S_SHARD_KEY",
+        "l6_quota":   "S_REBALANCER",
+        "l6_ret":     "S_SCHEMA_GUARD",
+        "l6_pipe":    "S_CICD",
+        "l6_test":    "S_MIGRATION_DRY_RUN",
+        "l6_rb":      "S_ROLLBACK",
+        "l6_logs":    "S_LOGGING",
+        "l6_filters": "S_LOG_FILTER"
+      },
+      "installedMatrixIds": ["net_l6", "obs_l6", "st_l6", "cd_l6"],
+      "expected": {
+        "outcome": "fail",
+        "fatalStatuses": ["F11_HOTSPOT"]
+      }
+    },
+    {
+      "name": "Ловушка 8 — S_SCHEMA_GUARD без S_MIGRATION_DRY_RUN (D_BACKFILL_UNVERIFIED → F11_HOTSPOT)",
+      "placements": {
+        "l6_route1":  "S_SHARD_FENCE",
+        "l6_route2":  "S_SHARD_PROBE",
+        "l6_ret":     "S_SCHEMA_GUARD",
+        "l6_pipe":    "S_CICD",
+        "l6_rb":      "S_ROLLBACK",
+        "l6_logs":    "S_LOGGING",
+        "l6_filters": "S_LOG_FILTER"
+      },
+      "installedMatrixIds": ["net_l6", "obs_l6", "st_l6", "cd_l6"],
+      "expected": {
+        "outcome": "fail",
+        "fatalStatuses": ["F11_HOTSPOT"]
+      }
+    },
+    {
+      "name": "Ловушка 9 — S_REPLICATION_MANAGER без S_QUORUM_KEEPER (D_SPLIT_BRAIN → F12_SPLIT_BRAIN)",
+      "placements": {
+        "l6_route1":  "S_HASH_ROUTING",
+        "l6_ret":     "S_REPLICATION_MANAGER",
+        "l6_quota":   "S_REPLICA_SYNC",
+        "l6_logs":    "S_LOGGING",
+        "l6_filters": "S_LOG_FILTER"
+      },
+      "installedMatrixIds": ["net_l6", "obs_l6", "st_l6"],
+      "expected": {
+        "outcome": "fail",
+        "fatalStatuses": ["F12_SPLIT_BRAIN"]
       }
     }
   ]

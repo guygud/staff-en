@@ -6,7 +6,164 @@
     "resources": [
       "coins",
       "aura"
-    ]
+    ],
+    "cardCatalogSchema": "v1-three-cells",
+    "cardCatalogNote": "spellCardCatalog / obryadCardCatalog — дизайн (3 ячейки: лечение + до 2 дебафов). spellCatalog / obryadCatalog — legacy для движка.",
+    "playtestBrief": {
+      "L1_MILLER_BARN": {
+        "order": 1,
+        "name": "Амбар мельника",
+        "clientName": "Мельник Проспер",
+        "item": "Замок",
+        "description": "Из амбара мельника Проспера пропадает мука. Магический замок уже стоит — он пускает только работников мельницы. Но кто именно входил и когда — неизвестно. Нужно добавить журнал доступа, чтобы найти виновного.",
+        "budget": {
+          "gold": 4,
+          "aura": 5
+        },
+        "successReports": [
+          "Мельник Проспер потирает руки: журнал доступа помог поймать вора с поличным. Замок работает, мука цела. Добрая слава идёт впереди тебя!",
+          "Свиток чист, замок крепок, мука в сохранности. Мельник обещает печь пироги для всей деревни в честь мага, который навёл порядок."
+        ],
+        "requirementsDisplay": [],
+        "hintsDisplay": [],
+        "inheritedDebuffLabels": [
+          "🙈 Слепота"
+        ]
+      },
+      "L2_KESHA_CACHE": {
+        "order": 2,
+        "name": "Не Иннокентий, а Кеша",
+        "clientName": "Иннокентий «Кеша»",
+        "item": "Магический шар",
+        "description": "Старший писец Иннокентий просит превратить личный шар-ускоритель «Редиска» в общий сервис для всех отделов. Шар создавался без изоляции и без контроля роста — теперь каждый отдел хочет его использовать, и всё это одновременно.",
+        "budget": {
+          "gold": 6,
+          "aura": 3
+        },
+        "successReports": [
+          "Редиска теперь умеет разговаривать с каждым отделом по отдельности. Кеша облегчённо выдыхает — квартальные отчёты больше не будут ждать в очереди.",
+          "Шар работает по-новому: каждый отдел получает свою долю, и никто не может захватить всю память. Кеша доволен — начальство наконец получило свои 'быстрые овощи'."
+        ],
+        "requirementsDisplay": [],
+        "hintsDisplay": [],
+        "inheritedDebuffLabels": [
+          "⚗️ Переполнение",
+          "🔓 Компрометация"
+        ]
+      },
+      "L3_GENNADY_LIGHTHOUSE": {
+        "order": 3,
+        "name": "Указатель на перепутье",
+        "clientName": "Геннадий (смотритель перекрёстка)",
+        "item": "Указатель",
+        "description": "На перекрёстке трёх торговых путей стоит безымянный указатель Геннадия. Посланники его не находят, узлы никто не проверяет, а маршруты никем не закреплены. Можно поставить алгоритмы — или договориться с посланниками. Каждый путь требует своего.",
+        "budget": {
+          "gold": 17,
+          "aura": 5
+        },
+        "successReports": [
+          "Геннадий глядит на перекрёсток. Посланники расходятся по дорожкам сами — Весы делают своё дело, Сердцебиение следит за узлами. «Четыре детали, и всё работает. Хорошо.»",
+          "Геннадий разворачивает Карту Земель. «Каждый посланник знает свой путь заранее. Дорого — но надёжно, и ни одного лишнего эффекта.»"
+        ],
+        "requirementsDisplay": [],
+        "hintsDisplay": [],
+        "inheritedDebuffLabels": [
+          "🙈 Слепота",
+          "🪰 Путаница"
+        ]
+      },
+      "L4_ANASTASIA_GOLDEN": {
+        "order": 4,
+        "name": "Золотой путь Анастасии",
+        "clientName": "Анастасия (платформенная команда)",
+        "item": "Шаблон",
+        "description": "Анастасия строит платформу: единый шаблон для новых сервисов её команды. Сервисы появляются без TLS, без логов и без healthcheck — каждый на своё усмотрение. Нужен «Золотой путь» — стандарт, который работает из коробки.",
+        "budget": {
+          "gold": 17,
+          "aura": 5
+        },
+        "successReports": [
+          "Золотой путь проложен. Каждый новый сервис теперь появляется уже с TLS, логами и healthcheck. Анастасия видит сервисы как на ладони.",
+          "Шаблон работает. Команды больше не гадают — просто разворачивают по стандарту."
+        ],
+        "requirementsDisplay": [],
+        "hintsDisplay": [],
+        "inheritedDebuffLabels": [
+          "🔓 Компрометация",
+          "🙈 Слепота",
+          "🕸️ Хрупкость"
+        ]
+      },
+      "L5_KIRA_API": {
+        "order": 5,
+        "name": "Автоматон-регистратор Киры",
+        "clientName": "Кира Морозова (партнёрская платформа)",
+        "item": "Автоматон",
+        "description": "Кира Морозова строит единый API-шлюз для партнёров. Шлюз работает, но открыт всем, деплои хаотичны, а аудитного следа нет. Нужны авторизация, зрелый контур доставки (пайплайн, гейты, откат) и журнал доступа.",
+        "budget": {
+          "gold": 18,
+          "aura": 4
+        },
+        "successReports": [
+          "Доступ закрыт, деплои воспроизводимы, аудит ведётся. Кира наконец-то спит спокойно.",
+          "Один партнёр попытался обойти авторизацию — журнал всё зафиксировал. Шлюз устоял."
+        ],
+        "requirementsDisplay": [],
+        "hintsDisplay": [],
+        "inheritedDebuffLabels": [
+          "🔓 Компрометация",
+          "🌀 Недоставка",
+          "🕳️ Дыра аудита"
+        ]
+      },
+      "L6_MARK_SHARDING": {
+        "order": 6,
+        "name": "Голуби Марка",
+        "clientName": "Марк Игоревич (архив)",
+        "item": "Механический голубь",
+        "description": "Марк Игоревич строит шардированный архив свитков. Три подсистемы: маршрутизация голубей, согласованная схема данных с миграциями, наблюдаемость. Не смешивай два закона маршрутизации без арбитра.",
+        "budget": {
+          "gold": 24,
+          "aura": 6
+        },
+        "successReports": [
+          "Голуби знают куда лететь. Каждый свиток попадает в правильный шард без переспросов. Марк доволен — архив вырос без хаоса.",
+          "Схема едина во всех шардах. Миграции проходят без сюрпризов. Летопись фиксирует каждый полёт."
+        ],
+        "requirementsDisplay": [],
+        "hintsDisplay": [],
+        "inheritedDebuffLabels": [
+          "🔥 Горячий шард",
+          "🧠 Раскол кворума",
+          "🌑 Тёмный шард"
+        ]
+      },
+      "L7_EDWARD_MULTIDC": {
+        "order": 7,
+        "name": "Ковчеги Эдуарда",
+        "clientName": "Эдуард (инфраструктура)",
+        "item": "Ковчег",
+        "description": "Эдуард строит резервные обелиски в двух локациях. Доступно семь контуров, но на площадку влезают только четыре. Нужно выбрать матрицы так, чтобы пережить падение дата-центра, проверить аварийное переключение и не захлебнуться на резерве.",
+        "budget": {
+          "gold": 30,
+          "aura": 9
+        },
+        "successReports": [
+          "Ковчеги запущены! Первый DC упал на 3 минуты — система даже не заметила. Второй принял трафик автоматически. Эдуард молча кивает — это значит 'отлично'.",
+          "Оба обелиска работают в синхронном режиме. Деплои происходят в обе локации без ручного вмешательства. Это и есть надёжность без героизма."
+        ],
+        "requirementsDisplay": [],
+        "hintsDisplay": [],
+        "inheritedDebuffLabels": [
+          "🌀 Недоставка",
+          "🔁 Петля failover",
+          "🏚️ Провал резерва"
+        ]
+      }
+    },
+    "compiledFrom": "new",
+    "compiledAt": "2026-05-22T15:17:00.953Z",
+    "compileNote": "Built by scripts/build-game-data.mjs from new/*.csv; IDs and wiring from previous game-data baseline."
   },
   "statusCatalog": [
     {
@@ -16,6 +173,60 @@
       "reportHints": [
         "Архив распух и треснул по швам — чернила затопили хранилище.",
         "Бесконтрольный рост данных сломал хранилище изнутри."
+      ]
+    },
+    {
+      "id": "F10_CONTRACT_DRIFT",
+      "name": "Разъезд контрактов",
+      "icon": "📜",
+      "reportHints": [
+        "Партнёр пришёл со старым договором API, а шлюз уже говорит на другом языке.",
+        "Релиз вышел, но контракты партнёров не сверили — интеграции рассыпались."
+      ]
+    },
+    {
+      "id": "F11_HOTSPOT",
+      "name": "Горячий шард",
+      "icon": "🔥",
+      "reportHints": [
+        "Один шард раскалился от ключей, пока остальные простаивали.",
+        "Перераспределение началось, но горячий диапазон всё ещё жжёт хранилище."
+      ]
+    },
+    {
+      "id": "F12_SPLIT_BRAIN",
+      "name": "Раскол кворума",
+      "icon": "🧠",
+      "reportHints": [
+        "Две группы реплик решили, что каждая из них главная.",
+        "Кворум распался: шарды отвечают уверенно, но разными истинами."
+      ]
+    },
+    {
+      "id": "F13_DARK_SHARD",
+      "name": "Тёмный шард",
+      "icon": "🌑",
+      "reportHints": [
+        "Один из шардов пропал из летописи: он ещё работает, но никто не видит его полёты.",
+        "Голуби несут свитки в темноту — ошибок нет только потому, что их некому записать."
+      ]
+    },
+    {
+      "id": "F15_FAILOVER_LOOP",
+      "name": "Петля failover",
+      "icon": "🔁",
+      "reportHints": [
+        "Трафик мечется между дата-центрами: каждый считает соседа больным.",
+        "Локальные проверки живы, но глобальный контур переключения вошёл в вечный круг."
+      ]
+    },
+    {
+      "id": "F16_CAPACITY_GAP",
+      "name": "Провал резерва",
+      "icon": "🏚️",
+      "reportHints": [
+        "Второй дата-центр есть на карте, но не выдерживает полный поток первого.",
+        "Резервная ёмкость не зеркалирована: авария превращает запасной обелиск в бутылочное горлышко."
       ]
     },
     {
@@ -71,6 +282,214 @@
         "В журнале — всё стадо коров Мельника, семь мух и один случайный пролётный дрозд. Нужного среди этого нет.",
         "Записал каждую муху, каждую корову, каждый скрип двери. Когда случилось важное — оно утонуло в шуме."
       ]
+    },
+    {
+      "id": "F8_AUDIT_GAP",
+      "name": "Дыра аудита",
+      "icon": "🕳️",
+      "reportHints": [
+        "Партнёрский вызов прошёл, но в книге доступа пустая строка.",
+        "Общие логи шумят, а кто именно трогал API — не доказать."
+      ]
+    },
+    {
+      "id": "F9_UNREVIEWED_RELEASE",
+      "name": "Непроверенный релиз",
+      "icon": "🚪",
+      "reportHints": [
+        "Изменение проскочило в прод без стража на воротах MR.",
+        "Пайплайн есть, но любую ветку всё ещё можно протолкнуть без проверки."
+      ]
+    }
+  ],
+  "treatmentCatalog": [
+    {
+      "tag": "Ясность",
+      "healsStatuses": [
+        "F4_BLINDNESS",
+        "F13_DARK_SHARD"
+      ],
+      "narrativeOnly": false
+    },
+    {
+      "tag": "Чистота",
+      "healsStatuses": [
+        "F1_OVERFLOW"
+      ],
+      "narrativeOnly": false
+    },
+    {
+      "tag": "Надёжность",
+      "healsStatuses": [
+        "F15_FAILOVER_LOOP"
+      ],
+      "narrativeOnly": false
+    },
+    {
+      "tag": "Изоляция",
+      "healsStatuses": [
+        "F3_COMPROMISE"
+      ],
+      "narrativeOnly": false
+    },
+    {
+      "tag": "Шифрование",
+      "healsStatuses": [
+        "F3_COMPROMISE"
+      ],
+      "narrativeOnly": false
+    },
+    {
+      "tag": "Конфиденциальность",
+      "healsStatuses": [
+        "F3_COMPROMISE"
+      ],
+      "narrativeOnly": false
+    },
+    {
+      "tag": "Доставка",
+      "healsStatuses": [
+        "F6_NONDELIVERY"
+      ],
+      "narrativeOnly": false
+    },
+    {
+      "tag": "Арбитраж",
+      "healsStatuses": [
+        "F2_CONTRADICTION"
+      ],
+      "narrativeOnly": false
+    },
+    {
+      "tag": "Охлаждение",
+      "healsStatuses": [
+        "F11_HOTSPOT"
+      ],
+      "narrativeOnly": false
+    },
+    {
+      "tag": "Аудит",
+      "healsStatuses": [
+        "F8_AUDIT_GAP"
+      ],
+      "narrativeOnly": false
+    },
+    {
+      "tag": "Проверка",
+      "healsStatuses": [
+        "F9_UNREVIEWED_RELEASE",
+        "F10_CONTRACT_DRIFT"
+      ],
+      "narrativeOnly": false
+    },
+    {
+      "tag": "Баланс",
+      "healsStatuses": [
+        "F11_HOTSPOT"
+      ],
+      "narrativeOnly": false
+    },
+    {
+      "tag": "Кворум",
+      "healsStatuses": [
+        "F12_SPLIT_BRAIN"
+      ],
+      "narrativeOnly": false
+    },
+    {
+      "tag": "Синхронность",
+      "healsStatuses": [
+        "F5_FRAGILITY"
+      ],
+      "narrativeOnly": false
+    },
+    {
+      "tag": "Совместимость",
+      "healsStatuses": [
+        "F10_CONTRACT_DRIFT"
+      ],
+      "narrativeOnly": false
+    },
+    {
+      "tag": "Резерв",
+      "healsStatuses": [
+        "F16_CAPACITY_GAP"
+      ],
+      "narrativeOnly": false
+    },
+    {
+      "tag": "Адресность",
+      "healsStatuses": [
+        "F4_BLINDNESS"
+      ],
+      "narrativeOnly": false
+    },
+    {
+      "tag": "Обнаружение",
+      "healsStatuses": [],
+      "narrativeOnly": true
+    },
+    {
+      "tag": "Равновесие",
+      "healsStatuses": [
+        "F7_CONFUSION"
+      ],
+      "narrativeOnly": false
+    },
+    {
+      "tag": "Привязка",
+      "healsStatuses": [
+        "F11_HOTSPOT"
+      ],
+      "narrativeOnly": false
+    },
+    {
+      "tag": "Распределение",
+      "healsStatuses": [
+        "F1_OVERFLOW"
+      ],
+      "narrativeOnly": false
+    },
+    {
+      "tag": "Согласованность",
+      "healsStatuses": [
+        "F10_CONTRACT_DRIFT",
+        "F12_SPLIT_BRAIN"
+      ],
+      "narrativeOnly": false
+    },
+    {
+      "tag": "Живость",
+      "healsStatuses": [],
+      "narrativeOnly": true
+    },
+    {
+      "tag": "Устойчивость",
+      "healsStatuses": [
+        "F5_FRAGILITY",
+        "F15_FAILOVER_LOOP"
+      ],
+      "narrativeOnly": false
+    },
+    {
+      "tag": "Порядок",
+      "healsStatuses": [
+        "F7_CONFUSION"
+      ],
+      "narrativeOnly": false
+    },
+    {
+      "tag": "Согласование",
+      "healsStatuses": [
+        "F7_CONFUSION",
+        "F12_SPLIT_BRAIN"
+      ],
+      "narrativeOnly": false
+    },
+    {
+      "tag": "Откат",
+      "healsStatuses": [],
+      "narrativeOnly": true
     }
   ],
   "matrixCatalog": [
@@ -128,6 +547,2249 @@
       ]
     }
   ],
+  "matrixPresets": [
+    {
+      "id": "MP_OBS_AUDIT_BASIC",
+      "matrixId": "M_OBSERVATION",
+      "name": "Аудитный журнал",
+      "description": "Стандартная наблюдаемость: журнал, фильтр шума и ритуальный слот.",
+      "slotTypes": [
+        "OBS_LOGS",
+        "OBS_FILTERS",
+        "RITUAL_OBS"
+      ],
+      "installCostGold": 1
+    },
+    {
+      "id": "MP_OBS_ALERTING",
+      "matrixId": "M_OBSERVATION",
+      "name": "Сторожевая башня",
+      "description": "Логи, фильтр и алерты — наблюдение с активной реакцией.",
+      "slotTypes": [
+        "OBS_LOGS",
+        "OBS_FILTERS",
+        "OBS_ALERTS"
+      ],
+      "installCostGold": 2
+    },
+    {
+      "id": "MP_OBS_DOUBLE_LOG_FILTER",
+      "matrixId": "M_OBSERVATION",
+      "name": "Двойная летопись",
+      "description": "Два потока логов с общим фильтром — подходит для гибридной наблюдаемости.",
+      "slotTypes": [
+        "OBS_LOGS",
+        "OBS_LOGS",
+        "OBS_FILTERS"
+      ],
+      "installCostGold": 0
+    },
+    {
+      "id": "MP_OBS_CHRONICLE",
+      "matrixId": "M_OBSERVATION",
+      "name": "Хроника",
+      "description": "Два независимых журнала и ритуал: используется, когда нужны параллельные летописи.",
+      "slotTypes": [
+        "OBS_LOGS",
+        "OBS_LOGS",
+        "RITUAL_OBS"
+      ],
+      "installCostGold": 1
+    },
+    {
+      "id": "MP_OBS_COMPLIANCE",
+      "matrixId": "M_OBSERVATION",
+      "name": "Палата Комплаенса",
+      "description": "Смешанный контур: логи, release-gate и DR-тест — выносит проверки из delivery.",
+      "slotTypes": [
+        "OBS_LOGS",
+        "CD_GATES",
+        "CD_TESTING",
+        "RITUAL_OBS"
+      ],
+      "installCostGold": 1
+    },
+    {
+      "id": "MP_STORAGE_KEEPER",
+      "matrixId": "M_STORAGE",
+      "name": "Хранилище-Хранитель",
+      "description": "Базовое хранилище: ретенция, квоты и ритуальный слот.",
+      "slotTypes": [
+        "ST_RETENTION",
+        "ST_QUOTA",
+        "RITUAL_ST"
+      ],
+      "installCostGold": 1
+    },
+    {
+      "id": "MP_STORAGE_INDEXED",
+      "matrixId": "M_STORAGE",
+      "name": "Индексированный архив",
+      "description": "Хранилище с индексом, квотами и ретенцией — для поисковых сценариев.",
+      "slotTypes": [
+        "ST_RETENTION",
+        "ST_INDEX",
+        "ST_QUOTA"
+      ],
+      "installCostGold": 0
+    },
+    {
+      "id": "MP_STORAGE_RETENTION_RITUAL",
+      "matrixId": "M_STORAGE",
+      "name": "Малый погреб",
+      "description": "Минимальное хранилище: ретенция + ритуальный слот, для коротких уровней.",
+      "slotTypes": [
+        "ST_RETENTION",
+        "RITUAL_ST"
+      ],
+      "installCostGold": 1
+    },
+    {
+      "id": "MP_STORAGE_BUFFER",
+      "matrixId": "M_STORAGE",
+      "name": "Маршрутно-Складской Буфер",
+      "description": "Совмещённый контур: маршрутизация и квоты в одном — экономит установку.",
+      "slotTypes": [
+        "NET_ROUTING",
+        "ST_QUOTA",
+        "RITUAL_NET"
+      ],
+      "installCostGold": 2
+    },
+    {
+      "id": "MP_STORAGE_RESERVE",
+      "matrixId": "M_STORAGE",
+      "name": "Резервный Перевал",
+      "description": "Резервная ёмкость, квоты и аварийный routing в одном дорогом контуре.",
+      "slotTypes": [
+        "ST_RETENTION",
+        "ST_QUOTA",
+        "NET_ROUTING",
+        "RITUAL_NET"
+      ],
+      "installCostGold": 1
+    },
+    {
+      "id": "MP_NET_GATE_BASIC",
+      "matrixId": "M_CONNECTIVITY",
+      "name": "Базовый шлюз",
+      "description": "Простой периметр: AuthZ, TLS и ритуальный слот.",
+      "slotTypes": [
+        "NET_AUTH",
+        "NET_TLS",
+        "RITUAL_NET"
+      ],
+      "installCostGold": 1
+    },
+    {
+      "id": "MP_NET_AUTH_ONLY",
+      "matrixId": "M_CONNECTIVITY",
+      "name": "Калитка с печатью",
+      "description": "Минимальный сетевой контур: только AuthZ и ритуальный слот.",
+      "slotTypes": [
+        "NET_AUTH",
+        "RITUAL_NET"
+      ],
+      "installCostGold": 2
+    },
+    {
+      "id": "MP_NET_RELIABILITY",
+      "matrixId": "M_CONNECTIVITY",
+      "name": "Контур надёжности",
+      "description": "AuthZ и два discovery-слота под локатор и healthcheck.",
+      "slotTypes": [
+        "NET_AUTH",
+        "NET_DISCOVERY",
+        "NET_DISCOVERY",
+        "RITUAL_NET"
+      ],
+      "installCostGold": 2
+    },
+    {
+      "id": "MP_NET_EDGE",
+      "matrixId": "M_CONNECTIVITY",
+      "name": "Край Обелисков",
+      "description": "Полный периметр: AuthZ, TLS, два discovery-слота и ритуальный слот.",
+      "slotTypes": [
+        "NET_AUTH",
+        "NET_TLS",
+        "NET_DISCOVERY",
+        "NET_DISCOVERY",
+        "RITUAL_NET"
+      ],
+      "installCostGold": 2
+    },
+    {
+      "id": "MP_NET_EDGE_ROUTING",
+      "matrixId": "M_CONNECTIVITY",
+      "name": "Шлюз с роутингом",
+      "description": "Периметр плюс отдельный routing-слот для классификации трафика.",
+      "slotTypes": [
+        "NET_AUTH",
+        "NET_TLS",
+        "NET_DISCOVERY",
+        "NET_DISCOVERY",
+        "NET_ROUTING"
+      ],
+      "installCostGold": 2
+    },
+    {
+      "id": "MP_NET_INFRA_POST",
+      "matrixId": "M_CONNECTIVITY",
+      "name": "Инфраструктурный пост",
+      "description": "DNS-резолвер, TLS, два discovery-слота и ритуальный слот.",
+      "slotTypes": [
+        "NET_DNS",
+        "NET_TLS",
+        "NET_DISCOVERY",
+        "NET_DISCOVERY",
+        "RITUAL_NET"
+      ],
+      "installCostGold": 1
+    },
+    {
+      "id": "MP_NET_POSTAL",
+      "matrixId": "M_CONNECTIVITY",
+      "name": "Почтовая станция",
+      "description": "DNS и пара routing-слотов — для распределения по маршрутам.",
+      "slotTypes": [
+        "NET_DNS",
+        "NET_ROUTING",
+        "NET_ROUTING",
+        "RITUAL_NET"
+      ],
+      "installCostGold": 2
+    },
+    {
+      "id": "MP_NET_TRAFFIC",
+      "matrixId": "M_CONNECTIVITY",
+      "name": "Весы Трафика",
+      "description": "Routing и discovery в одной матрице — лёгкий альтернативный контур.",
+      "slotTypes": [
+        "NET_ROUTING",
+        "NET_DISCOVERY",
+        "RITUAL_NET"
+      ],
+      "installCostGold": 1
+    },
+    {
+      "id": "MP_NET_SHARD_ROUTING",
+      "matrixId": "M_CONNECTIVITY",
+      "name": "Маршрутизатор Шардов",
+      "description": "Два routing-слота для разных законов маршрутизации и ритуал.",
+      "slotTypes": [
+        "NET_ROUTING",
+        "NET_ROUTING",
+        "RITUAL_NET"
+      ],
+      "installCostGold": 2
+    },
+    {
+      "id": "MP_NET_ROUTING_STAND",
+      "matrixId": "M_CONNECTIVITY",
+      "name": "Стойка маршрутов",
+      "description": "Три routing-слота, AuthZ и ритуал — для тяжёлых маршрутных задач.",
+      "slotTypes": [
+        "NET_ROUTING",
+        "NET_ROUTING",
+        "NET_ROUTING",
+        "NET_AUTH",
+        "RITUAL_NET"
+      ],
+      "installCostGold": 2
+    },
+    {
+      "id": "MP_NET_ROUTING_ONLY",
+      "matrixId": "M_CONNECTIVITY",
+      "name": "Голый маршрут",
+      "description": "Один routing-слот без обвязки — самый маленький сетевой контур.",
+      "slotTypes": [
+        "NET_ROUTING"
+      ],
+      "installCostGold": 2
+    },
+    {
+      "id": "MP_DELIVERY_FULL",
+      "matrixId": "M_DELIVERY",
+      "name": "Конвейер доставки",
+      "description": "Полный delivery-контур: pipeline, gates, testing, rollback и ритуал.",
+      "slotTypes": [
+        "CD_PIPELINE",
+        "CD_GATES",
+        "CD_TESTING",
+        "CD_ROLLBACK",
+        "RITUAL_CD"
+      ],
+      "installCostGold": 1
+    },
+    {
+      "id": "MP_DELIVERY_GATES",
+      "matrixId": "M_DELIVERY",
+      "name": "Гейтовый конвейер",
+      "description": "Pipeline + gates + rollback — без отдельного testing-слота.",
+      "slotTypes": [
+        "CD_PIPELINE",
+        "CD_GATES",
+        "CD_ROLLBACK"
+      ],
+      "installCostGold": 0
+    },
+    {
+      "id": "MP_DELIVERY_TESTING",
+      "matrixId": "M_DELIVERY",
+      "name": "Конвейер Миграций",
+      "description": "Pipeline + testing + rollback + ритуал — для рискованных миграций.",
+      "slotTypes": [
+        "CD_PIPELINE",
+        "CD_TESTING",
+        "CD_ROLLBACK",
+        "RITUAL_CD"
+      ],
+      "installCostGold": 1
+    },
+    {
+      "id": "MP_DELIVERY_MINIMAL",
+      "matrixId": "M_DELIVERY",
+      "name": "Малый конвейер",
+      "description": "Только pipeline и rollback — минимально жизнеспособный delivery-контур.",
+      "slotTypes": [
+        "CD_PIPELINE",
+        "CD_ROLLBACK"
+      ],
+      "installCostGold": 2
+    }
+  ],
+  "inheritedDebtCatalog": [
+    {
+      "id": "D_AUDIT_NEEDED",
+      "statusIfUnresolved": "F8_AUDIT_GAP",
+      "origin": "level",
+      "introducedAtLevels": [
+        "L5_KIRA_API",
+        "L1_LIBRARY_ORBS",
+        "L2_GATEWAY_PASS"
+      ],
+      "narrative": "Наследственный долг уровня: нужен аудит доступа, не путать с переполнением от объёма логов карты.",
+      "distinctFromCardDebts": [
+        "D_ACCESS_LOG_VOLUME"
+      ]
+    },
+    {
+      "id": "D_BACKFILL_UNVERIFIED",
+      "statusIfUnresolved": "F11_HOTSPOT",
+      "origin": "card",
+      "sourceCardId": "S_SCHEMA_GUARD",
+      "narrative": "Долг от Schema Guard: backfill не проверен dry-run."
+    },
+    {
+      "id": "D_CACHE_GROWTH",
+      "statusIfUnresolved": "F1_OVERFLOW",
+      "origin": "level",
+      "introducedAtLevels": [
+        "L2_KESHA_CACHE"
+      ],
+      "narrative": ""
+    },
+    {
+      "id": "D_COLD_SHARD",
+      "statusIfUnresolved": "F7_CONFUSION",
+      "origin": "card",
+      "sourceCardId": "S_SHARD_FENCE",
+      "narrative": "Долг от Shard Fence: замороженный шард; лечится Зондом, не общим «Живостью»."
+    },
+    {
+      "id": "D_FAILOVER_LOOP",
+      "statusIfUnresolved": "F15_FAILOVER_LOOP",
+      "origin": "level",
+      "introducedAtLevels": [
+        "L7_EDWARD_MULTIDC"
+      ],
+      "narrative": "Наследственный долг уровня: петля failover между DC."
+    },
+    {
+      "id": "D_HIDDEN_NODES",
+      "statusIfUnresolved": "F5_FRAGILITY",
+      "origin": "level",
+      "introducedAtLevels": [
+        "L4_ANASTASIA_GOLDEN"
+      ],
+      "narrative": "Наследственный долг уровня: узлы не обнаружены; лечится явной привязкой, не симптом-классом."
+    },
+    {
+      "id": "D_INDEX_GROWTH",
+      "statusIfUnresolved": "F1_OVERFLOW",
+      "origin": "level",
+      "introducedAtLevels": [
+        "L1_LIBRARY_ORBS"
+      ],
+      "narrative": ""
+    },
+    {
+      "id": "D_NEEDS_HEALTHCHECK",
+      "statusIfUnresolved": "F5_FRAGILITY",
+      "origin": "card",
+      "sourceCardId": "S_DISCOVERY",
+      "narrative": "Долг от соседней карты (Discovery) или уровня: нужен healthcheck, не путать с перегрузкой от Traffic Split.",
+      "distinctFromCardDebts": [
+        "D_SPLIT_OVERLOAD"
+      ]
+    },
+    {
+      "id": "D_NEEDS_MIGRATION",
+      "statusIfUnresolved": "F5_FRAGILITY",
+      "origin": "card",
+      "sourceCardId": "S_SCHEMA_GUARD",
+      "narrative": "Долг от Schema Guard: требуется миграция перед пайплайном."
+    },
+    {
+      "id": "D_NEEDS_ROLLBACK",
+      "statusIfUnresolved": "F5_FRAGILITY",
+      "origin": "card",
+      "sourceCardId": "S_CICD",
+      "narrative": "Долг от CI/CD без отката: релиз без пути назад."
+    },
+    {
+      "id": "D_NO_CICD",
+      "statusIfUnresolved": "F6_NONDELIVERY",
+      "origin": "level",
+      "introducedAtLevels": [
+        "L5_KIRA_API",
+        "L7_EDWARD_MULTIDC"
+      ],
+      "narrative": ""
+    },
+    {
+      "id": "D_NO_OBSERVABILITY",
+      "statusIfUnresolved": "F4_BLINDNESS",
+      "origin": "level",
+      "introducedAtLevels": [
+        "L1_MILLER_BARN",
+        "L4_ANASTASIA_GOLDEN",
+        "L6_MARK_SHARDING"
+      ],
+      "narrative": "Наследственный долг уровня: система слепа до появления наблюдаемости."
+    },
+    {
+      "id": "D_OPEN_ACCESS",
+      "statusIfUnresolved": "F3_COMPROMISE",
+      "origin": "level",
+      "introducedAtLevels": [
+        "L2_KESHA_CACHE",
+        "L5_KIRA_API"
+      ],
+      "narrative": ""
+    },
+    {
+      "id": "D_REBALANCE_WINDOW",
+      "statusIfUnresolved": "F5_FRAGILITY",
+      "origin": "card",
+      "sourceCardId": "S_REBALANCER",
+      "narrative": "Долг от Rebalancer: окно перераспределения без проверки миграции."
+    },
+    {
+      "id": "D_RESERVE_CAPACITY_GAP",
+      "statusIfUnresolved": "F16_CAPACITY_GAP",
+      "origin": "level",
+      "introducedAtLevels": [
+        "L7_EDWARD_MULTIDC"
+      ],
+      "narrative": ""
+    },
+    {
+      "id": "D_ROUTING_AMBIGUITY",
+      "statusIfUnresolved": "F7_CONFUSION",
+      "origin": "level",
+      "introducedAtLevels": [
+        "L3_GENNADY_LIGHTHOUSE",
+        "L6_MARK_SHARDING"
+      ],
+      "narrative": ""
+    },
+    {
+      "id": "D_SCHEMA_DRIFT",
+      "statusIfUnresolved": "F12_SPLIT_BRAIN",
+      "origin": "level",
+      "introducedAtLevels": [
+        "L6_MARK_SHARDING"
+      ],
+      "narrative": ""
+    },
+    {
+      "id": "D_SIGN_UNCLEAR",
+      "statusIfUnresolved": "F4_BLINDNESS",
+      "origin": "level",
+      "introducedAtLevels": [
+        "L3_GENNADY_LIGHTHOUSE"
+      ],
+      "narrative": ""
+    },
+    {
+      "id": "D_SPLIT_OVERLOAD",
+      "statusIfUnresolved": "F5_FRAGILITY",
+      "origin": "card",
+      "sourceCardId": "S_TRAFFIC_SPLIT",
+      "narrative": "Долг от Traffic Split: перегрузка после разделения потоков."
+    },
+    {
+      "id": "D_TRANSPORT_EXPOSED",
+      "statusIfUnresolved": "F3_COMPROMISE",
+      "origin": "level",
+      "introducedAtLevels": [
+        "L4_ANASTASIA_GOLDEN"
+      ],
+      "narrative": ""
+    },
+    {
+      "id": "D_UNTESTED_FAILOVER",
+      "statusIfUnresolved": "F5_FRAGILITY",
+      "origin": "card",
+      "sourceCardId": "S_GLOBAL_HEALTHCHECK",
+      "narrative": "Долг от Global Healthcheck: failover не обкатан DR-учением."
+    }
+  ],
+  "spellCardCatalog": [
+    {
+      "id": "S_BROAD_LOGGING",
+      "introducedAtLevel": "L1_MILLER_BARN",
+      "name": "Перо Всевидящего",
+      "description": "Записывает всё подряд — каждый звук, шорох и пролетевшего комара. В таком потоке шума нужного не найдёшь.",
+      "allowedSlotTypes": [
+        "OBS_LOGS"
+      ],
+      "unique": true,
+      "effects": [
+        {
+          "type": "CAPABILITY",
+          "id": "HAS_LOGS"
+        }
+      ],
+      "currencies": {
+        "gold": 2,
+        "aura": 2
+      },
+      "propertyCells": [
+        {
+          "kind": "treatment",
+          "treatmentTags": [
+            "Ясность"
+          ],
+          "healsInherited": []
+        },
+        {
+          "kind": "debuff",
+          "origin": "card",
+          "debtId": "D_LOG_NOISE",
+          "statusIfUnresolved": "F7_CONFUSION"
+        },
+        null
+      ]
+    },
+    {
+      "id": "S_NET_JOURNAL",
+      "introducedAtLevel": "L2_GATEWAY_PASS",
+      "name": "Сетевой Журнал",
+      "description": "Фиксирует все соединения на уровне сети — кто подключился и когда. Технически сложно, но предсказуемо.",
+      "allowedSlotTypes": [
+        "NET_ROUTING"
+      ],
+      "unique": true,
+      "effects": [
+        {
+          "type": "CAPABILITY",
+          "id": "HAS_ACCESS_LOGS"
+        }
+      ],
+      "currencies": {
+        "gold": 4,
+        "aura": 0
+      },
+      "propertyCells": [
+        {
+          "kind": "treatment",
+          "treatmentTags": [
+            "Ясность",
+            "Аудит"
+          ],
+          "healsInherited": [
+            {
+              "debtId": "D_AUDIT_NEEDED"
+            }
+          ]
+        },
+        {
+          "kind": "debuff",
+          "origin": "card",
+          "debtId": "D_ACCESS_LOG_VOLUME",
+          "statusIfUnresolved": "F1_OVERFLOW"
+        },
+        null
+      ]
+    },
+    {
+      "id": "S_LIB_LOGS",
+      "introducedAtLevel": "L4_ANASTASIA_GOLDEN",
+      "name": "Хроника Читальни",
+      "description": "Ведёт подробный журнал каждого обращения к фолиантам. Дёшево, но операционный риск высок — данные чувствительны.",
+      "allowedSlotTypes": [
+        "OBS_LOGS"
+      ],
+      "unique": true,
+      "effects": [
+        {
+          "type": "CAPABILITY",
+          "id": "HAS_ACCESS_LOGS"
+        }
+      ],
+      "currencies": {
+        "gold": 2,
+        "aura": 3
+      },
+      "propertyCells": [
+        {
+          "kind": "treatment",
+          "treatmentTags": [
+            "Ясность",
+            "Аудит"
+          ],
+          "healsInherited": [
+            {
+              "debtId": "D_AUDIT_NEEDED"
+            }
+          ]
+        },
+        {
+          "kind": "debuff",
+          "origin": "card",
+          "debtId": "D_ACCESS_LOG_VOLUME",
+          "statusIfUnresolved": "F1_OVERFLOW"
+        },
+        null
+      ]
+    },
+    {
+      "id": "S_LOGGING",
+      "introducedAtLevel": "L4_ANASTASIA_GOLDEN",
+      "name": "Перо Летописца",
+      "description": "Записывает события системы в журнал",
+      "allowedSlotTypes": [
+        "OBS_LOGS"
+      ],
+      "unique": true,
+      "effects": [
+        {
+          "type": "CAPABILITY",
+          "id": "HAS_LOGS"
+        }
+      ],
+      "currencies": {
+        "gold": 2,
+        "aura": 1
+      },
+      "propertyCells": [
+        {
+          "kind": "treatment",
+          "treatmentTags": [
+            "Ясность"
+          ],
+          "healsInherited": []
+        },
+        {
+          "kind": "debuff",
+          "origin": "card",
+          "debtId": "D_LOG_VOLUME",
+          "statusIfUnresolved": "F1_OVERFLOW"
+        },
+        null
+      ]
+    },
+    {
+      "id": "S_LOG_FILTER",
+      "introducedAtLevel": "L2_KESHA_CACHE",
+      "name": "Сито Смыслов",
+      "description": "Фильтрует и очищает поток логов — снижает объём любых журналов",
+      "allowedSlotTypes": [
+        "OBS_FILTERS"
+      ],
+      "unique": true,
+      "effects": [
+        {
+          "type": "CAPABILITY",
+          "id": "HAS_LOG_FILTERING"
+        }
+      ],
+      "currencies": {
+        "gold": 2,
+        "aura": -1
+      },
+      "propertyCells": [
+        {
+          "kind": "treatment",
+          "treatmentTags": [
+            "Чистота"
+          ],
+          "healsInherited": []
+        },
+        null,
+        null
+      ]
+    },
+    {
+      "id": "S_ACCESS_LOGS",
+      "introducedAtLevel": "L1_MILLER_BARN",
+      "name": "Книга Доступа",
+      "description": "Ведёт аудитный журнал всех входов и обращений",
+      "allowedSlotTypes": [
+        "OBS_LOGS"
+      ],
+      "unique": true,
+      "effects": [
+        {
+          "type": "CAPABILITY",
+          "id": "HAS_ACCESS_LOGS"
+        }
+      ],
+      "currencies": {
+        "gold": 3,
+        "aura": 1
+      },
+      "propertyCells": [
+        {
+          "kind": "treatment",
+          "treatmentTags": [
+            "Ясность",
+            "Аудит"
+          ],
+          "healsInherited": [
+            {
+              "debtId": "D_AUDIT_NEEDED"
+            },
+            {
+              "debtId": "D_NO_OBSERVABILITY"
+            }
+          ]
+        },
+        {
+          "kind": "debuff",
+          "origin": "card",
+          "debtId": "D_ACCESS_LOG_VOLUME",
+          "statusIfUnresolved": "F1_OVERFLOW"
+        },
+        null
+      ]
+    },
+    {
+      "id": "S_ALERTING",
+      "introducedAtLevel": "L3_NEW_CASTLE",
+      "name": "Набат Тревоги",
+      "description": "Оповещает о сбоях в реальном времени",
+      "allowedSlotTypes": [
+        "OBS_ALERTS"
+      ],
+      "unique": true,
+      "effects": [
+        {
+          "type": "CAPABILITY",
+          "id": "HAS_ALERTING"
+        }
+      ],
+      "currencies": {
+        "gold": 2,
+        "aura": 1
+      },
+      "propertyCells": [
+        {
+          "kind": "treatment",
+          "treatmentTags": [],
+          "healsInherited": []
+        },
+        null,
+        null
+      ]
+    },
+    {
+      "id": "S_TTL",
+      "introducedAtLevel": "L1_MILLER_BARN",
+      "name": "Песочные Часы",
+      "description": "Автоматически истекает старые записи по времени",
+      "allowedSlotTypes": [
+        "ST_RETENTION"
+      ],
+      "unique": true,
+      "effects": [
+        {
+          "type": "CAPABILITY",
+          "id": "HAS_TTL"
+        }
+      ],
+      "currencies": {
+        "gold": 2,
+        "aura": 2
+      },
+      "propertyCells": [
+        {
+          "kind": "treatment",
+          "treatmentTags": [
+            "Чистота"
+          ],
+          "healsInherited": []
+        },
+        null,
+        null
+      ]
+    },
+    {
+      "id": "S_ROTATION",
+      "introducedAtLevel": "L1_MILLER_BARN",
+      "name": "Метла Кладовщика",
+      "description": "Периодически очищает и ротирует хранилище",
+      "allowedSlotTypes": [
+        "ST_RETENTION"
+      ],
+      "unique": true,
+      "effects": [
+        {
+          "type": "CAPABILITY",
+          "id": "HAS_ROTATION"
+        }
+      ],
+      "currencies": {
+        "gold": 2,
+        "aura": 1
+      },
+      "propertyCells": [
+        {
+          "kind": "treatment",
+          "treatmentTags": [
+            "Чистота"
+          ],
+          "healsInherited": []
+        },
+        null,
+        null
+      ]
+    },
+    {
+      "id": "S_QUOTAS",
+      "introducedAtLevel": "L2_KESHA_CACHE",
+      "name": "Предел Закромов",
+      "description": "Устанавливает жёсткие квоты на объём хранения",
+      "allowedSlotTypes": [
+        "ST_QUOTA"
+      ],
+      "unique": true,
+      "effects": [
+        {
+          "type": "CAPABILITY",
+          "id": "HAS_QUOTAS"
+        }
+      ],
+      "currencies": {
+        "gold": 2,
+        "aura": 1
+      },
+      "propertyCells": [
+        {
+          "kind": "treatment",
+          "treatmentTags": [
+            "Чистота"
+          ],
+          "healsInherited": []
+        },
+        null,
+        null
+      ]
+    },
+    {
+      "id": "S_INDEX",
+      "introducedAtLevel": "L1_LIBRARY_ORBS",
+      "name": "Клеймо Поиска",
+      "description": "Индексирует данные для быстрого поиска",
+      "allowedSlotTypes": [
+        "ST_INDEX"
+      ],
+      "unique": true,
+      "effects": [
+        {
+          "type": "CAPABILITY",
+          "id": "HAS_INDEX"
+        }
+      ],
+      "currencies": {
+        "gold": 2,
+        "aura": 1
+      },
+      "propertyCells": [
+        {
+          "kind": "treatment",
+          "treatmentTags": [],
+          "healsInherited": []
+        },
+        {
+          "kind": "debuff",
+          "origin": "card",
+          "debtId": "D_INDEX_GROWTH",
+          "statusIfUnresolved": "F1_OVERFLOW"
+        },
+        null
+      ]
+    },
+    {
+      "id": "S_SECRETS",
+      "introducedAtLevel": null,
+      "name": "Сейф Тайнописи",
+      "description": "Шифрует и защищает секреты в хранилище",
+      "allowedSlotTypes": [
+        "ST_SECRETS"
+      ],
+      "unique": true,
+      "effects": [
+        {
+          "type": "CAPABILITY",
+          "id": "HAS_STORAGE_SECRETS"
+        }
+      ],
+      "currencies": {
+        "gold": 3,
+        "aura": 0
+      },
+      "propertyCells": [
+        {
+          "kind": "treatment",
+          "treatmentTags": [],
+          "healsInherited": []
+        },
+        null,
+        null
+      ]
+    },
+    {
+      "id": "S_AUTHZ",
+      "introducedAtLevel": "L2_KESHA_CACHE",
+      "name": "Страж Порогов",
+      "description": "Контролирует доступ — только своим",
+      "allowedSlotTypes": [
+        "NET_AUTH"
+      ],
+      "unique": true,
+      "effects": [
+        {
+          "type": "CAPABILITY",
+          "id": "HAS_AUTHZ"
+        }
+      ],
+      "currencies": {
+        "gold": 4,
+        "aura": 1
+      },
+      "propertyCells": [
+        {
+          "kind": "treatment",
+          "treatmentTags": [
+            "Изоляция"
+          ],
+          "healsInherited": []
+        },
+        null,
+        null
+      ]
+    },
+    {
+      "id": "S_DNS",
+      "introducedAtLevel": "L3_GENNADY_LIGHTHOUSE",
+      "name": "Глашатай Домена",
+      "description": "Регистрирует постоянное имя службы в открытом реестре. Посланники наконец знают, куда идти — но адрес теперь виден всем.",
+      "allowedSlotTypes": [
+        "NET_DNS"
+      ],
+      "unique": true,
+      "effects": [
+        {
+          "type": "CAPABILITY",
+          "id": "HAS_DNS"
+        }
+      ],
+      "currencies": {
+        "gold": 2,
+        "aura": 1
+      },
+      "propertyCells": [
+        {
+          "kind": "treatment",
+          "treatmentTags": [
+            "Адресность"
+          ],
+          "healsInherited": []
+        },
+        {
+          "kind": "debuff",
+          "origin": "card",
+          "debtId": "D_DNS_EXPOSED",
+          "statusIfUnresolved": "F3_COMPROMISE"
+        },
+        null
+      ]
+    },
+    {
+      "id": "S_PRIVATE_DNS",
+      "introducedAtLevel": "L3_GENNADY_LIGHTHOUSE",
+      "name": "Тайный Адрес",
+      "description": "Регистрирует адрес только во внутреннем реестре. Не виден извне — но дороже обычного имени.",
+      "allowedSlotTypes": [
+        "NET_DNS"
+      ],
+      "unique": true,
+      "effects": [
+        {
+          "type": "CAPABILITY",
+          "id": "HAS_DNS"
+        }
+      ],
+      "currencies": {
+        "gold": 8,
+        "aura": 1
+      },
+      "propertyCells": [
+        {
+          "kind": "treatment",
+          "treatmentTags": [
+            "Адресность",
+            "Конфиденциальность"
+          ],
+          "healsInherited": []
+        },
+        null,
+        null
+      ]
+    },
+    {
+      "id": "S_TLS_CERT",
+      "introducedAtLevel": "L3_GENNADY_LIGHTHOUSE",
+      "name": "Печать Серта",
+      "description": "Выдаёт TLS-сертификат, шифрует трафик",
+      "allowedSlotTypes": [
+        "NET_TLS"
+      ],
+      "unique": true,
+      "effects": [
+        {
+          "type": "CAPABILITY",
+          "id": "HAS_TLS"
+        }
+      ],
+      "currencies": {
+        "gold": 2,
+        "aura": 1
+      },
+      "propertyCells": [
+        {
+          "kind": "treatment",
+          "treatmentTags": [
+            "Шифрование"
+          ],
+          "healsInherited": []
+        },
+        null,
+        null
+      ]
+    },
+    {
+      "id": "S_GATEWAY_SEAL",
+      "introducedAtLevel": "L4_ANASTASIA_GOLDEN",
+      "name": "Печать Врат",
+      "description": "Шифрует трафик шлюза — и сразу ставит вопрос: кто вообще может войти?",
+      "allowedSlotTypes": [
+        "NET_TLS"
+      ],
+      "unique": true,
+      "effects": [
+        {
+          "type": "CAPABILITY",
+          "id": "HAS_TLS"
+        }
+      ],
+      "currencies": {
+        "gold": 2,
+        "aura": 1
+      },
+      "propertyCells": [
+        {
+          "kind": "treatment",
+          "treatmentTags": [
+            "Шифрование"
+          ],
+          "healsInherited": []
+        },
+        {
+          "kind": "debuff",
+          "origin": "card",
+          "debtId": "D_OPEN_ACCESS",
+          "statusIfUnresolved": "F3_COMPROMISE"
+        },
+        null
+      ]
+    },
+    {
+      "id": "S_DISCOVERY",
+      "introducedAtLevel": "L2_GATEWAY_PASS",
+      "name": "Зов Разведчика",
+      "description": "Обнаруживает доступные эндпоинты сервисов",
+      "allowedSlotTypes": [
+        "NET_DISCOVERY"
+      ],
+      "unique": true,
+      "effects": [
+        {
+          "type": "CAPABILITY",
+          "id": "HAS_DISCOVERY"
+        }
+      ],
+      "currencies": {
+        "gold": 2,
+        "aura": 1
+      },
+      "propertyCells": [
+        {
+          "kind": "treatment",
+          "treatmentTags": [
+            "Обнаружение"
+          ],
+          "healsInherited": [
+            {
+              "debtId": "D_HIDDEN_NODES"
+            }
+          ]
+        },
+        {
+          "kind": "debuff",
+          "origin": "card",
+          "debtId": "D_NEEDS_HEALTHCHECK",
+          "statusIfUnresolved": "F5_FRAGILITY"
+        },
+        null
+      ]
+    },
+    {
+      "id": "S_HEALTHCHECK",
+      "introducedAtLevel": "L3_GENNADY_LIGHTHOUSE",
+      "name": "Сердцебиение",
+      "description": "Проверяет живость узлов, обеспечивает failover",
+      "allowedSlotTypes": [
+        "NET_DISCOVERY"
+      ],
+      "unique": true,
+      "effects": [
+        {
+          "type": "CAPABILITY",
+          "id": "HAS_HEALTHCHECK"
+        },
+        {
+          "type": "CAPABILITY",
+          "id": "HAS_FAILOVER"
+        }
+      ],
+      "currencies": {
+        "gold": 2,
+        "aura": 1
+      },
+      "propertyCells": [
+        {
+          "kind": "treatment",
+          "treatmentTags": [],
+          "healsInherited": [
+            {
+              "debtId": "D_NEEDS_HEALTHCHECK"
+            },
+            {
+              "debtId": "D_SPLIT_OVERLOAD"
+            }
+          ]
+        },
+        null,
+        null
+      ]
+    },
+    {
+      "id": "S_TRAFFIC_SPLIT",
+      "introducedAtLevel": "L3_GENNADY_LIGHTHOUSE",
+      "name": "Весы Потоков",
+      "description": "Распределяет трафик по весам между эндпоинтами",
+      "allowedSlotTypes": [
+        "NET_ROUTING"
+      ],
+      "unique": true,
+      "effects": [
+        {
+          "type": "CAPABILITY",
+          "id": "HAS_TRAFFIC_SPLIT"
+        },
+        {
+          "type": "CAPABILITY",
+          "id": "HAS_STABLE_ROUTING"
+        }
+      ],
+      "currencies": {
+        "gold": 2,
+        "aura": 1
+      },
+      "propertyCells": [
+        {
+          "kind": "treatment",
+          "treatmentTags": [
+            "Равновесие",
+            "Охлаждение"
+          ],
+          "healsInherited": []
+        },
+        {
+          "kind": "debuff",
+          "origin": "card",
+          "debtId": "D_SPLIT_OVERLOAD",
+          "statusIfUnresolved": "F5_FRAGILITY"
+        },
+        null
+      ]
+    },
+    {
+      "id": "S_HASH_ROUTING",
+      "introducedAtLevel": "L6_MARK_SHARDING",
+      "name": "Якорь Сессии",
+      "description": "Явная таблица привязки: каждый посланник закреплён за конкретным узлом. Дороже, но без автоматики и без каскадных эффектов.",
+      "allowedSlotTypes": [
+        "NET_ROUTING"
+      ],
+      "unique": true,
+      "effects": [
+        {
+          "type": "CAPABILITY",
+          "id": "HAS_HASH_ROUTING"
+        }
+      ],
+      "currencies": {
+        "gold": 4,
+        "aura": 1
+      },
+      "propertyCells": [
+        {
+          "kind": "treatment",
+          "treatmentTags": [
+            "Привязка",
+            "Равновесие"
+          ],
+          "healsInherited": []
+        },
+        null,
+        null
+      ]
+    },
+    {
+      "id": "S_SHARD_KEY",
+      "introducedAtLevel": "L6_MARK_SHARDING",
+      "name": "Ключ Шардирования",
+      "description": "Задаёт алгоритм распределения свитков по шардам. Голуби знают куда лететь — но шарды начинают расти неравномерно.",
+      "allowedSlotTypes": [
+        "NET_ROUTING"
+      ],
+      "unique": true,
+      "effects": [
+        {
+          "type": "CAPABILITY",
+          "id": "HAS_HASH_ROUTING"
+        }
+      ],
+      "currencies": {
+        "gold": 3,
+        "aura": 1
+      },
+      "propertyCells": [
+        {
+          "kind": "treatment",
+          "treatmentTags": [
+            "Распределение",
+            "Равновесие"
+          ],
+          "healsInherited": []
+        },
+        {
+          "kind": "debuff",
+          "origin": "card",
+          "debtId": "D_SHARD_IMBALANCE",
+          "statusIfUnresolved": "F1_OVERFLOW"
+        },
+        null
+      ]
+    },
+    {
+      "id": "S_REBALANCER",
+      "introducedAtLevel": "L6_MARK_SHARDING",
+      "name": "Перераспределитель Шардов",
+      "description": "Следит за размером шардов и перемещает данные, чтобы нагрузка распределялась равномерно.",
+      "allowedSlotTypes": [
+        "ST_QUOTA"
+      ],
+      "unique": true,
+      "effects": [],
+      "currencies": {
+        "gold": 2,
+        "aura": 1
+      },
+      "propertyCells": [
+        {
+          "kind": "treatment",
+          "treatmentTags": [
+            "Баланс"
+          ],
+          "healsInherited": []
+        },
+        {
+          "kind": "debuff",
+          "origin": "card",
+          "debtId": "D_REBALANCE_WINDOW",
+          "statusIfUnresolved": "F5_FRAGILITY"
+        },
+        {
+          "kind": "debuff",
+          "origin": "card",
+          "debtId": "D_HOT_PARTITION",
+          "statusIfUnresolved": "F11_HOTSPOT"
+        }
+      ]
+    },
+    {
+      "id": "S_HOT_KEY_SPLITTER",
+      "introducedAtLevel": "L6_MARK_SHARDING",
+      "name": "Расщепитель Горячих Ключей",
+      "description": "Выносит горячие ключи в отдельные диапазоны, чтобы один шард не перегревался.",
+      "allowedSlotTypes": [
+        "NET_ROUTING"
+      ],
+      "unique": true,
+      "effects": [],
+      "currencies": {
+        "gold": 1,
+        "aura": 0
+      },
+      "propertyCells": [
+        {
+          "kind": "treatment",
+          "treatmentTags": [
+            "Охлаждение"
+          ],
+          "healsInherited": []
+        },
+        null,
+        null
+      ]
+    },
+    {
+      "id": "S_SCHEMA_GUARD",
+      "introducedAtLevel": "L6_MARK_SHARDING",
+      "name": "Страж Схемы",
+      "description": "Проверяет что схема данных одинакова во всех шардах. Обнаружив расхождение — требует запустить миграцию.",
+      "allowedSlotTypes": [
+        "ST_RETENTION"
+      ],
+      "unique": true,
+      "effects": [],
+      "currencies": {
+        "gold": 3,
+        "aura": 1
+      },
+      "propertyCells": [
+        {
+          "kind": "treatment",
+          "treatmentTags": [
+            "Согласованность"
+          ],
+          "healsInherited": []
+        },
+        {
+          "kind": "debuff",
+          "origin": "card",
+          "debtId": "D_NEEDS_MIGRATION",
+          "statusIfUnresolved": "F5_FRAGILITY"
+        },
+        {
+          "kind": "debuff",
+          "origin": "card",
+          "debtId": "D_BACKFILL_UNVERIFIED",
+          "statusIfUnresolved": "F11_HOTSPOT"
+        }
+      ]
+    },
+    {
+      "id": "S_MIGRATION_DRY_RUN",
+      "introducedAtLevel": "L6_MARK_SHARDING",
+      "name": "Сухой Прогон Миграции",
+      "description": "Прогоняет backfill и перераспределение на копии, прежде чем трогать живые шарды.",
+      "allowedSlotTypes": [
+        "CD_TESTING"
+      ],
+      "unique": true,
+      "effects": [],
+      "currencies": {
+        "gold": 1,
+        "aura": 0
+      },
+      "propertyCells": [
+        {
+          "kind": "treatment",
+          "treatmentTags": [
+            "Проверка"
+          ],
+          "healsInherited": [
+            {
+              "debtId": "D_REBALANCE_WINDOW"
+            },
+            {
+              "debtId": "D_BACKFILL_UNVERIFIED"
+            }
+          ]
+        },
+        null,
+        null
+      ]
+    },
+    {
+      "id": "S_REPLICATION_MANAGER",
+      "introducedAtLevel": "L6_MARK_SHARDING",
+      "name": "Управляющий Репликами",
+      "description": "Выравнивает данные между шардами через асинхронную репликацию. Схема сходится, но реплики поначалу отстают.",
+      "allowedSlotTypes": [
+        "ST_RETENTION"
+      ],
+      "unique": true,
+      "effects": [],
+      "currencies": {
+        "gold": 2,
+        "aura": 1
+      },
+      "propertyCells": [
+        {
+          "kind": "treatment",
+          "treatmentTags": [
+            "Синхронность"
+          ],
+          "healsInherited": []
+        },
+        {
+          "kind": "debuff",
+          "origin": "card",
+          "debtId": "D_REPLICATION_LAG",
+          "statusIfUnresolved": "F5_FRAGILITY"
+        },
+        {
+          "kind": "debuff",
+          "origin": "card",
+          "debtId": "D_SPLIT_BRAIN",
+          "statusIfUnresolved": "F12_SPLIT_BRAIN"
+        }
+      ]
+    },
+    {
+      "id": "S_QUORUM_KEEPER",
+      "introducedAtLevel": "L6_MARK_SHARDING",
+      "name": "Хранитель Кворума",
+      "description": "Назначает явный кворум записи, чтобы реплики не распались на две правды.",
+      "allowedSlotTypes": [
+        "NET_ROUTING"
+      ],
+      "unique": true,
+      "effects": [],
+      "currencies": {
+        "gold": 2,
+        "aura": 0
+      },
+      "propertyCells": [
+        {
+          "kind": "treatment",
+          "treatmentTags": [
+            "Кворум"
+          ],
+          "healsInherited": []
+        },
+        null,
+        null
+      ]
+    },
+    {
+      "id": "S_REPLICA_SYNC",
+      "introducedAtLevel": "L6_MARK_SHARDING",
+      "name": "Синхронизатор Реплик",
+      "description": "Принудительно догоняет отстающие реплики — задержка репликации устраняется, шарды снова согласованы.",
+      "allowedSlotTypes": [
+        "ST_QUOTA"
+      ],
+      "unique": true,
+      "effects": [],
+      "currencies": {
+        "gold": 2,
+        "aura": 1
+      },
+      "propertyCells": [
+        {
+          "kind": "treatment",
+          "treatmentTags": [
+            "Синхронность"
+          ],
+          "healsInherited": []
+        },
+        null,
+        null
+      ]
+    },
+    {
+      "id": "S_SHARD_FENCE",
+      "introducedAtLevel": "L6_MARK_SHARDING",
+      "name": "Ограда Шарда",
+      "description": "Отрезает проблемный шард от входящего трафика — изоляция мгновенная, но шард перестаёт получать обновления.",
+      "allowedSlotTypes": [
+        "NET_ROUTING"
+      ],
+      "unique": true,
+      "effects": [],
+      "currencies": {
+        "gold": 2,
+        "aura": 1
+      },
+      "propertyCells": [
+        {
+          "kind": "treatment",
+          "treatmentTags": [
+            "Изоляция",
+            "Равновесие"
+          ],
+          "healsInherited": []
+        },
+        {
+          "kind": "debuff",
+          "origin": "card",
+          "debtId": "D_COLD_SHARD",
+          "statusIfUnresolved": "F7_CONFUSION"
+        },
+        null
+      ]
+    },
+    {
+      "id": "S_SHARD_PROBE",
+      "introducedAtLevel": "L6_MARK_SHARDING",
+      "name": "Зонд Шардов",
+      "description": "Регулярно опрашивает все шарды — обнаруживает замёрзшие шарды и возвращает их в строй.",
+      "allowedSlotTypes": [
+        "NET_ROUTING"
+      ],
+      "unique": true,
+      "effects": [],
+      "currencies": {
+        "gold": 2,
+        "aura": 1
+      },
+      "propertyCells": [
+        {
+          "kind": "treatment",
+          "treatmentTags": [
+            "Живость"
+          ],
+          "healsInherited": [
+            {
+              "debtId": "D_COLD_SHARD"
+            }
+          ]
+        },
+        null,
+        null
+      ]
+    },
+    {
+      "id": "S_WRITE_AHEAD_LOG",
+      "introducedAtLevel": "L6_MARK_SHARDING",
+      "name": "Журнал Опережающей Записи",
+      "description": "Фиксирует каждое изменение до его применения — при сбое систему можно восстановить из журнала.",
+      "allowedSlotTypes": [
+        "OBS_LOGS"
+      ],
+      "unique": true,
+      "effects": [
+        {
+          "type": "CAPABILITY",
+          "id": "HAS_LOGS"
+        }
+      ],
+      "currencies": {
+        "gold": 3,
+        "aura": 1
+      },
+      "propertyCells": [
+        {
+          "kind": "treatment",
+          "treatmentTags": [
+            "Устойчивость",
+            "Ясность"
+          ],
+          "healsInherited": []
+        },
+        {
+          "kind": "debuff",
+          "origin": "card",
+          "debtId": "D_LOG_VOLUME",
+          "statusIfUnresolved": "F1_OVERFLOW"
+        },
+        null
+      ]
+    },
+    {
+      "id": "S_LOCALITY_ROUTING",
+      "introducedAtLevel": "L3_GENNADY_LIGHTHOUSE",
+      "name": "Карта Земель",
+      "description": "Статическая таблица ближних врат: каждый посланник знает свой перекрёсток заранее. Дороже алгоритма, но предсказуема и не даёт побочных эффектов.",
+      "allowedSlotTypes": [
+        "NET_ROUTING"
+      ],
+      "unique": true,
+      "effects": [
+        {
+          "type": "CAPABILITY",
+          "id": "HAS_STABLE_ROUTING"
+        }
+      ],
+      "currencies": {
+        "gold": 8,
+        "aura": 1
+      },
+      "propertyCells": [
+        {
+          "kind": "treatment",
+          "treatmentTags": [
+            "Равновесие"
+          ],
+          "healsInherited": []
+        },
+        null,
+        null
+      ]
+    },
+    {
+      "id": "S_POLICY_RESOLVER",
+      "introducedAtLevel": "L6_MARK_SHARDING",
+      "name": "Арбитр Печатей",
+      "description": "Согласует конфликтующие политики маршрутизации",
+      "allowedSlotTypes": [
+        "NET_ROUTING"
+      ],
+      "unique": true,
+      "effects": [
+        {
+          "type": "CAPABILITY",
+          "id": "HAS_POLICY_RESOLVER"
+        }
+      ],
+      "currencies": {
+        "gold": 3,
+        "aura": 0
+      },
+      "propertyCells": [
+        {
+          "kind": "treatment",
+          "treatmentTags": [
+            "Арбитраж"
+          ],
+          "healsInherited": []
+        },
+        null,
+        null
+      ]
+    },
+    {
+      "id": "S_CICD",
+      "introducedAtLevel": "L2_GATEWAY_PASS",
+      "name": "Ритуал Доставки",
+      "description": "Автоматизирует доставку изменений в прод",
+      "allowedSlotTypes": [
+        "CD_PIPELINE"
+      ],
+      "unique": true,
+      "effects": [
+        {
+          "type": "CAPABILITY",
+          "id": "HAS_CICD"
+        }
+      ],
+      "currencies": {
+        "gold": 2,
+        "aura": 1
+      },
+      "propertyCells": [
+        {
+          "kind": "treatment",
+          "treatmentTags": [
+            "Доставка"
+          ],
+          "healsInherited": [
+            {
+              "debtId": "D_NEEDS_MIGRATION"
+            }
+          ]
+        },
+        {
+          "kind": "debuff",
+          "origin": "card",
+          "debtId": "D_NEEDS_ROLLBACK",
+          "statusIfUnresolved": "F5_FRAGILITY"
+        },
+        null
+      ]
+    },
+    {
+      "id": "S_ROLLBACK",
+      "introducedAtLevel": "L2_GATEWAY_PASS",
+      "name": "Ключ Отката",
+      "description": "Позволяет вернуться к предыдущей версии при сбое доставки",
+      "allowedSlotTypes": [
+        "CD_ROLLBACK"
+      ],
+      "unique": true,
+      "effects": [
+        {
+          "type": "CAPABILITY",
+          "id": "HAS_ROLLBACK"
+        }
+      ],
+      "currencies": {
+        "gold": 2,
+        "aura": 1
+      },
+      "propertyCells": [
+        {
+          "kind": "treatment",
+          "treatmentTags": [
+            "Откат"
+          ],
+          "healsInherited": [
+            {
+              "debtId": "D_NEEDS_ROLLBACK"
+            }
+          ]
+        },
+        null,
+        null
+      ]
+    },
+    {
+      "id": "S_MR_GATES",
+      "introducedAtLevel": "L2_LBAAS_FAIR_GATE",
+      "name": "Страж Врат MR",
+      "description": "Запрещает деплой без проверенного MR",
+      "allowedSlotTypes": [
+        "CD_GATES"
+      ],
+      "unique": true,
+      "effects": [
+        {
+          "type": "CAPABILITY",
+          "id": "HAS_MR_GATES"
+        }
+      ],
+      "currencies": {
+        "gold": 2,
+        "aura": 1
+      },
+      "propertyCells": [
+        {
+          "kind": "treatment",
+          "treatmentTags": [
+            "Проверка"
+          ],
+          "healsInherited": []
+        },
+        null,
+        null
+      ]
+    },
+    {
+      "id": "S_API_CICD",
+      "introducedAtLevel": "L5_KIRA_API",
+      "name": "Ритуал API-доставки",
+      "description": "Автоматизирует выкладку партнёрского API и вскрывает обязательные release-хвосты",
+      "allowedSlotTypes": [
+        "CD_PIPELINE"
+      ],
+      "unique": true,
+      "effects": [
+        {
+          "type": "CAPABILITY",
+          "id": "HAS_CICD"
+        }
+      ],
+      "currencies": {
+        "gold": 2,
+        "aura": 1
+      },
+      "propertyCells": [
+        {
+          "kind": "treatment",
+          "treatmentTags": [
+            "Доставка"
+          ],
+          "healsInherited": [
+            {
+              "debtId": "D_NEEDS_MIGRATION"
+            }
+          ]
+        },
+        {
+          "kind": "debuff",
+          "origin": "card",
+          "debtId": "D_NEEDS_ROLLBACK",
+          "statusIfUnresolved": "F5_FRAGILITY"
+        },
+        {
+          "kind": "debuff",
+          "origin": "card",
+          "debtId": "D_NO_REVIEW_GATES",
+          "statusIfUnresolved": "F9_UNREVIEWED_RELEASE"
+        }
+      ]
+    },
+    {
+      "id": "S_API_MR_GATES",
+      "introducedAtLevel": "L5_KIRA_API",
+      "name": "Страж Врат API",
+      "description": "Запрещает деплой партнёрского API без проверенного MR и вскрывает контрактный хвост",
+      "allowedSlotTypes": [
+        "CD_GATES"
+      ],
+      "unique": true,
+      "effects": [
+        {
+          "type": "CAPABILITY",
+          "id": "HAS_MR_GATES"
+        }
+      ],
+      "currencies": {
+        "gold": 2,
+        "aura": 1
+      },
+      "propertyCells": [
+        {
+          "kind": "treatment",
+          "treatmentTags": [
+            "Проверка",
+            "Совместимость"
+          ],
+          "healsInherited": []
+        },
+        {
+          "kind": "debuff",
+          "origin": "card",
+          "debtId": "D_PARTNER_CONTRACT_DRIFT",
+          "statusIfUnresolved": "F10_CONTRACT_DRIFT"
+        },
+        null
+      ]
+    },
+    {
+      "id": "S_CONTRACT_TESTS",
+      "introducedAtLevel": "L5_KIRA_API",
+      "name": "Испытания Договоров",
+      "description": "Проверяет партнёрские API-контракты перед релизом",
+      "allowedSlotTypes": [
+        "CD_TESTING"
+      ],
+      "unique": true,
+      "effects": [
+        {
+          "type": "CAPABILITY",
+          "id": "HAS_CONTRACT_TESTS"
+        }
+      ],
+      "currencies": {
+        "gold": 1,
+        "aura": 0
+      },
+      "propertyCells": [
+        {
+          "kind": "treatment",
+          "treatmentTags": [
+            "Совместимость"
+          ],
+          "healsInherited": []
+        },
+        null,
+        null
+      ]
+    },
+    {
+      "id": "S_GLOBAL_HEALTHCHECK",
+      "introducedAtLevel": "L7_EDWARD_MULTIDC",
+      "name": "Глобальное Сердцебиение",
+      "description": "Проверяет оба дата-центра из внешнего контура и останавливает петлю взаимного failover.",
+      "allowedSlotTypes": [
+        "NET_DISCOVERY"
+      ],
+      "unique": true,
+      "effects": [
+        {
+          "type": "CAPABILITY",
+          "id": "HAS_HEALTHCHECK"
+        },
+        {
+          "type": "CAPABILITY",
+          "id": "HAS_FAILOVER"
+        }
+      ],
+      "currencies": {
+        "gold": 2,
+        "aura": 1
+      },
+      "propertyCells": [
+        {
+          "kind": "treatment",
+          "treatmentTags": [
+            "Надёжность"
+          ],
+          "healsInherited": [
+            {
+              "debtId": "D_FAILOVER_LOOP"
+            },
+            {
+              "debtId": "D_NEEDS_HEALTHCHECK"
+            }
+          ]
+        },
+        {
+          "kind": "debuff",
+          "origin": "card",
+          "debtId": "D_UNTESTED_FAILOVER",
+          "statusIfUnresolved": "F5_FRAGILITY"
+        },
+        null
+      ]
+    },
+    {
+      "id": "S_REGION_RECONCILER",
+      "introducedAtLevel": "L7_EDWARD_MULTIDC",
+      "name": "Сверщик Регионов",
+      "description": "Сравнивает настройки двух дата-центров перед релизом и вскрывает drift контрактов между регионами.",
+      "allowedSlotTypes": [
+        "CD_GATES"
+      ],
+      "unique": true,
+      "effects": [
+        {
+          "type": "CAPABILITY",
+          "id": "HAS_REGION_RECONCILE"
+        }
+      ],
+      "currencies": {
+        "gold": 2,
+        "aura": 0
+      },
+      "propertyCells": [
+        {
+          "kind": "treatment",
+          "treatmentTags": [
+            "Согласованность"
+          ],
+          "healsInherited": []
+        },
+        null,
+        null
+      ]
+    },
+    {
+      "id": "S_MULTI_REGION_DRILL",
+      "introducedAtLevel": "L7_EDWARD_MULTIDC",
+      "name": "Учение Двух Обелисков",
+      "description": "Прогоняет аварийное переключение и сверку региональных контрактов на копии до настоящего отказа.",
+      "allowedSlotTypes": [
+        "CD_TESTING"
+      ],
+      "unique": true,
+      "effects": [
+        {
+          "type": "CAPABILITY",
+          "id": "HAS_DR_DRILL"
+        }
+      ],
+      "currencies": {
+        "gold": 2,
+        "aura": 0
+      },
+      "propertyCells": [
+        {
+          "kind": "treatment",
+          "treatmentTags": [
+            "Проверка"
+          ],
+          "healsInherited": [
+            {
+              "debtId": "D_UNTESTED_FAILOVER"
+            }
+          ]
+        },
+        null,
+        null
+      ]
+    },
+    {
+      "id": "S_CAPACITY_MIRROR",
+      "introducedAtLevel": "L7_EDWARD_MULTIDC",
+      "name": "Зеркало Ёмкости",
+      "description": "Выравнивает резервную ёмкость между дата-центрами, но требует общих квот на зеркале.",
+      "allowedSlotTypes": [
+        "ST_RETENTION"
+      ],
+      "unique": true,
+      "effects": [
+        {
+          "type": "CAPABILITY",
+          "id": "HAS_RESERVE_CAPACITY"
+        }
+      ],
+      "currencies": {
+        "gold": 2,
+        "aura": 0
+      },
+      "propertyCells": [
+        {
+          "kind": "treatment",
+          "treatmentTags": [
+            "Резерв"
+          ],
+          "healsInherited": []
+        },
+        {
+          "kind": "debuff",
+          "origin": "card",
+          "debtId": "D_MIRROR_QUOTA_GAP",
+          "statusIfUnresolved": "F1_OVERFLOW"
+        },
+        null
+      ]
+    }
+  ],
+  "obryadCardCatalog": [
+    {
+      "id": "R_ONBOARDING",
+      "introducedAtLevel": "L2_KESHA_CACHE",
+      "name": "Свиток Наставлений",
+      "description": "Обязательный онбординг сотрудников. Стоит монеты, но снижает операционный риск работы с чувствительными данными. Организационная мера, заменяющая технический контроль доступа.",
+      "allowedSlotTypes": [
+        "RITUAL_OBS"
+      ],
+      "unique": true,
+      "effects": [],
+      "currencies": {
+        "gold": 1,
+        "aura": -2
+      },
+      "propertyCells": [
+        {
+          "kind": "treatment",
+          "treatmentTags": [
+            "Изоляция"
+          ],
+          "healsInherited": []
+        },
+        null,
+        null
+      ]
+    },
+    {
+      "id": "R_LIBRARY_GRANT",
+      "introducedAtLevel": "L2_KESHA_CACHE",
+      "name": "Академический Грант",
+      "description": "Академия субсидирует стандартные решения. Чистые монеты — никакого дополнительного риска.",
+      "allowedSlotTypes": [
+        "RITUAL_ST",
+        "RITUAL_OBS"
+      ],
+      "unique": true,
+      "effects": [],
+      "currencies": {
+        "gold": -2,
+        "aura": -1
+      },
+      "propertyCells": [
+        {
+          "kind": "treatment",
+          "treatmentTags": [],
+          "healsInherited": []
+        },
+        null,
+        null
+      ]
+    },
+    {
+      "id": "R_PATRON_SEAL",
+      "introducedAtLevel": "L3_GENNADY_LIGHTHOUSE",
+      "name": "Печать Мецената",
+      "description": "Меценат доплачивает за сетевую и доставочную инфраструктуру. Субсидия есть, и он слегка повышает твой допустимый предел риска — но это не значит, что рисковать безопасно.",
+      "allowedSlotTypes": [
+        "RITUAL_NET",
+        "RITUAL_CD"
+      ],
+      "unique": true,
+      "effects": [],
+      "auraLimitDelta": 2,
+      "currencies": {
+        "gold": -2,
+        "aura": 1
+      },
+      "propertyCells": [
+        {
+          "kind": "treatment",
+          "treatmentTags": [],
+          "healsInherited": []
+        },
+        null,
+        null
+      ]
+    },
+    {
+      "id": "R_AI_BUFF",
+      "introducedAtLevel": "L1_MILLER_BARN",
+      "name": "Печать Прогресса",
+      "description": "Астрологи провозгласили неделю ИИ. Скажи князю, что в конструкте стоит ИИ — вернёт 3 монеты. Но обещание без основания — это риск.",
+      "allowedSlotTypes": [
+        "RITUAL_OBS",
+        "RITUAL_ST",
+        "RITUAL_NET",
+        "RITUAL_CD"
+      ],
+      "unique": true,
+      "effects": [],
+      "currencies": {
+        "gold": -2,
+        "aura": 3
+      },
+      "propertyCells": [
+        {
+          "kind": "treatment",
+          "treatmentTags": [],
+          "healsInherited": []
+        },
+        null,
+        null
+      ]
+    },
+    {
+      "id": "R_GUARD_TO_BAR",
+      "introducedAtLevel": "L3_GENNADY_LIGHTHOUSE",
+      "name": "Стражника в бар",
+      "description": "Стража становится сговорчивее. Некому следить за объёмом — проблема снята.",
+      "allowedSlotTypes": [
+        "RITUAL_NET"
+      ],
+      "unique": true,
+      "effects": [],
+      "currencies": {
+        "gold": 2,
+        "aura": -2
+      },
+      "propertyCells": [
+        {
+          "kind": "treatment",
+          "treatmentTags": [
+            "Чистота"
+          ],
+          "healsInherited": []
+        },
+        null,
+        null
+      ]
+    },
+    {
+      "id": "R_CANARY",
+      "introducedAtLevel": "L2_GATEWAY_PASS",
+      "name": "Канарейка в шахте",
+      "description": "Раннее предупреждение о проблемах. Дёшево, эффективно, незаметно.",
+      "allowedSlotTypes": [
+        "RITUAL_OBS"
+      ],
+      "unique": true,
+      "effects": [],
+      "currencies": {
+        "gold": 1,
+        "aura": -1
+      },
+      "propertyCells": [
+        {
+          "kind": "treatment",
+          "treatmentTags": [],
+          "healsInherited": []
+        },
+        null,
+        null
+      ]
+    },
+    {
+      "id": "R_LOG_ARCHIVE",
+      "introducedAtLevel": "L5_KIRA_API",
+      "name": "Архивация Хроник",
+      "description": "Ротирует и сжимает логи доступа — объём перестаёт расти.",
+      "allowedSlotTypes": [
+        "RITUAL_OBS"
+      ],
+      "unique": true,
+      "effects": [],
+      "currencies": {
+        "gold": 2,
+        "aura": -2
+      },
+      "propertyCells": [
+        {
+          "kind": "treatment",
+          "treatmentTags": [
+            "Чистота"
+          ],
+          "healsInherited": []
+        },
+        null,
+        null
+      ]
+    },
+    {
+      "id": "R_ROUTING_DECREE",
+      "introducedAtLevel": null,
+      "name": "Указ Перекрёстка",
+      "description": "Геннадий подписывает договор с посланниками: каждый маршрут закреплён, живые узлы известны по имени. Без алгоритмов — только слово и договор.",
+      "allowedSlotTypes": [
+        "RITUAL_OBS"
+      ],
+      "unique": true,
+      "effects": [
+        {
+          "type": "CAPABILITY",
+          "id": "HAS_STABLE_ROUTING"
+        },
+        {
+          "type": "CAPABILITY",
+          "id": "HAS_FAILOVER"
+        },
+        {
+          "type": "CAPABILITY",
+          "id": "HAS_DISCOVERY"
+        }
+      ],
+      "currencies": {
+        "gold": 2,
+        "aura": 2
+      },
+      "propertyCells": [
+        {
+          "kind": "treatment",
+          "treatmentTags": [
+            "Порядок",
+            "Согласование",
+            "Живость"
+          ],
+          "healsInherited": []
+        },
+        null,
+        null
+      ]
+    }
+  ],
   "spellCatalog": [
     {
       "id": "S_BROAD_LOGGING",
@@ -149,15 +2811,13 @@
           "statusIfUnresolved": "F7_CONFUSION"
         }
       ],
-      "resolvesDebts": [
-        "D_NO_OBSERVABILITY"
-      ],
-      "buffs": [
+      "resolvesDebts": [],
+      "treatmentTags": [
         "Ясность"
       ],
       "currencies": {
         "gold": 2,
-        "aura": 0
+        "aura": 2
       }
     },
     {
@@ -183,8 +2843,9 @@
       "resolvesDebts": [
         "D_AUDIT_NEEDED"
       ],
-      "buffs": [
-        "Ясность"
+      "treatmentTags": [
+        "Ясность",
+        "Аудит"
       ],
       "currencies": {
         "gold": 4,
@@ -214,8 +2875,9 @@
       "resolvesDebts": [
         "D_AUDIT_NEEDED"
       ],
-      "buffs": [
-        "Ясность"
+      "treatmentTags": [
+        "Ясность",
+        "Аудит"
       ],
       "currencies": {
         "gold": 2,
@@ -242,10 +2904,8 @@
           "statusIfUnresolved": "F1_OVERFLOW"
         }
       ],
-      "resolvesDebts": [
-        "D_NO_OBSERVABILITY"
-      ],
-      "buffs": [
+      "resolvesDebts": [],
+      "treatmentTags": [
         "Ясность"
       ],
       "currencies": {
@@ -256,7 +2916,7 @@
     {
       "id": "S_LOG_FILTER",
       "name": "Сито Смыслов",
-      "description": "Фильтрует и очищает поток логов",
+      "description": "Фильтрует и очищает поток логов — снижает объём любых журналов",
       "allowedSlotTypes": [
         "OBS_FILTERS"
       ],
@@ -268,15 +2928,13 @@
         }
       ],
       "addsDebts": [],
-      "resolvesDebts": [
-        "D_LOG_VOLUME"
-      ],
-      "buffs": [
+      "resolvesDebts": [],
+      "treatmentTags": [
         "Чистота"
       ],
       "currencies": {
         "gold": 2,
-        "aura": 0
+        "aura": -1
       }
     },
     {
@@ -303,8 +2961,9 @@
         "D_AUDIT_NEEDED",
         "D_NO_OBSERVABILITY"
       ],
-      "buffs": [
-        "Ясность"
+      "treatmentTags": [
+        "Ясность",
+        "Аудит"
       ],
       "currencies": {
         "gold": 3,
@@ -330,7 +2989,8 @@
       "currencies": {
         "gold": 2,
         "aura": 1
-      }
+      },
+      "treatmentTags": []
     },
     {
       "id": "S_TTL",
@@ -347,14 +3007,9 @@
         }
       ],
       "addsDebts": [],
-      "buffs": [
+      "resolvesDebts": [],
+      "treatmentTags": [
         "Чистота"
-      ],
-      "resolvesDebts": [
-        "D_LOG_VOLUME",
-        "D_ACCESS_LOG_VOLUME",
-        "D_CACHE_GROWTH",
-        "D_INDEX_GROWTH"
       ],
       "currencies": {
         "gold": 2,
@@ -376,16 +3031,13 @@
         }
       ],
       "addsDebts": [],
-      "buffs": [
+      "resolvesDebts": [],
+      "treatmentTags": [
         "Чистота"
-      ],
-      "resolvesDebts": [
-        "D_LOG_VOLUME",
-        "D_ACCESS_LOG_VOLUME"
       ],
       "currencies": {
         "gold": 2,
-        "aura": 0
+        "aura": 1
       }
     },
     {
@@ -403,13 +3055,8 @@
         }
       ],
       "addsDebts": [],
-      "resolvesDebts": [
-        "D_LOG_VOLUME",
-        "D_ACCESS_LOG_VOLUME",
-        "D_CACHE_GROWTH",
-        "D_INDEX_GROWTH"
-      ],
-      "buffs": [
+      "resolvesDebts": [],
+      "treatmentTags": [
         "Чистота"
       ],
       "currencies": {
@@ -441,7 +3088,8 @@
       "currencies": {
         "gold": 2,
         "aura": 1
-      }
+      },
+      "treatmentTags": []
     },
     {
       "id": "S_SECRETS",
@@ -462,7 +3110,8 @@
       "currencies": {
         "gold": 3,
         "aura": 0
-      }
+      },
+      "treatmentTags": []
     },
     {
       "id": "S_AUTHZ",
@@ -479,21 +3128,48 @@
         }
       ],
       "addsDebts": [],
-      "resolvesDebts": [
-        "D_OPEN_ACCESS"
-      ],
-      "buffs": [
+      "resolvesDebts": [],
+      "treatmentTags": [
         "Изоляция"
       ],
       "currencies": {
         "gold": 4,
-        "aura": 0
+        "aura": 1
       }
     },
     {
       "id": "S_DNS",
       "name": "Глашатай Домена",
-      "description": "Регистрирует доменное имя для службы",
+      "description": "Регистрирует постоянное имя службы в открытом реестре. Посланники наконец знают, куда идти — но адрес теперь виден всем.",
+      "allowedSlotTypes": [
+        "NET_DNS"
+      ],
+      "unique": true,
+      "effects": [
+        {
+          "type": "CAPABILITY",
+          "id": "HAS_DNS"
+        }
+      ],
+      "addsDebts": [
+        {
+          "id": "D_DNS_EXPOSED",
+          "statusIfUnresolved": "F3_COMPROMISE"
+        }
+      ],
+      "resolvesDebts": [],
+      "treatmentTags": [
+        "Адресность"
+      ],
+      "currencies": {
+        "gold": 2,
+        "aura": 1
+      }
+    },
+    {
+      "id": "S_PRIVATE_DNS",
+      "name": "Тайный Адрес",
+      "description": "Регистрирует адрес только во внутреннем реестре. Не виден извне — но дороже обычного имени.",
       "allowedSlotTypes": [
         "NET_DNS"
       ],
@@ -506,9 +3182,13 @@
       ],
       "addsDebts": [],
       "resolvesDebts": [],
+      "treatmentTags": [
+        "Адресность",
+        "Конфиденциальность"
+      ],
       "currencies": {
-        "gold": 2,
-        "aura": 0
+        "gold": 8,
+        "aura": 1
       }
     },
     {
@@ -527,9 +3207,41 @@
       ],
       "addsDebts": [],
       "resolvesDebts": [],
+      "treatmentTags": [
+        "Шифрование"
+      ],
       "currencies": {
         "gold": 2,
-        "aura": 0
+        "aura": 1
+      }
+    },
+    {
+      "id": "S_GATEWAY_SEAL",
+      "name": "Печать Врат",
+      "description": "Шифрует трафик шлюза — и сразу ставит вопрос: кто вообще может войти?",
+      "allowedSlotTypes": [
+        "NET_TLS"
+      ],
+      "unique": true,
+      "effects": [
+        {
+          "type": "CAPABILITY",
+          "id": "HAS_TLS"
+        }
+      ],
+      "resolvesDebts": [],
+      "addsDebts": [
+        {
+          "id": "D_OPEN_ACCESS",
+          "statusIfUnresolved": "F3_COMPROMISE"
+        }
+      ],
+      "treatmentTags": [
+        "Шифрование"
+      ],
+      "currencies": {
+        "gold": 2,
+        "aura": 1
       }
     },
     {
@@ -552,11 +3264,16 @@
           "statusIfUnresolved": "F5_FRAGILITY"
         }
       ],
-      "resolvesDebts": [],
+      "resolvesDebts": [
+        "D_HIDDEN_NODES"
+      ],
       "currencies": {
         "gold": 2,
         "aura": 1
-      }
+      },
+      "treatmentTags": [
+        "Обнаружение"
+      ]
     },
     {
       "id": "S_HEALTHCHECK",
@@ -578,14 +3295,13 @@
       ],
       "addsDebts": [],
       "resolvesDebts": [
-        "D_NEEDS_HEALTHCHECK"
+        "D_NEEDS_HEALTHCHECK",
+        "D_SPLIT_OVERLOAD"
       ],
-      "buffs": [
-        "Надёжность"
-      ],
+      "treatmentTags": [],
       "currencies": {
         "gold": 2,
-        "aura": 0
+        "aura": 1
       }
     },
     {
@@ -600,10 +3316,23 @@
         {
           "type": "CAPABILITY",
           "id": "HAS_TRAFFIC_SPLIT"
+        },
+        {
+          "type": "CAPABILITY",
+          "id": "HAS_STABLE_ROUTING"
         }
       ],
-      "addsDebts": [],
+      "addsDebts": [
+        {
+          "id": "D_SPLIT_OVERLOAD",
+          "statusIfUnresolved": "F5_FRAGILITY"
+        }
+      ],
       "resolvesDebts": [],
+      "treatmentTags": [
+        "Равновесие",
+        "Охлаждение"
+      ],
       "currencies": {
         "gold": 2,
         "aura": 1
@@ -612,7 +3341,7 @@
     {
       "id": "S_HASH_ROUTING",
       "name": "Якорь Сессии",
-      "description": "Привязывает сессию к одному эндпоинту (sticky routing)",
+      "description": "Явная таблица привязки: каждый посланник закреплён за конкретным узлом. Дороже, но без автоматики и без каскадных эффектов.",
       "allowedSlotTypes": [
         "NET_ROUTING"
       ],
@@ -626,9 +3355,306 @@
       "addsDebts": [],
       "resolvesDebts": [],
       "currencies": {
+        "gold": 4,
+        "aura": 1
+      },
+      "treatmentTags": [
+        "Привязка",
+        "Равновесие"
+      ]
+    },
+    {
+      "id": "S_SHARD_KEY",
+      "name": "Ключ Шардирования",
+      "description": "Задаёт алгоритм распределения свитков по шардам. Голуби знают куда лететь — но шарды начинают расти неравномерно.",
+      "allowedSlotTypes": [
+        "NET_ROUTING"
+      ],
+      "unique": true,
+      "effects": [
+        {
+          "type": "CAPABILITY",
+          "id": "HAS_HASH_ROUTING"
+        }
+      ],
+      "resolvesDebts": [],
+      "addsDebts": [
+        {
+          "id": "D_SHARD_IMBALANCE",
+          "statusIfUnresolved": "F1_OVERFLOW"
+        }
+      ],
+      "treatmentTags": [
+        "Распределение",
+        "Равновесие"
+      ],
+      "currencies": {
+        "gold": 3,
+        "aura": 1
+      }
+    },
+    {
+      "id": "S_REBALANCER",
+      "name": "Перераспределитель Шардов",
+      "description": "Следит за размером шардов и перемещает данные, чтобы нагрузка распределялась равномерно.",
+      "allowedSlotTypes": [
+        "ST_QUOTA"
+      ],
+      "unique": true,
+      "effects": [],
+      "resolvesDebts": [],
+      "addsDebts": [
+        {
+          "id": "D_REBALANCE_WINDOW",
+          "statusIfUnresolved": "F5_FRAGILITY"
+        },
+        {
+          "id": "D_HOT_PARTITION",
+          "statusIfUnresolved": "F11_HOTSPOT"
+        }
+      ],
+      "treatmentTags": [
+        "Баланс"
+      ],
+      "currencies": {
         "gold": 2,
         "aura": 1
       }
+    },
+    {
+      "id": "S_HOT_KEY_SPLITTER",
+      "name": "Расщепитель Горячих Ключей",
+      "description": "Выносит горячие ключи в отдельные диапазоны, чтобы один шард не перегревался.",
+      "allowedSlotTypes": [
+        "NET_ROUTING"
+      ],
+      "unique": true,
+      "effects": [],
+      "resolvesDebts": [],
+      "addsDebts": [],
+      "treatmentTags": [
+        "Охлаждение"
+      ],
+      "currencies": {
+        "gold": 1,
+        "aura": 0
+      }
+    },
+    {
+      "id": "S_SCHEMA_GUARD",
+      "name": "Страж Схемы",
+      "description": "Проверяет что схема данных одинакова во всех шардах. Обнаружив расхождение — требует запустить миграцию.",
+      "allowedSlotTypes": [
+        "ST_RETENTION"
+      ],
+      "unique": true,
+      "effects": [],
+      "resolvesDebts": [],
+      "addsDebts": [
+        {
+          "id": "D_NEEDS_MIGRATION",
+          "statusIfUnresolved": "F5_FRAGILITY"
+        },
+        {
+          "id": "D_BACKFILL_UNVERIFIED",
+          "statusIfUnresolved": "F11_HOTSPOT"
+        }
+      ],
+      "treatmentTags": [
+        "Согласованность"
+      ],
+      "currencies": {
+        "gold": 3,
+        "aura": 1
+      }
+    },
+    {
+      "id": "S_MIGRATION_DRY_RUN",
+      "name": "Сухой Прогон Миграции",
+      "description": "Прогоняет backfill и перераспределение на копии, прежде чем трогать живые шарды.",
+      "allowedSlotTypes": [
+        "CD_TESTING"
+      ],
+      "unique": true,
+      "effects": [],
+      "resolvesDebts": [
+        "D_REBALANCE_WINDOW",
+        "D_BACKFILL_UNVERIFIED"
+      ],
+      "addsDebts": [],
+      "treatmentTags": [
+        "Проверка"
+      ],
+      "currencies": {
+        "gold": 1,
+        "aura": 0
+      }
+    },
+    {
+      "id": "S_REPLICATION_MANAGER",
+      "name": "Управляющий Репликами",
+      "description": "Выравнивает данные между шардами через асинхронную репликацию. Схема сходится, но реплики поначалу отстают.",
+      "allowedSlotTypes": [
+        "ST_RETENTION"
+      ],
+      "unique": true,
+      "effects": [],
+      "resolvesDebts": [],
+      "addsDebts": [
+        {
+          "id": "D_REPLICATION_LAG",
+          "statusIfUnresolved": "F5_FRAGILITY"
+        },
+        {
+          "id": "D_SPLIT_BRAIN",
+          "statusIfUnresolved": "F12_SPLIT_BRAIN"
+        }
+      ],
+      "treatmentTags": [
+        "Синхронность"
+      ],
+      "currencies": {
+        "gold": 2,
+        "aura": 1
+      }
+    },
+    {
+      "id": "S_QUORUM_KEEPER",
+      "name": "Хранитель Кворума",
+      "description": "Назначает явный кворум записи, чтобы реплики не распались на две правды.",
+      "allowedSlotTypes": [
+        "NET_ROUTING"
+      ],
+      "unique": true,
+      "effects": [],
+      "resolvesDebts": [],
+      "addsDebts": [],
+      "treatmentTags": [
+        "Кворум"
+      ],
+      "currencies": {
+        "gold": 2,
+        "aura": 0
+      }
+    },
+    {
+      "id": "S_REPLICA_SYNC",
+      "name": "Синхронизатор Реплик",
+      "description": "Принудительно догоняет отстающие реплики — задержка репликации устраняется, шарды снова согласованы.",
+      "allowedSlotTypes": [
+        "ST_QUOTA"
+      ],
+      "unique": true,
+      "effects": [],
+      "resolvesDebts": [],
+      "addsDebts": [],
+      "treatmentTags": [
+        "Синхронность"
+      ],
+      "currencies": {
+        "gold": 2,
+        "aura": 1
+      }
+    },
+    {
+      "id": "S_SHARD_FENCE",
+      "name": "Ограда Шарда",
+      "description": "Отрезает проблемный шард от входящего трафика — изоляция мгновенная, но шард перестаёт получать обновления.",
+      "allowedSlotTypes": [
+        "NET_ROUTING"
+      ],
+      "unique": true,
+      "effects": [],
+      "resolvesDebts": [],
+      "addsDebts": [
+        {
+          "id": "D_COLD_SHARD",
+          "statusIfUnresolved": "F7_CONFUSION"
+        }
+      ],
+      "treatmentTags": [
+        "Изоляция",
+        "Равновесие"
+      ],
+      "currencies": {
+        "gold": 2,
+        "aura": 1
+      }
+    },
+    {
+      "id": "S_SHARD_PROBE",
+      "name": "Зонд Шардов",
+      "description": "Регулярно опрашивает все шарды — обнаруживает замёрзшие шарды и возвращает их в строй.",
+      "allowedSlotTypes": [
+        "NET_ROUTING"
+      ],
+      "unique": true,
+      "effects": [],
+      "resolvesDebts": [
+        "D_COLD_SHARD"
+      ],
+      "addsDebts": [],
+      "treatmentTags": [
+        "Живость"
+      ],
+      "currencies": {
+        "gold": 2,
+        "aura": 1
+      }
+    },
+    {
+      "id": "S_WRITE_AHEAD_LOG",
+      "name": "Журнал Опережающей Записи",
+      "description": "Фиксирует каждое изменение до его применения — при сбое систему можно восстановить из журнала.",
+      "allowedSlotTypes": [
+        "OBS_LOGS"
+      ],
+      "unique": true,
+      "effects": [
+        {
+          "type": "CAPABILITY",
+          "id": "HAS_LOGS"
+        }
+      ],
+      "resolvesDebts": [],
+      "addsDebts": [
+        {
+          "id": "D_LOG_VOLUME",
+          "statusIfUnresolved": "F1_OVERFLOW"
+        }
+      ],
+      "treatmentTags": [
+        "Устойчивость",
+        "Ясность"
+      ],
+      "currencies": {
+        "gold": 3,
+        "aura": 1
+      }
+    },
+    {
+      "id": "S_LOCALITY_ROUTING",
+      "name": "Карта Земель",
+      "description": "Статическая таблица ближних врат: каждый посланник знает свой перекрёсток заранее. Дороже алгоритма, но предсказуема и не даёт побочных эффектов.",
+      "allowedSlotTypes": [
+        "NET_ROUTING"
+      ],
+      "unique": true,
+      "effects": [
+        {
+          "type": "CAPABILITY",
+          "id": "HAS_STABLE_ROUTING"
+        }
+      ],
+      "addsDebts": [],
+      "resolvesDebts": [],
+      "currencies": {
+        "gold": 8,
+        "aura": 1
+      },
+      "treatmentTags": [
+        "Равновесие"
+      ]
     },
     {
       "id": "S_POLICY_RESOLVER",
@@ -646,7 +3672,7 @@
       ],
       "addsDebts": [],
       "resolvesDebts": [],
-      "buffs": [
+      "treatmentTags": [
         "Арбитраж"
       ],
       "currencies": {
@@ -675,9 +3701,9 @@
         }
       ],
       "resolvesDebts": [
-        "D_NO_CICD"
+        "D_NEEDS_MIGRATION"
       ],
-      "buffs": [
+      "treatmentTags": [
         "Доставка"
       ],
       "currencies": {
@@ -688,7 +3714,7 @@
     {
       "id": "S_ROLLBACK",
       "name": "Ключ Отката",
-      "description": "Позволяет вернуться к предыдущей версии",
+      "description": "Позволяет вернуться к предыдущей версии при сбое доставки",
       "allowedSlotTypes": [
         "CD_ROLLBACK"
       ],
@@ -703,12 +3729,12 @@
       "resolvesDebts": [
         "D_NEEDS_ROLLBACK"
       ],
-      "buffs": [
-        "Надёжность"
+      "treatmentTags": [
+        "Откат"
       ],
       "currencies": {
         "gold": 2,
-        "aura": 0
+        "aura": 1
       }
     },
     {
@@ -727,6 +3753,213 @@
       ],
       "addsDebts": [],
       "resolvesDebts": [],
+      "treatmentTags": [
+        "Проверка"
+      ],
+      "currencies": {
+        "gold": 2,
+        "aura": 1
+      }
+    },
+    {
+      "id": "S_API_CICD",
+      "name": "Ритуал API-доставки",
+      "description": "Автоматизирует выкладку партнёрского API и вскрывает обязательные release-хвосты",
+      "allowedSlotTypes": [
+        "CD_PIPELINE"
+      ],
+      "unique": true,
+      "effects": [
+        {
+          "type": "CAPABILITY",
+          "id": "HAS_CICD"
+        }
+      ],
+      "addsDebts": [
+        {
+          "id": "D_NEEDS_ROLLBACK",
+          "statusIfUnresolved": "F5_FRAGILITY"
+        },
+        {
+          "id": "D_NO_REVIEW_GATES",
+          "statusIfUnresolved": "F9_UNREVIEWED_RELEASE"
+        }
+      ],
+      "resolvesDebts": [
+        "D_NEEDS_MIGRATION"
+      ],
+      "treatmentTags": [
+        "Доставка"
+      ],
+      "currencies": {
+        "gold": 2,
+        "aura": 1
+      }
+    },
+    {
+      "id": "S_API_MR_GATES",
+      "name": "Страж Врат API",
+      "description": "Запрещает деплой партнёрского API без проверенного MR и вскрывает контрактный хвост",
+      "allowedSlotTypes": [
+        "CD_GATES"
+      ],
+      "unique": true,
+      "effects": [
+        {
+          "type": "CAPABILITY",
+          "id": "HAS_MR_GATES"
+        }
+      ],
+      "addsDebts": [
+        {
+          "id": "D_PARTNER_CONTRACT_DRIFT",
+          "statusIfUnresolved": "F10_CONTRACT_DRIFT"
+        }
+      ],
+      "resolvesDebts": [],
+      "currencies": {
+        "gold": 2,
+        "aura": 1
+      },
+      "treatmentTags": [
+        "Проверка",
+        "Совместимость"
+      ]
+    },
+    {
+      "id": "S_CONTRACT_TESTS",
+      "name": "Испытания Договоров",
+      "description": "Проверяет партнёрские API-контракты перед релизом",
+      "allowedSlotTypes": [
+        "CD_TESTING"
+      ],
+      "unique": true,
+      "effects": [
+        {
+          "type": "CAPABILITY",
+          "id": "HAS_CONTRACT_TESTS"
+        }
+      ],
+      "addsDebts": [],
+      "resolvesDebts": [],
+      "treatmentTags": [
+        "Совместимость"
+      ],
+      "currencies": {
+        "gold": 1,
+        "aura": 0
+      }
+    },
+    {
+      "id": "S_GLOBAL_HEALTHCHECK",
+      "name": "Глобальное Сердцебиение",
+      "description": "Проверяет оба дата-центра из внешнего контура и останавливает петлю взаимного failover.",
+      "allowedSlotTypes": [
+        "NET_DISCOVERY"
+      ],
+      "unique": true,
+      "effects": [
+        {
+          "type": "CAPABILITY",
+          "id": "HAS_HEALTHCHECK"
+        },
+        {
+          "type": "CAPABILITY",
+          "id": "HAS_FAILOVER"
+        }
+      ],
+      "addsDebts": [
+        {
+          "id": "D_UNTESTED_FAILOVER",
+          "statusIfUnresolved": "F5_FRAGILITY"
+        }
+      ],
+      "resolvesDebts": [
+        "D_FAILOVER_LOOP",
+        "D_NEEDS_HEALTHCHECK"
+      ],
+      "treatmentTags": [
+        "Надёжность"
+      ],
+      "currencies": {
+        "gold": 2,
+        "aura": 1
+      }
+    },
+    {
+      "id": "S_REGION_RECONCILER",
+      "name": "Сверщик Регионов",
+      "description": "Сравнивает настройки двух дата-центров перед релизом и вскрывает drift контрактов между регионами.",
+      "allowedSlotTypes": [
+        "CD_GATES"
+      ],
+      "unique": true,
+      "effects": [
+        {
+          "type": "CAPABILITY",
+          "id": "HAS_REGION_RECONCILE"
+        }
+      ],
+      "addsDebts": [],
+      "resolvesDebts": [],
+      "treatmentTags": [
+        "Согласованность"
+      ],
+      "currencies": {
+        "gold": 2,
+        "aura": 0
+      }
+    },
+    {
+      "id": "S_MULTI_REGION_DRILL",
+      "name": "Учение Двух Обелисков",
+      "description": "Прогоняет аварийное переключение и сверку региональных контрактов на копии до настоящего отказа.",
+      "allowedSlotTypes": [
+        "CD_TESTING"
+      ],
+      "unique": true,
+      "effects": [
+        {
+          "type": "CAPABILITY",
+          "id": "HAS_DR_DRILL"
+        }
+      ],
+      "addsDebts": [],
+      "resolvesDebts": [
+        "D_UNTESTED_FAILOVER"
+      ],
+      "treatmentTags": [
+        "Проверка"
+      ],
+      "currencies": {
+        "gold": 2,
+        "aura": 0
+      }
+    },
+    {
+      "id": "S_CAPACITY_MIRROR",
+      "name": "Зеркало Ёмкости",
+      "description": "Выравнивает резервную ёмкость между дата-центрами, но требует общих квот на зеркале.",
+      "allowedSlotTypes": [
+        "ST_RETENTION"
+      ],
+      "unique": true,
+      "effects": [
+        {
+          "type": "CAPABILITY",
+          "id": "HAS_RESERVE_CAPACITY"
+        }
+      ],
+      "addsDebts": [
+        {
+          "id": "D_MIRROR_QUOTA_GAP",
+          "statusIfUnresolved": "F1_OVERFLOW"
+        }
+      ],
+      "resolvesDebts": [],
+      "treatmentTags": [
+        "Резерв"
+      ],
       "currencies": {
         "gold": 2,
         "aura": 0
@@ -743,10 +3976,8 @@
       ],
       "unique": true,
       "addsDebts": [],
-      "resolvesDebts": [
-        "D_OPEN_ACCESS"
-      ],
-      "buffs": [
+      "resolvesDebts": [],
+      "treatmentTags": [
         "Изоляция"
       ],
       "currencies": {
@@ -767,8 +3998,9 @@
       "resolvesDebts": [],
       "currencies": {
         "gold": -2,
-        "aura": 0
-      }
+        "aura": -1
+      },
+      "treatmentTags": []
     },
     {
       "id": "R_PATRON_SEAL",
@@ -784,8 +4016,9 @@
       "resolvesDebts": [],
       "currencies": {
         "gold": -2,
-        "aura": 0
-      }
+        "aura": 1
+      },
+      "treatmentTags": []
     },
     {
       "id": "R_AI_BUFF",
@@ -803,20 +4036,24 @@
       "currencies": {
         "gold": -2,
         "aura": 3
-      }
+      },
+      "treatmentTags": []
     },
     {
       "id": "R_GUARD_TO_BAR",
       "name": "Стражника в бар",
-      "description": "Стража становится сговорчивее. Меньше сопротивления изменениям — меньше операционных рисков.",
+      "description": "Стража становится сговорчивее. Некому следить за объёмом — проблема снята.",
       "allowedSlotTypes": [
         "RITUAL_NET"
       ],
       "unique": true,
       "addsDebts": [],
       "resolvesDebts": [],
+      "treatmentTags": [
+        "Чистота"
+      ],
       "currencies": {
-        "gold": 0,
+        "gold": 2,
         "aura": -2
       }
     },
@@ -833,6 +4070,59 @@
       "currencies": {
         "gold": 1,
         "aura": -1
+      },
+      "treatmentTags": []
+    },
+    {
+      "id": "R_LOG_ARCHIVE",
+      "name": "Архивация Хроник",
+      "description": "Ротирует и сжимает логи доступа — объём перестаёт расти.",
+      "allowedSlotTypes": [
+        "RITUAL_OBS"
+      ],
+      "unique": true,
+      "addsDebts": [],
+      "resolvesDebts": [],
+      "treatmentTags": [
+        "Чистота"
+      ],
+      "currencies": {
+        "gold": 2,
+        "aura": -2
+      }
+    },
+    {
+      "id": "R_ROUTING_DECREE",
+      "name": "Указ Перекрёстка",
+      "description": "Геннадий подписывает договор с посланниками: каждый маршрут закреплён, живые узлы известны по имени. Без алгоритмов — только слово и договор.",
+      "allowedSlotTypes": [
+        "RITUAL_OBS"
+      ],
+      "unique": true,
+      "effects": [
+        {
+          "type": "CAPABILITY",
+          "id": "HAS_STABLE_ROUTING"
+        },
+        {
+          "type": "CAPABILITY",
+          "id": "HAS_FAILOVER"
+        },
+        {
+          "type": "CAPABILITY",
+          "id": "HAS_DISCOVERY"
+        }
+      ],
+      "addsDebts": [],
+      "resolvesDebts": [],
+      "treatmentTags": [
+        "Порядок",
+        "Согласование",
+        "Живость"
+      ],
+      "currencies": {
+        "gold": 2,
+        "aura": 2
       }
     }
   ],
@@ -848,6 +4138,18 @@
         "S_POLICY_RESOLVER"
       ],
       "description": "Весовое и sticky-распределение несовместимы без арбитра"
+    },
+    {
+      "id": "CP_SHARD_KEY_VS_HASH",
+      "spells": [
+        "S_SHARD_KEY",
+        "S_HASH_ROUTING"
+      ],
+      "statusIfUnresolved": "F2_CONTRADICTION",
+      "resolvedBy": [
+        "S_POLICY_RESOLVER"
+      ],
+      "description": "Два разных закона маршрутизации по ключу несовместимы без арбитра"
     }
   ],
   "capabilityLabels": {
@@ -871,7 +4173,12 @@
     "HAS_TRAFFIC_SPLIT": "Разделение трафика",
     "HAS_FAILOVER": "Аварийное переключение",
     "HAS_POLICY_RESOLVER": "Арбитр конфликтов",
-    "HAS_MR_GATES": "Гейты на влитие"
+    "HAS_MR_GATES": "Гейты на влитие",
+    "HAS_CONTRACT_TESTS": "Контрактные тесты",
+    "HAS_STABLE_ROUTING": "Стабильные маршруты",
+    "HAS_REGION_RECONCILE": "Сверка регионов",
+    "HAS_DR_DRILL": "Учение аварийного переключения",
+    "HAS_RESERVE_CAPACITY": "Резервная ёмкость"
   },
   "reportTemplates": {
     "F1_OVERFLOW": {
@@ -908,6 +4215,46 @@
       "title": "Путаница в логах",
       "failText": "Журнал записал всё стадо коров, семь мух и пролётного дрозда — а нужное утонуло в шуме. Используй инструмент, который пишет только то, что важно.",
       "advice": "Замени Перо Всевидящего на инструмент точечного аудита — он записывает только нужное."
+    },
+    "F8_AUDIT_GAP": {
+      "title": "Дыра аудита",
+      "failText": "Партнёрский вызов прошёл, но в книге доступа пустая строка: общие логи не доказывают, кто трогал API.",
+      "advice": "Поставь Книгу Доступа (`S_ACCESS_LOGS`). Она закрывает долг аудита, а фильтр или архив уже лечат объём."
+    },
+    "F9_UNREVIEWED_RELEASE": {
+      "title": "Непроверенный релиз",
+      "failText": "Пайплайн живой, но ворота MR открыты: изменение можно протолкнуть без проверки.",
+      "advice": "Добавь Стража Врат API (`S_API_MR_GATES`) в слот `CD_GATES`, чтобы релизы проходили через review gate."
+    },
+    "F10_CONTRACT_DRIFT": {
+      "title": "Разъезд контрактов",
+      "failText": "Шлюз обновился, а партнёрские договоры API не сверили — интеграции начали говорить на разных языках.",
+      "advice": "Добавь Испытания Договоров (`S_CONTRACT_TESTS`) в delivery-контур, чтобы ловить разъезд контрактов до прода."
+    },
+    "F11_HOTSPOT": {
+      "title": "Горячий шард",
+      "failText": "Один диапазон ключей раскалил отдельный шард: балансировка началась, но горячие ключи и backfill не проверены.",
+      "advice": "Охлади горячий диапазон `S_HOT_KEY_SPLITTER` и проверь миграционный backfill через `S_MIGRATION_DRY_RUN`."
+    },
+    "F12_SPLIT_BRAIN": {
+      "title": "Раскол кворума",
+      "failText": "Реплики отвечают двумя несовместимыми истинами: синхронизация есть, но кворум записи не закреплён.",
+      "advice": "Добавь `S_QUORUM_KEEPER`, чтобы репликационный контур имел один источник истины."
+    },
+    "F13_DARK_SHARD": {
+      "title": "Тёмный шард",
+      "failText": "Часть шардов работает без летописи: ошибки и потерянные свитки не видны до тех пор, пока архив уже не разошёлся.",
+      "advice": "Добавь наблюдаемость (`S_LOGGING` или совместимый журнал), а затем закрой объём логов фильтром или ритуалом."
+    },
+    "F15_FAILOVER_LOOP": {
+      "title": "Петля failover",
+      "failText": "Обелиски перебрасывают трафик друг другу: локальный healthcheck есть, но общего взгляда на отказ нет.",
+      "advice": "Поставь `S_GLOBAL_HEALTHCHECK` рядом с discovery, чтобы failover принимал решение из внешнего контура."
+    },
+    "F16_CAPACITY_GAP": {
+      "title": "Провал резерва",
+      "failText": "Резервный дата-центр не держит полный поток: отказ первого превращается в переполнение второго.",
+      "advice": "Добавь `S_CAPACITY_MIRROR` и закрой появившийся `D_MIRROR_QUOTA_GAP` квотами."
     }
   },
   "levelCatalog": [
@@ -934,6 +4281,7 @@
         {
           "matrixId": "M_OBSERVATION",
           "instanceId": "obs0",
+          "presetId": "MP_OBS_AUDIT_BASIC",
           "slots": [
             {
               "slotId": "obs0_logs",
@@ -948,11 +4296,13 @@
               "slotType": "RITUAL_OBS"
             }
           ],
-          "installCostGold": 0
+          "installCostGold": 1,
+          "preInstalled": true
         },
         {
           "matrixId": "M_STORAGE",
           "instanceId": "st0",
+          "presetId": "MP_STORAGE_RETENTION_RITUAL",
           "slots": [
             {
               "slotId": "st0_ret",
@@ -963,7 +4313,8 @@
               "slotType": "RITUAL_ST"
             }
           ],
-          "installCostGold": 0
+          "installCostGold": 1,
+          "preInstalled": true
         }
       ],
       "defaultInstalled": [
@@ -992,8 +4343,7 @@
       "nonCriticalStatusAuraPenalty": 2,
       "successReports": [
         "Мельник Проспер потирает руки: журнал доступа помог поймать вора с поличным. Замок работает, мука цела. Добрая слава идёт впереди тебя!",
-        "Свиток чист, замок крепок, мука в сохранности. Мельник обещает печь пироги для всей деревни в честь мага, который навёл порядок.",
-        "Вор найден — журнал не солгал. Проспер говорит, что с таким магом можно спать спокойно."
+        "Свиток чист, замок крепок, мука в сохранности. Мельник обещает печь пироги для всей деревни в честь мага, который навёл порядок."
       ],
       "hints": [
         "Магический замок уже пускает только своих — тебе нужно лишь узнать, кто именно входил.",
@@ -1004,7 +4354,20 @@
       "budget": {
         "gold": 4,
         "aura": 5
-      }
+      },
+      "solutions": [
+        {
+          "name": "Путь A — Обряд + Книга + Метла",
+          "matrices": [],
+          "placements": {
+            "obs0_ritual": "R_AI_BUFF",
+            "obs0_logs": "S_ACCESS_LOGS",
+            "st0_ret": "S_ROTATION"
+          },
+          "note": "Единственный путь. R_AI_BUFF (−2 нетто) обязателен: без него 5 монет > бюджет 4."
+        }
+      ],
+      "maxOptionalMatrices": 0
     },
     {
       "id": "L2_KESHA_CACHE",
@@ -1029,6 +4392,7 @@
         {
           "matrixId": "M_STORAGE",
           "instanceId": "st_l2",
+          "presetId": "MP_STORAGE_KEEPER",
           "slots": [
             {
               "slotId": "st_l2_ret",
@@ -1043,11 +4407,13 @@
               "slotType": "RITUAL_ST"
             }
           ],
-          "installCostGold": 0
+          "installCostGold": 1,
+          "preInstalled": true
         },
         {
           "matrixId": "M_CONNECTIVITY",
           "instanceId": "net_l2",
+          "presetId": "MP_NET_AUTH_ONLY",
           "preInstalled": false,
           "slots": [
             {
@@ -1064,6 +4430,7 @@
         {
           "matrixId": "M_OBSERVATION",
           "instanceId": "obs_l2",
+          "presetId": "MP_OBS_AUDIT_BASIC",
           "preInstalled": false,
           "slots": [
             {
@@ -1116,8 +4483,7 @@
       "nonCriticalStatusAuraPenalty": 2,
       "successReports": [
         "Редиска теперь умеет разговаривать с каждым отделом по отдельности. Кеша облегчённо выдыхает — квартальные отчёты больше не будут ждать в очереди.",
-        "Шар работает по-новому: каждый отдел получает свою долю, и никто не может захватить всю память. Кеша доволен — начальство наконец получило свои 'быстрые овощи'.",
-        "Отдел финансов пытался залить в шар все чеки — но квоты встали стеной. Редиска выдержала. Суматохи не случилось."
+        "Шар работает по-новому: каждый отдел получает свою долю, и никто не может захватить всю память. Кеша доволен — начальство наконец получило свои 'быстрые овощи'."
       ],
       "hints": [
         "Редиска изначально не была рассчитана на несколько арендаторов — у неё два унаследованных долга, которые нужно закрыть.",
@@ -1127,48 +4493,52 @@
       "budget": {
         "gold": 6,
         "aura": 3
-      }
+      },
+      "solutions": [
+        {
+          "name": "Путь A — Технический (Связи)",
+          "matrices": [
+            "net_l2"
+          ],
+          "placements": {
+            "net_l2_auth": "S_AUTHZ",
+            "st_l2_quota": "S_QUOTAS",
+            "st_l2_ritual": "R_LIBRARY_GRANT"
+          },
+          "note": "Субсидия R_LIBRARY_GRANT обязательна: без неё 7 монет > бюджет 6."
+        },
+        {
+          "name": "Путь B — Организационный (Взгляд)",
+          "matrices": [
+            "obs_l2"
+          ],
+          "placements": {
+            "obs_l2_ritual": "R_ONBOARDING",
+            "st_l2_quota": "S_QUOTAS"
+          },
+          "note": "Дешевле (5 монет) и убирает ауру. R_ONBOARDING требует Матрицу Взгляда."
+        }
+      ]
     },
     {
       "id": "L3_GENNADY_LIGHTHOUSE",
-      "name": "Маяк для посланников",
+      "name": "Указатель на перепутье",
       "order": 3,
-      "description": "Геннадий держит сторожевой маяк на перевале. Посланники жалуются: одни ждут в очереди, другие теряют сессию на полпути. Геннадий хочет умную точку входа, которая помнит своих и не падает от одного убитого узла.",
-      "clientName": "Геннадий (смотритель маяка)",
+      "description": "На перекрёстке трёх торговых путей стоит безымянный указатель Геннадия. Посланники его не находят, узлы никто не проверяет, а маршруты никем не закреплены. Можно поставить алгоритмы — или договориться с посланниками. Каждый путь требует своего.",
+      "clientName": "Геннадий (смотритель перекрёстка)",
       "criticalStatuses": [
-        "F2_CONTRADICTION",
-        "F5_FRAGILITY"
+        "F3_COMPROMISE",
+        "F4_BLINDNESS",
+        "F5_FRAGILITY",
+        "F7_CONFUSION"
       ],
-      "requirements": [
-        {
-          "id": "REQ_DNS",
-          "type": "CAPABILITY_REQUIRED",
-          "capabilityId": "HAS_DNS",
-          "label": "Постоянный адрес маяка (DNS)"
-        },
-        {
-          "id": "REQ_TLS",
-          "type": "CAPABILITY_REQUIRED",
-          "capabilityId": "HAS_TLS",
-          "label": "Шифрование писем (TLS)"
-        },
-        {
-          "id": "REQ_DISCOVERY",
-          "type": "CAPABILITY_REQUIRED",
-          "capabilityId": "HAS_DISCOVERY",
-          "label": "Обнаружение живых узлов (service discovery)"
-        },
-        {
-          "id": "REQ_FAILOVER",
-          "type": "CAPABILITY_REQUIRED",
-          "capabilityId": "HAS_FAILOVER",
-          "label": "Автоматический failover при падении узла"
-        }
-      ],
+      "requirements": [],
       "availableMatrices": [
         {
           "matrixId": "M_CONNECTIVITY",
-          "instanceId": "net_l3",
+          "instanceId": "net_l3_infra",
+          "presetId": "MP_NET_INFRA_POST",
+          "preInstalled": false,
           "slots": [
             {
               "slotId": "l3_dns",
@@ -1187,6 +4557,19 @@
               "slotType": "NET_DISCOVERY"
             },
             {
+              "slotId": "l3_base_rit",
+              "slotType": "RITUAL_NET"
+            }
+          ],
+          "installCostGold": 1
+        },
+        {
+          "matrixId": "M_CONNECTIVITY",
+          "instanceId": "net_l3_routing",
+          "presetId": "MP_NET_ROUTING_STAND",
+          "preInstalled": false,
+          "slots": [
+            {
               "slotId": "l3_route1",
               "slotType": "NET_ROUTING"
             },
@@ -1199,55 +4582,120 @@
               "slotType": "NET_ROUTING"
             },
             {
-              "slotId": "l3_ritual",
+              "slotId": "l3_auth",
+              "slotType": "NET_AUTH"
+            },
+            {
+              "slotId": "l3_rit_net",
               "slotType": "RITUAL_NET"
             }
           ],
-          "installCostGold": 0
+          "installCostGold": 2
+        },
+        {
+          "matrixId": "M_CONNECTIVITY",
+          "instanceId": "net_l3_relay",
+          "presetId": "MP_NET_POSTAL",
+          "preInstalled": false,
+          "slots": [
+            {
+              "slotId": "l3_r_dns",
+              "slotType": "NET_DNS"
+            },
+            {
+              "slotId": "l3_r_route1",
+              "slotType": "NET_ROUTING"
+            },
+            {
+              "slotId": "l3_r_route2",
+              "slotType": "NET_ROUTING"
+            },
+            {
+              "slotId": "l3_r_rit",
+              "slotType": "RITUAL_NET"
+            }
+          ],
+          "installCostGold": 2
         }
       ],
       "defaultInstalled": [
         {
-          "note": "Ворота маяка защищены — пропускают только известных посланников. AuthZ предустановлен.",
+          "note": "Указатель безымянный и маршруты не закреплены. HAS_AUTHZ предустановлен.",
           "grantsCapabilities": [
             "HAS_AUTHZ"
           ],
           "addsDebts": [
             {
-              "id": "D_NEEDS_HEALTHCHECK",
-              "statusIfUnresolved": "F5_FRAGILITY"
+              "id": "D_SIGN_UNCLEAR",
+              "statusIfUnresolved": "F4_BLINDNESS"
+            },
+            {
+              "id": "D_ROUTING_AMBIGUITY",
+              "statusIfUnresolved": "F7_CONFUSION"
             }
           ]
         }
       ],
       "availableSpells": [
         "S_DNS",
+        "S_PRIVATE_DNS",
         "S_TLS_CERT",
-        "S_DISCOVERY",
-        "S_HEALTHCHECK",
         "S_TRAFFIC_SPLIT",
-        "S_HASH_ROUTING",
-        "S_POLICY_RESOLVER"
+        "S_HEALTHCHECK",
+        "S_LOCALITY_ROUTING"
       ],
       "availableObryads": [
         "R_PATRON_SEAL",
+        "R_AI_BUFF",
         "R_GUARD_TO_BAR"
       ],
       "nonCriticalStatusAuraPenalty": 2,
       "successReports": [
-        "Маяк стоит! Посланники знают куда идти, шифр держит тайну, живые узлы помнят своих. Геннадий доволен — очереди рассосались.",
-        "Умные указатели работают. Один узел упал — маяк сам перенаправил трафик. Геннадий говорит: 'Вот теперь — маяк!'",
-        "Лёгкий и надёжный. Посланники не знают, что за кулисами — и именно это признак хорошей работы."
+        "Геннадий глядит на перекрёсток. Посланники расходятся по дорожкам сами — Весы делают своё дело, Сердцебиение следит за узлами. «Четыре детали, и всё работает. Хорошо.»",
+        "Геннадий разворачивает Карту Земель. «Каждый посланник знает свой путь заранее. Дорого — но надёжно, и ни одного лишнего эффекта.»"
       ],
       "hints": [
-        "Discovery без Healthcheck — хрупкость: мёртвые узлы будут получать трафик.",
-        "Весовое распределение и sticky-роутинг работают по-разному — вместе они конфликтуют без Арбитра Печатей.",
-        "Печать Мецената не просто субсидирует монеты — она также расширяет твой допустимый лимит ауры."
+        "Два унаследованных дебафа — каждый требует своей карты.",
+        "Три матрицы на выбор: Инфраструктурный пост, Стойка маршрутов и Почтовая станция. Установи две.",
+        "Дешёвый DNS виден всему миру: без TLS-серта это компрометация (каскад).",
+        "Весы Потоков распределяют трафик — но создают новый дебаф перегрузки. Нужна проверка здоровья.",
+        "Тайный Адрес и Карта Земель дороже — без каскадов, но требуют ритуала. Почтовая станция подходит для этого пути.",
+        "Бюджет рассчитан на один из двух путей. Для дорогого пути нужна Печать Мецената."
       ],
       "budget": {
-        "gold": 14,
-        "aura": 2
-      }
+        "gold": 17,
+        "aura": 5
+      },
+      "solutions": [
+        {
+          "name": "Путь A — Дешёвые карты (каскады)",
+          "matrices": [
+            "net_l3_infra",
+            "net_l3_routing"
+          ],
+          "placements": {
+            "l3_dns": "S_DNS",
+            "l3_tls": "S_TLS_CERT",
+            "l3_route1": "S_TRAFFIC_SPLIT",
+            "l3_disc1": "S_HEALTHCHECK"
+          },
+          "note": "DNS(2) → каскад D_DNS_EXPOSED → TLS(2). TrafficSplit(2,+1aura) → каскад D_SPLIT_OVERLOAD → Healthcheck(2). Матрица(2). Итого 10g/1aura. Ритуал не нужен → Финал A."
+        },
+        {
+          "name": "Путь B — Дорогие карты (ритуал)",
+          "matrices": [
+            "net_l3_infra",
+            "net_l3_routing"
+          ],
+          "placements": {
+            "l3_base_rit": "R_PATRON_SEAL",
+            "l3_dns": "S_PRIVATE_DNS",
+            "l3_route1": "S_LOCALITY_ROUTING"
+          },
+          "note": "R_PATRON_SEAL(-2g,+2 auraLimit). PrivateDNS(8g, без каскада) + LocalityRouting(8g, 0 aura). 8+8+2-2=16g. Без ритуала 18g > 16g → провал. Финал B."
+        }
+      ],
+      "maxOptionalMatrices": 2
     },
     {
       "id": "L4_ANASTASIA_GOLDEN",
@@ -1256,22 +4704,11 @@
       "description": "Анастасия строит платформу: единый шаблон для новых сервисов её команды. Сервисы появляются без TLS, без логов и без healthcheck — каждый на своё усмотрение. Нужен «Золотой путь» — стандарт, который работает из коробки.",
       "clientName": "Анастасия (платформенная команда)",
       "criticalStatuses": [
+        "F3_COMPROMISE",
         "F4_BLINDNESS",
         "F5_FRAGILITY"
       ],
       "requirements": [
-        {
-          "id": "REQ_TLS",
-          "type": "CAPABILITY_REQUIRED",
-          "capabilityId": "HAS_TLS",
-          "label": "TLS из коробки"
-        },
-        {
-          "id": "REQ_AUTHZ",
-          "type": "CAPABILITY_REQUIRED",
-          "capabilityId": "HAS_AUTHZ",
-          "label": "Контроль доступа"
-        },
         {
           "id": "REQ_FAILOVER",
           "type": "CAPABILITY_REQUIRED",
@@ -1283,6 +4720,8 @@
         {
           "matrixId": "M_CONNECTIVITY",
           "instanceId": "net_l4",
+          "presetId": "MP_NET_EDGE",
+          "preInstalled": false,
           "slots": [
             {
               "slotId": "l4_auth",
@@ -1305,11 +4744,13 @@
               "slotType": "RITUAL_NET"
             }
           ],
-          "installCostGold": 0
+          "installCostGold": 2
         },
         {
           "matrixId": "M_OBSERVATION",
           "instanceId": "obs_l4",
+          "presetId": "MP_OBS_AUDIT_BASIC",
+          "preInstalled": false,
           "slots": [
             {
               "slotId": "l4_logs",
@@ -1324,98 +4765,148 @@
               "slotType": "RITUAL_OBS"
             }
           ],
-          "installCostGold": 0
+          "installCostGold": 1
+        },
+        {
+          "matrixId": "M_CONNECTIVITY",
+          "instanceId": "net_l4_lite",
+          "presetId": "MP_NET_GATE_BASIC",
+          "preInstalled": false,
+          "slots": [
+            {
+              "slotId": "l4_lite_auth",
+              "slotType": "NET_AUTH"
+            },
+            {
+              "slotId": "l4_lite_tls",
+              "slotType": "NET_TLS"
+            },
+            {
+              "slotId": "l4_lite_rit",
+              "slotType": "RITUAL_NET"
+            }
+          ],
+          "installCostGold": 1
         }
       ],
       "defaultInstalled": [
         {
+          "note": "Трафик сервисов не шифруется — данные видны в сети.",
+          "addsDebts": [
+            {
+              "id": "D_TRANSPORT_EXPOSED",
+              "statusIfUnresolved": "F3_COMPROMISE"
+            }
+          ]
+        },
+        {
           "note": "Новые сервисы деплоятся без наблюдаемости — никто не знает, что внутри.",
-          "grantsCapabilities": [],
           "addsDebts": [
             {
               "id": "D_NO_OBSERVABILITY",
               "statusIfUnresolved": "F4_BLINDNESS"
             }
           ]
+        },
+        {
+          "note": "Сервисы не зарегистрированы — посланники не знают, куда идти и живы ли узлы.",
+          "addsDebts": [
+            {
+              "id": "D_HIDDEN_NODES",
+              "statusIfUnresolved": "F5_FRAGILITY"
+            }
+          ]
         }
       ],
       "availableSpells": [
+        "S_GATEWAY_SEAL",
         "S_AUTHZ",
-        "S_TLS_CERT",
         "S_DISCOVERY",
         "S_HEALTHCHECK",
         "S_LOGGING",
         "S_LOG_FILTER",
-        "S_ACCESS_LOGS"
+        "S_ACCESS_LOGS",
+        "S_BROAD_LOGGING",
+        "S_LIB_LOGS"
       ],
       "availableObryads": [
         "R_CANARY",
         "R_PATRON_SEAL",
-        "R_GUARD_TO_BAR"
+        "R_GUARD_TO_BAR",
+        "R_AI_BUFF",
+        "R_ONBOARDING"
       ],
       "nonCriticalStatusAuraPenalty": 2,
       "successReports": [
         "Золотой путь проложен. Каждый новый сервис теперь появляется уже с TLS, логами и healthcheck. Анастасия видит сервисы как на ладони.",
-        "Шаблон работает. Команды больше не гадают — просто разворачивают по стандарту.",
-        "Платформа живёт. Наблюдаемость включена, живучесть обеспечена. Следующий сервис за пятнадцать минут."
+        "Шаблон работает. Команды больше не гадают — просто разворачивают по стандарту."
       ],
       "hints": [
-        "Золотой путь начинается с наблюдаемости — без логов ты слеп.",
-        "Discovery без Healthcheck — красивая иллюзия: сервис «найден», но никто не знает, жив ли он.",
-        "Канарейка — дёшево и тихо снижает ауру: иногда этого достаточно, чтобы уложиться в лимит."
+        "Четыре долга с порога: трафик открыт, доступ не защищён, наблюдаемости нет, узлы скрыты.",
+        "Discovery находит узлы, но порождает новый вопрос: а они живы? Healthcheck отвечает.",
+        "Logging пишет всё подряд — том растёт. Либо фильтруй, либо отправь стражника в бар."
       ],
       "budget": {
-        "gold": 15,
-        "aura": 3
-      }
+        "gold": 17,
+        "aura": 5
+      },
+      "solutions": [
+        {
+          "name": "Путь A — Каскад (Gateway_Seal → Authz + Logging + Log_Filter)",
+          "matrices": [
+            "net_l4",
+            "obs_l4"
+          ],
+          "placements": {
+            "l4_auth": "S_AUTHZ",
+            "l4_tls": "S_GATEWAY_SEAL",
+            "l4_disc1": "S_DISCOVERY",
+            "l4_disc2": "S_HEALTHCHECK",
+            "l4_logs": "S_LOGGING",
+            "l4_filters": "S_LOG_FILTER"
+          },
+          "note": "S_GATEWAY_SEAL → D_OPEN_ACCESS → S_AUTHZ. S_LOGGING → D_LOG_VOLUME → S_LOG_FILTER. 14g карты + 3g матрицы = 17 / 4 ауры."
+        },
+        {
+          "name": "Путь B — Ритуал (Gateway_Seal → Authz + Logging + Guard_To_Bar)",
+          "matrices": [
+            "net_l4",
+            "obs_l4"
+          ],
+          "placements": {
+            "l4_auth": "S_AUTHZ",
+            "l4_tls": "S_GATEWAY_SEAL",
+            "l4_disc1": "S_DISCOVERY",
+            "l4_disc2": "S_HEALTHCHECK",
+            "l4_net_rit": "R_GUARD_TO_BAR",
+            "l4_logs": "S_LOGGING"
+          },
+          "note": "S_GATEWAY_SEAL → D_OPEN_ACCESS → S_AUTHZ. R_GUARD_TO_BAR резолвит D_LOG_VOLUME, -2 ауры. 14g + 3g = 17 / 3 ауры."
+        }
+      ],
+      "maxOptionalMatrices": 2
     },
     {
       "id": "L5_KIRA_API",
       "name": "Автоматон-регистратор Киры",
       "order": 5,
-      "description": "Кира Морозова строит единый API-шлюз для партнёров. Сервис стоит, но без контуров доставки и аудита. Хаотичные деплои ломают стабильность, а кто когда что делал — непонятно.",
+      "description": "Кира Морозова строит единый API-шлюз для партнёров. Шлюз работает, но открыт всем, деплои хаотичны, а аудитного следа нет. Нужны авторизация, зрелый контур доставки (пайплайн, гейты, откат) и журнал доступа.",
       "clientName": "Кира Морозова (партнёрская платформа)",
       "criticalStatuses": [
         "F3_COMPROMISE",
         "F5_FRAGILITY",
-        "F6_NONDELIVERY"
+        "F6_NONDELIVERY",
+        "F8_AUDIT_GAP",
+        "F9_UNREVIEWED_RELEASE",
+        "F10_CONTRACT_DRIFT"
       ],
-      "requirements": [
-        {
-          "id": "REQ_TLS",
-          "type": "CAPABILITY_REQUIRED",
-          "capabilityId": "HAS_TLS",
-          "label": "TLS"
-        },
-        {
-          "id": "REQ_AUTHZ",
-          "type": "CAPABILITY_REQUIRED",
-          "capabilityId": "HAS_AUTHZ",
-          "label": "Контроль доступа партнёров"
-        },
-        {
-          "id": "REQ_FAIL",
-          "type": "CAPABILITY_REQUIRED",
-          "capabilityId": "HAS_FAILOVER",
-          "label": "Failover"
-        },
-        {
-          "id": "REQ_CICD",
-          "type": "CAPABILITY_REQUIRED",
-          "capabilityId": "HAS_CICD",
-          "label": "Воспроизводимая доставка"
-        },
-        {
-          "id": "REQ_AUDIT",
-          "type": "CAPABILITY_REQUIRED",
-          "capabilityId": "HAS_ACCESS_LOGS",
-          "label": "Аудит доступа партнёров"
-        }
-      ],
+      "requirements": [],
       "availableMatrices": [
         {
           "matrixId": "M_CONNECTIVITY",
           "instanceId": "net_l5",
+          "presetId": "MP_NET_GATE_BASIC",
+          "preInstalled": false,
           "slots": [
             {
               "slotId": "l5_auth",
@@ -1426,23 +4917,17 @@
               "slotType": "NET_TLS"
             },
             {
-              "slotId": "l5_disc1",
-              "slotType": "NET_DISCOVERY"
-            },
-            {
-              "slotId": "l5_disc2",
-              "slotType": "NET_DISCOVERY"
-            },
-            {
               "slotId": "l5_net_rit",
               "slotType": "RITUAL_NET"
             }
           ],
-          "installCostGold": 0
+          "installCostGold": 2
         },
         {
           "matrixId": "M_OBSERVATION",
           "instanceId": "obs_l5",
+          "presetId": "MP_OBS_AUDIT_BASIC",
+          "preInstalled": false,
           "slots": [
             {
               "slotId": "l5_logs",
@@ -1457,15 +4942,25 @@
               "slotType": "RITUAL_OBS"
             }
           ],
-          "installCostGold": 0
+          "installCostGold": 1
         },
         {
           "matrixId": "M_DELIVERY",
           "instanceId": "cd_l5",
+          "presetId": "MP_DELIVERY_FULL",
+          "preInstalled": false,
           "slots": [
             {
               "slotId": "l5_pipe",
               "slotType": "CD_PIPELINE"
+            },
+            {
+              "slotId": "l5_gate",
+              "slotType": "CD_GATES"
+            },
+            {
+              "slotId": "l5_contract",
+              "slotType": "CD_TESTING"
             },
             {
               "slotId": "l5_rb",
@@ -1476,102 +4971,187 @@
               "slotType": "RITUAL_CD"
             }
           ],
-          "installCostGold": 0
+          "installCostGold": 1
+        },
+        {
+          "matrixId": "M_CONNECTIVITY",
+          "instanceId": "resilience_l5",
+          "presetId": "MP_NET_RELIABILITY",
+          "preInstalled": false,
+          "slots": [
+            {
+              "slotId": "l5_res_auth",
+              "slotType": "NET_AUTH"
+            },
+            {
+              "slotId": "l5_res_disc1",
+              "slotType": "NET_DISCOVERY"
+            },
+            {
+              "slotId": "l5_res_disc2",
+              "slotType": "NET_DISCOVERY"
+            },
+            {
+              "slotId": "l5_res_rit",
+              "slotType": "RITUAL_NET"
+            }
+          ],
+          "installCostGold": 2
+        },
+        {
+          "matrixId": "M_OBSERVATION",
+          "instanceId": "chronicle_l5",
+          "presetId": "MP_OBS_CHRONICLE",
+          "preInstalled": false,
+          "slots": [
+            {
+              "slotId": "l5_chr_log1",
+              "slotType": "OBS_LOGS"
+            },
+            {
+              "slotId": "l5_chr_log2",
+              "slotType": "OBS_LOGS"
+            },
+            {
+              "slotId": "l5_chr_rit",
+              "slotType": "RITUAL_OBS"
+            }
+          ],
+          "installCostGold": 1
         }
       ],
       "defaultInstalled": [
         {
-          "note": "Сервис деплоился вручную без единого ритуала доставки.",
-          "grantsCapabilities": [],
+          "note": "Шлюз открыт всем — авторизации нет.",
+          "addsDebts": [
+            {
+              "id": "D_OPEN_ACCESS",
+              "statusIfUnresolved": "F3_COMPROMISE"
+            }
+          ]
+        },
+        {
+          "note": "Сервис деплоился вручную — воспроизводимой доставки нет.",
           "addsDebts": [
             {
               "id": "D_NO_CICD",
               "statusIfUnresolved": "F6_NONDELIVERY"
             }
           ]
+        },
+        {
+          "note": "Кто и когда обращался к шлюзу — неизвестно, аудита нет.",
+          "addsDebts": [
+            {
+              "id": "D_AUDIT_NEEDED",
+              "statusIfUnresolved": "F8_AUDIT_GAP"
+            }
+          ]
         }
       ],
       "availableSpells": [
-        "S_TLS_CERT",
         "S_AUTHZ",
-        "S_DISCOVERY",
-        "S_HEALTHCHECK",
         "S_ACCESS_LOGS",
         "S_LOG_FILTER",
-        "S_CICD",
-        "S_ROLLBACK"
+        "S_API_CICD",
+        "S_API_MR_GATES",
+        "S_CONTRACT_TESTS",
+        "S_ROLLBACK",
+        "S_TLS_CERT",
+        "S_GATEWAY_SEAL",
+        "S_DISCOVERY",
+        "S_HEALTHCHECK",
+        "S_LOGGING",
+        "S_BROAD_LOGGING"
       ],
       "availableObryads": [
+        "R_LOG_ARCHIVE",
+        "R_PATRON_SEAL",
         "R_GUARD_TO_BAR",
         "R_CANARY",
-        "R_PATRON_SEAL"
+        "R_AI_BUFF"
       ],
       "nonCriticalStatusAuraPenalty": 2,
       "successReports": [
-        "Партнёры знают куда идти, деплои воспроизводимы, аудит работает. Кира наконец-то спит спокойно.",
-        "API-шлюз стоит крепко. Один партнёр пытался обойти авторизацию — не вышло. Журнал всё зафиксировал.",
-        "Три отдела подключились за день. Умный шлюз не задал ни одного лишнего вопроса."
+        "Доступ закрыт, деплои воспроизводимы, аудит ведётся. Кира наконец-то спит спокойно.",
+        "Один партнёр попытался обойти авторизацию — журнал всё зафиксировал. Шлюз устоял."
       ],
       "hints": [
-        "D_NO_CICD унаследован — без ритуала доставки Кира не примет работу.",
-        "CICD без ROLLBACK — хрупкость: одна ошибка деплоя рушит всё.",
-        "DISCOVERY без HEALTHCHECK — то же самое: мёртвые узлы получают трафик."
+        "Три долга с порога: доступ, ручные деплои и аудит. Остальные риски появляются каскадом, когда ты начинаешь лечить delivery.",
+        "S_API_CICD лечит недоставку, но рождает два хвоста: нужен откат и обязательный MR-гейт.",
+        "S_API_MR_GATES закрывает review gate, но после него всплывает разъезд партнёрских контрактов — нужны S_CONTRACT_TESTS.",
+        "S_ACCESS_LOGS лечит дыру аудита, но пишет много — нужен фильтр или архивный ритуал.",
+        "Печать Мецената в ритуале доставки расширяет лимит ауры — полезно, если берёшь гейты и контрактные тесты."
       ],
       "budget": {
         "gold": 18,
         "aura": 4
-      }
+      },
+      "solutions": [
+        {
+          "name": "Путь A — Стандарт (фильтр логов)",
+          "matrices": [
+            "net_l5",
+            "obs_l5",
+            "cd_l5"
+          ],
+          "placements": {
+            "l5_auth": "S_AUTHZ",
+            "l5_logs": "S_ACCESS_LOGS",
+            "l5_filters": "S_LOG_FILTER",
+            "l5_pipe": "S_API_CICD",
+            "l5_gate": "S_API_MR_GATES",
+            "l5_contract": "S_CONTRACT_TESTS",
+            "l5_rb": "S_ROLLBACK",
+            "l5_cd_rit": "R_PATRON_SEAL"
+          },
+          "note": "S_ACCESS_LOGS → D_ACCESS_LOG_VOLUME → S_LOG_FILTER. S_API_CICD → D_NEEDS_ROLLBACK + D_NO_REVIEW_GATES; S_ROLLBACK и S_API_MR_GATES закрывают хвосты. S_API_MR_GATES → D_PARTNER_CONTRACT_DRIFT → S_CONTRACT_TESTS. 14g карт + 4g матриц = 18 / 5 ауры при лимите 5."
+        },
+        {
+          "name": "Путь B — Релизный контур (MR gates + Печать Мецената)",
+          "matrices": [
+            "net_l5",
+            "obs_l5",
+            "cd_l5"
+          ],
+          "placements": {
+            "l5_auth": "S_AUTHZ",
+            "l5_logs": "S_ACCESS_LOGS",
+            "l5_obs_rit": "R_LOG_ARCHIVE",
+            "l5_pipe": "S_API_CICD",
+            "l5_gate": "S_API_MR_GATES",
+            "l5_contract": "S_CONTRACT_TESTS",
+            "l5_rb": "S_ROLLBACK",
+            "l5_cd_rit": "R_PATRON_SEAL"
+          },
+          "note": "Аудит через S_ACCESS_LOGS + R_LOG_ARCHIVE. Конвейер: S_API_CICD → откат + Страж Врат API; затем S_API_MR_GATES → D_PARTNER_CONTRACT_DRIFT → S_CONTRACT_TESTS. R_PATRON_SEAL (−2g, +2 лимит ауры) вмещает гейты. 14g карт + 4g матриц = 18 / 4 ауры при лимите 5."
+        }
+      ],
+      "maxOptionalMatrices": 3
     },
     {
       "id": "L6_MARK_SHARDING",
       "name": "Голуби Марка",
       "order": 6,
-      "description": "Марк Игоревич создаёт систему шардированных хранилищ. Механические голуби должны знать, куда нести свитки — по постоянному ключу, без переспросов. Система должна выдерживать рост и обеспечивать воспроизводимые деплои.",
+      "description": "Марк Игоревич строит шардированный архив свитков. Три подсистемы: маршрутизация голубей, согласованная схема данных с миграциями, наблюдаемость. Не смешивай два закона маршрутизации без арбитра.",
       "clientName": "Марк Игоревич (архив)",
-      "maxOptionalMatrices": 1,
       "criticalStatuses": [
         "F1_OVERFLOW",
-        "F5_FRAGILITY"
+        "F2_CONTRADICTION",
+        "F5_FRAGILITY",
+        "F11_HOTSPOT",
+        "F12_SPLIT_BRAIN",
+        "F13_DARK_SHARD",
+        "F7_CONFUSION"
       ],
-      "requirements": [
-        {
-          "id": "REQ_ROUTING",
-          "type": "CAPABILITY_REQUIRED",
-          "capabilityId": "HAS_HASH_ROUTING",
-          "label": "Постоянный шардированный роутинг (consistent hashing)"
-        },
-        {
-          "id": "REQ_FAILOVER",
-          "type": "CAPABILITY_REQUIRED",
-          "capabilityId": "HAS_FAILOVER",
-          "label": "Failover при падении шарда"
-        },
-        {
-          "id": "REQ_LOGS",
-          "type": "CAPABILITY_REQUIRED",
-          "capabilityId": "HAS_LOGS",
-          "label": "Наблюдаемость"
-        },
-        {
-          "id": "REQ_CICD",
-          "type": "CAPABILITY_REQUIRED",
-          "capabilityId": "HAS_CICD",
-          "label": "Воспроизводимая доставка"
-        }
-      ],
+      "requirements": [],
       "availableMatrices": [
         {
           "matrixId": "M_CONNECTIVITY",
           "instanceId": "net_l6",
+          "presetId": "MP_NET_SHARD_ROUTING",
+          "preInstalled": false,
           "slots": [
-            {
-              "slotId": "l6_disc1",
-              "slotType": "NET_DISCOVERY"
-            },
-            {
-              "slotId": "l6_disc2",
-              "slotType": "NET_DISCOVERY"
-            },
             {
               "slotId": "l6_route1",
               "slotType": "NET_ROUTING"
@@ -1585,11 +5165,13 @@
               "slotType": "RITUAL_NET"
             }
           ],
-          "installCostGold": 0
+          "installCostGold": 2
         },
         {
           "matrixId": "M_OBSERVATION",
           "instanceId": "obs_l6",
+          "presetId": "MP_OBS_AUDIT_BASIC",
+          "preInstalled": false,
           "slots": [
             {
               "slotId": "l6_logs",
@@ -1604,30 +5186,12 @@
               "slotType": "RITUAL_OBS"
             }
           ],
-          "installCostGold": 0
-        },
-        {
-          "matrixId": "M_DELIVERY",
-          "instanceId": "cd_l6",
-          "slots": [
-            {
-              "slotId": "l6_pipe",
-              "slotType": "CD_PIPELINE"
-            },
-            {
-              "slotId": "l6_rb",
-              "slotType": "CD_ROLLBACK"
-            },
-            {
-              "slotId": "l6_cd_rit",
-              "slotType": "RITUAL_CD"
-            }
-          ],
-          "installCostGold": 0
+          "installCostGold": 1
         },
         {
           "matrixId": "M_STORAGE",
           "instanceId": "st_l6",
+          "presetId": "MP_STORAGE_KEEPER",
           "preInstalled": false,
           "slots": [
             {
@@ -1644,53 +5208,189 @@
             }
           ],
           "installCostGold": 2
+        },
+        {
+          "matrixId": "M_DELIVERY",
+          "instanceId": "cd_l6",
+          "presetId": "MP_DELIVERY_TESTING",
+          "preInstalled": false,
+          "slots": [
+            {
+              "slotId": "l6_pipe",
+              "slotType": "CD_PIPELINE"
+            },
+            {
+              "slotId": "l6_test",
+              "slotType": "CD_TESTING"
+            },
+            {
+              "slotId": "l6_rb",
+              "slotType": "CD_ROLLBACK"
+            },
+            {
+              "slotId": "l6_cd_rit",
+              "slotType": "RITUAL_CD"
+            }
+          ],
+          "installCostGold": 1
+        },
+        {
+          "matrixId": "M_STORAGE",
+          "instanceId": "buffer_l6",
+          "presetId": "MP_STORAGE_BUFFER",
+          "preInstalled": false,
+          "slots": [
+            {
+              "slotId": "l6_buf_route",
+              "slotType": "NET_ROUTING"
+            },
+            {
+              "slotId": "l6_buf_quota",
+              "slotType": "ST_QUOTA"
+            },
+            {
+              "slotId": "l6_buf_rit",
+              "slotType": "RITUAL_NET"
+            }
+          ],
+          "installCostGold": 2
         }
       ],
-      "defaultInstalled": [],
+      "defaultInstalled": [
+        {
+          "note": "Голуби не знают в какой шард лететь — алгоритм маршрутизации не задан.",
+          "addsDebts": [
+            {
+              "id": "D_ROUTING_AMBIGUITY",
+              "statusIfUnresolved": "F7_CONFUSION"
+            }
+          ]
+        },
+        {
+          "note": "Схема данных разошлась между шардами — запросы к разным шардам дают разные поля.",
+          "addsDebts": [
+            {
+              "id": "D_SCHEMA_DRIFT",
+              "statusIfUnresolved": "F12_SPLIT_BRAIN"
+            }
+          ]
+        },
+        {
+          "note": "Ни одного лога — никто не знает куда уходят свитки и есть ли ошибки.",
+          "addsDebts": [
+            {
+              "id": "D_NO_OBSERVABILITY",
+              "statusIfUnresolved": "F4_BLINDNESS"
+            }
+          ]
+        }
+      ],
       "availableSpells": [
-        "S_DISCOVERY",
-        "S_HEALTHCHECK",
-        "S_HASH_ROUTING",
-        "S_LOGGING",
-        "S_LOG_FILTER",
-        "S_ACCESS_LOGS",
-        "S_TTL",
-        "S_QUOTAS",
+        "S_SHARD_KEY",
+        "S_REBALANCER",
+        "S_HOT_KEY_SPLITTER",
+        "S_SCHEMA_GUARD",
+        "S_MIGRATION_DRY_RUN",
+        "S_REPLICATION_MANAGER",
+        "S_QUORUM_KEEPER",
+        "S_REPLICA_SYNC",
+        "S_SHARD_FENCE",
+        "S_SHARD_PROBE",
         "S_CICD",
-        "S_ROLLBACK"
+        "S_ROLLBACK",
+        "S_LOGGING",
+        "S_WRITE_AHEAD_LOG",
+        "S_LOG_FILTER",
+        "S_HASH_ROUTING",
+        "S_POLICY_RESOLVER",
+        "S_ACCESS_LOGS",
+        "S_QUOTAS",
+        "S_TTL"
       ],
       "availableObryads": [
-        "R_CANARY",
+        "R_GUARD_TO_BAR",
         "R_LIBRARY_GRANT",
+        "R_CANARY",
         "R_PATRON_SEAL",
-        "R_GUARD_TO_BAR"
+        "R_LOG_ARCHIVE"
       ],
       "nonCriticalStatusAuraPenalty": 2,
       "successReports": [
-        "Голуби знают куда лететь. Каждый свиток идёт в правильный шард без переспросов. Марк доволен — архив наконец вырос без хаоса.",
-        "Шардированный роутинг работает стабильно. Деплои воспроизводимы. Архив растёт управляемо.",
-        "Система выдержала тестовую нагрузку. Ни один голубь не потерялся."
+        "Голуби знают куда лететь. Каждый свиток попадает в правильный шард без переспросов. Марк доволен — архив вырос без хаоса.",
+        "Схема едина во всех шардах. Миграции проходят без сюрпризов. Летопись фиксирует каждый полёт."
       ],
       "hints": [
-        "Шардированный роутинг без Healthcheck — мёртвый шард будет получать трафик.",
-        "Наблюдаемость нужна — без логов непонятно, куда улетают голуби.",
-        "Опциональную матрицу выбирай осознанно: Взгляд даёт логи, Хранение — квоты для контроля роста."
+        "Три новых дебафа с порога: горячий шард маршрутизации, раскол схемы и тёмный шард без летописи.",
+        "Маршрутизация: Ключ Шардирования и Якорь Сессии вместе без Арбитра — противоречие (F2).",
+        "Ключ Шардирования задаёт маршрут — но шарды сразу растут неравномерно. Перераспределитель лечит дисбаланс, но открывает окно ребаланса и горячий диапазон.",
+        "Страж Схемы фиксирует расхождение — но требует миграцию и сухой прогон backfill. Конвейер доставки и откат обязательны.",
+        "Репликация лечит drift без CI/CD, но рождает lag и split-brain: нужен синхронизатор реплик и хранитель кворума.",
+        "Маршрутно-Складской Буфер экономит матрицу — но без летописи или конвейера останешься слепым или хрупким."
       ],
       "budget": {
-        "gold": 17,
-        "aura": 4
-      }
+        "gold": 24,
+        "aura": 6
+      },
+      "solutions": [
+        {
+          "name": "Путь A — Технический (S_LOG_FILTER)",
+          "matrices": [
+            "net_l6",
+            "obs_l6",
+            "st_l6",
+            "cd_l6"
+          ],
+          "placements": {
+            "l6_route1": "S_SHARD_KEY",
+            "l6_route2": "S_HOT_KEY_SPLITTER",
+            "l6_quota": "S_REBALANCER",
+            "l6_ret": "S_SCHEMA_GUARD",
+            "l6_pipe": "S_CICD",
+            "l6_test": "S_MIGRATION_DRY_RUN",
+            "l6_rb": "S_ROLLBACK",
+            "l6_logs": "S_LOGGING",
+            "l6_filters": "S_LOG_FILTER"
+          },
+          "note": "S_SHARD_KEY→D_SHARD_IMBALANCE→S_REBALANCER→D_REBALANCE_WINDOW + D_HOT_PARTITION; S_MIGRATION_DRY_RUN и S_HOT_KEY_SPLITTER закрывают хвосты. S_SCHEMA_GUARD→D_NEEDS_MIGRATION + D_BACKFILL_UNVERIFIED→S_CICD/S_ROLLBACK + dry-run. 18g+6g=24 / 5 аур."
+        },
+        {
+          "name": "Путь B — Ритуал (R_GUARD_TO_BAR вместо S_LOG_FILTER)",
+          "matrices": [
+            "net_l6",
+            "obs_l6",
+            "st_l6",
+            "cd_l6"
+          ],
+          "placements": {
+            "l6_route1": "S_SHARD_KEY",
+            "l6_route2": "S_HOT_KEY_SPLITTER",
+            "l6_quota": "S_REBALANCER",
+            "l6_ret": "S_SCHEMA_GUARD",
+            "l6_pipe": "S_CICD",
+            "l6_test": "S_MIGRATION_DRY_RUN",
+            "l6_rb": "S_ROLLBACK",
+            "l6_logs": "S_LOGGING",
+            "l6_net_rit": "R_GUARD_TO_BAR"
+          },
+          "note": "R_GUARD_TO_BAR резолвит D_LOG_VOLUME и даёт -2 ауры. Шардовая цепочка закрыта через hot-key splitter + dry-run. 18g+6g=24 / 4 ауры."
+        }
+      ],
+      "maxOptionalMatrices": 3
     },
     {
       "id": "L7_EDWARD_MULTIDC",
       "name": "Ковчеги Эдуарда",
       "order": 7,
-      "description": "Эдуард строит резервные обелиски в двух локациях. Система должна пережить полное падение одного дата-центра — без героизма, без ручного вмешательства. Все метрики, все доставки, весь доступ — под контролем.",
+      "description": "Эдуард строит резервные обелиски в двух локациях. Доступно семь контуров, но на площадку влезают только четыре. Нужно выбрать матрицы так, чтобы пережить падение дата-центра, проверить аварийное переключение и не захлебнуться на резерве.",
       "clientName": "Эдуард (инфраструктура)",
+      "maxOptionalMatrices": 4,
       "criticalStatuses": [
         "F5_FRAGILITY",
         "F1_OVERFLOW",
-        "F3_COMPROMISE"
+        "F3_COMPROMISE",
+        "F6_NONDELIVERY",
+        "F15_FAILOVER_LOOP",
+        "F16_CAPACITY_GAP"
       ],
       "requirements": [
         {
@@ -1728,12 +5428,32 @@
           "type": "CAPABILITY_REQUIRED",
           "capabilityId": "HAS_QUOTAS",
           "label": "Квоты — контроль роста в обоих DC"
+        },
+        {
+          "id": "REQ_REGION_RECONCILE",
+          "type": "CAPABILITY_REQUIRED",
+          "capabilityId": "HAS_REGION_RECONCILE",
+          "label": "Сверка конфигурации регионов"
+        },
+        {
+          "id": "REQ_DR_DRILL",
+          "type": "CAPABILITY_REQUIRED",
+          "capabilityId": "HAS_DR_DRILL",
+          "label": "Проверенное аварийное переключение"
+        },
+        {
+          "id": "REQ_RESERVE_CAPACITY",
+          "type": "CAPABILITY_REQUIRED",
+          "capabilityId": "HAS_RESERVE_CAPACITY",
+          "label": "Резервная ёмкость второго DC"
         }
       ],
       "availableMatrices": [
         {
           "matrixId": "M_CONNECTIVITY",
-          "instanceId": "net_l7",
+          "instanceId": "edge_l7",
+          "presetId": "MP_NET_EDGE",
+          "preInstalled": false,
           "slots": [
             {
               "slotId": "l7_auth",
@@ -1744,23 +5464,25 @@
               "slotType": "NET_TLS"
             },
             {
-              "slotId": "l7_disc1",
+              "slotId": "l7_disc",
               "slotType": "NET_DISCOVERY"
             },
             {
-              "slotId": "l7_disc2",
+              "slotId": "l7_heart",
               "slotType": "NET_DISCOVERY"
             },
             {
-              "slotId": "l7_net_rit",
+              "slotId": "l7_edge_rit",
               "slotType": "RITUAL_NET"
             }
           ],
-          "installCostGold": 0
+          "installCostGold": 1
         },
         {
           "matrixId": "M_OBSERVATION",
-          "instanceId": "obs_l7",
+          "instanceId": "audit_l7",
+          "presetId": "MP_OBS_AUDIT_BASIC",
+          "preInstalled": false,
           "slots": [
             {
               "slotId": "l7_logs",
@@ -1775,14 +5497,16 @@
               "slotType": "RITUAL_OBS"
             }
           ],
-          "installCostGold": 0
+          "installCostGold": 1
         },
         {
           "matrixId": "M_STORAGE",
-          "instanceId": "st_l7",
+          "instanceId": "capacity_l7",
+          "presetId": "MP_STORAGE_KEEPER",
+          "preInstalled": false,
           "slots": [
             {
-              "slotId": "l7_ret",
+              "slotId": "l7_capacity",
               "slotType": "ST_RETENTION"
             },
             {
@@ -1794,11 +5518,13 @@
               "slotType": "RITUAL_ST"
             }
           ],
-          "installCostGold": 0
+          "installCostGold": 1
         },
         {
           "matrixId": "M_DELIVERY",
-          "instanceId": "cd_l7",
+          "instanceId": "release_l7",
+          "presetId": "MP_DELIVERY_FULL",
+          "preInstalled": false,
           "slots": [
             {
               "slotId": "l7_pipe",
@@ -1809,6 +5535,10 @@
               "slotType": "CD_GATES"
             },
             {
+              "slotId": "l7_drill",
+              "slotType": "CD_TESTING"
+            },
+            {
               "slotId": "l7_rb",
               "slotType": "CD_ROLLBACK"
             },
@@ -1817,17 +5547,95 @@
               "slotType": "RITUAL_CD"
             }
           ],
-          "installCostGold": 0
+          "installCostGold": 1
+        },
+        {
+          "matrixId": "M_CONNECTIVITY",
+          "instanceId": "traffic_l7",
+          "presetId": "MP_NET_TRAFFIC",
+          "preInstalled": false,
+          "slots": [
+            {
+              "slotId": "l7_route",
+              "slotType": "NET_ROUTING"
+            },
+            {
+              "slotId": "l7_traffic_disc",
+              "slotType": "NET_DISCOVERY"
+            },
+            {
+              "slotId": "l7_traffic_rit",
+              "slotType": "RITUAL_NET"
+            }
+          ],
+          "installCostGold": 1
+        },
+        {
+          "matrixId": "M_OBSERVATION",
+          "instanceId": "compliance_l7",
+          "presetId": "MP_OBS_COMPLIANCE",
+          "preInstalled": false,
+          "slots": [
+            {
+              "slotId": "l7_comp_logs",
+              "slotType": "OBS_LOGS"
+            },
+            {
+              "slotId": "l7_comp_gate",
+              "slotType": "CD_GATES"
+            },
+            {
+              "slotId": "l7_comp_drill",
+              "slotType": "CD_TESTING"
+            },
+            {
+              "slotId": "l7_comp_rit",
+              "slotType": "RITUAL_OBS"
+            }
+          ],
+          "installCostGold": 1
+        },
+        {
+          "matrixId": "M_STORAGE",
+          "instanceId": "reserve_l7",
+          "presetId": "MP_STORAGE_RESERVE",
+          "preInstalled": false,
+          "slots": [
+            {
+              "slotId": "l7_reserve_capacity",
+              "slotType": "ST_RETENTION"
+            },
+            {
+              "slotId": "l7_reserve_quota",
+              "slotType": "ST_QUOTA"
+            },
+            {
+              "slotId": "l7_reserve_route",
+              "slotType": "NET_ROUTING"
+            },
+            {
+              "slotId": "l7_reserve_rit",
+              "slotType": "RITUAL_NET"
+            }
+          ],
+          "installCostGold": 1
         }
       ],
       "defaultInstalled": [
         {
           "note": "Первый ковчег деплоился вручную без стандарта — нет ритуала доставки.",
-          "grantsCapabilities": [],
           "addsDebts": [
             {
               "id": "D_NO_CICD",
               "statusIfUnresolved": "F6_NONDELIVERY"
+            },
+            {
+              "id": "D_FAILOVER_LOOP",
+              "statusIfUnresolved": "F15_FAILOVER_LOOP"
+            },
+            {
+              "id": "D_RESERVE_CAPACITY_GAP",
+              "statusIfUnresolved": "F16_CAPACITY_GAP"
             }
           ]
         }
@@ -1836,16 +5644,21 @@
         "S_AUTHZ",
         "S_TLS_CERT",
         "S_DISCOVERY",
-        "S_HEALTHCHECK",
+        "S_GLOBAL_HEALTHCHECK",
         "S_LOGGING",
         "S_LOG_FILTER",
         "S_ACCESS_LOGS",
         "S_TTL",
         "S_QUOTAS",
         "S_ROTATION",
+        "S_CAPACITY_MIRROR",
         "S_CICD",
         "S_ROLLBACK",
-        "S_MR_GATES"
+        "S_MR_GATES",
+        "S_REGION_RECONCILER",
+        "S_MULTI_REGION_DRILL",
+        "S_TRAFFIC_SPLIT",
+        "S_QUORUM_KEEPER"
       ],
       "availableObryads": [
         "R_CANARY",
@@ -1856,18 +5669,67 @@
       "nonCriticalStatusAuraPenalty": 2,
       "successReports": [
         "Ковчеги запущены! Первый DC упал на 3 минуты — система даже не заметила. Второй принял трафик автоматически. Эдуард молча кивает — это значит 'отлично'.",
-        "Оба обелиска работают в синхронном режиме. Деплои происходят в обе локации без ручного вмешательства. Это и есть надёжность без героизма.",
-        "Аудит чист, квоты держат, rollback на месте. Инфраструктура готова к следующему уровню нагрузки."
+        "Оба обелиска работают в синхронном режиме. Деплои происходят в обе локации без ручного вмешательства. Это и есть надёжность без героизма."
       ],
       "hints": [
-        "Failover между DC — это не просто Discovery: нужен Healthcheck, иначе мёртвый DC будет получать трафик.",
-        "Квоты критичны: без них один DC захлебнётся, а второй не поможет.",
-        "Ковчег унаследовал долг D_NO_CICD — без ритуала доставки нельзя синхронизировать оба DC."
+        "У тебя семь матриц, но можно установить только четыре: выбирай контуры, которые закрывают не только DoD, но и стартовые долги.",
+        "Обычный Discovery не лечит D_FAILOVER_LOOP — нужен S_GLOBAL_HEALTHCHECK, а после него обязательное DR-учение.",
+        "S_REGION_RECONCILER остаётся обязательной зрелой проверкой релиза, но больше не порождает отдельный дебаф.",
+        "S_CAPACITY_MIRROR спасает резервную ёмкость, но добавляет D_MIRROR_QUOTA_GAP: без S_QUOTAS второй DC переполнится."
       ],
       "budget": {
-        "gold": 24,
-        "aura": 5
-      }
+        "gold": 30,
+        "aura": 9
+      },
+      "solutions": [
+        {
+          "name": "Путь A — Edge + Audit + Capacity + Release",
+          "matrices": [
+            "edge_l7",
+            "audit_l7",
+            "capacity_l7",
+            "release_l7"
+          ],
+          "placements": {
+            "l7_auth": "S_AUTHZ",
+            "l7_tls": "S_TLS_CERT",
+            "l7_disc": "S_DISCOVERY",
+            "l7_heart": "S_GLOBAL_HEALTHCHECK",
+            "l7_logs": "S_LOGGING",
+            "l7_filters": "S_LOG_FILTER",
+            "l7_capacity": "S_CAPACITY_MIRROR",
+            "l7_quota": "S_QUOTAS",
+            "l7_pipe": "S_CICD",
+            "l7_rb": "S_ROLLBACK",
+            "l7_gate": "S_REGION_RECONCILER",
+            "l7_drill": "S_MULTI_REGION_DRILL"
+          },
+          "note": "30 монет / 7 ауры (сумма карт). Полный классический путь: отдельная наблюдаемость, отдельная ёмкость, полный release-контур."
+        },
+        {
+          "name": "Путь B — Edge + Compliance + Reserve + Release",
+          "matrices": [
+            "edge_l7",
+            "compliance_l7",
+            "reserve_l7",
+            "release_l7"
+          ],
+          "placements": {
+            "l7_auth": "S_AUTHZ",
+            "l7_tls": "S_TLS_CERT",
+            "l7_disc": "S_DISCOVERY",
+            "l7_heart": "S_GLOBAL_HEALTHCHECK",
+            "l7_comp_logs": "S_LOGGING",
+            "l7_comp_gate": "S_REGION_RECONCILER",
+            "l7_comp_drill": "S_MULTI_REGION_DRILL",
+            "l7_reserve_capacity": "S_CAPACITY_MIRROR",
+            "l7_reserve_quota": "S_QUOTAS",
+            "l7_pipe": "S_CICD",
+            "l7_rb": "S_ROLLBACK"
+          },
+          "note": "28 монет / 8 ауры (сумма карт). Альтернативный путь: проверки вынесены в комплаенс-контур, резервная матрица закрывает ёмкость и квоты."
+        }
+      ]
     },
     {
       "id": "L1_LIBRARY_ORBS",
@@ -1899,6 +5761,7 @@
         {
           "matrixId": "M_STORAGE",
           "instanceId": "st1",
+          "presetId": "MP_STORAGE_INDEXED",
           "preInstalled": true,
           "slots": [
             {
@@ -1919,6 +5782,7 @@
         {
           "matrixId": "M_CONNECTIVITY",
           "instanceId": "net1",
+          "presetId": "MP_NET_ROUTING_ONLY",
           "preInstalled": false,
           "slots": [
             {
@@ -1931,6 +5795,7 @@
         {
           "matrixId": "M_OBSERVATION",
           "instanceId": "obs1",
+          "presetId": "MP_OBS_AUDIT_BASIC",
           "preInstalled": false,
           "slots": [
             {
@@ -1940,6 +5805,10 @@
             {
               "slotId": "obs1_filters",
               "slotType": "OBS_FILTERS"
+            },
+            {
+              "slotId": "obs1_ritual",
+              "slotType": "RITUAL_OBS"
             }
           ],
           "installCostGold": 2
@@ -1948,7 +5817,6 @@
       "defaultInstalled": [
         {
           "note": "Предыдущий маг оставил неуправляемый индекс.",
-          "grantsCapabilities": [],
           "addsDebts": [
             {
               "id": "D_INDEX_GROWTH",
@@ -1956,7 +5824,7 @@
             },
             {
               "id": "D_AUDIT_NEEDED",
-              "statusIfUnresolved": "F4_BLINDNESS"
+              "statusIfUnresolved": "F8_AUDIT_GAP"
             }
           ]
         }
@@ -2039,6 +5907,7 @@
         {
           "matrixId": "M_CONNECTIVITY",
           "instanceId": "net_pass",
+          "presetId": "MP_NET_EDGE_ROUTING",
           "preInstalled": false,
           "slots": [
             {
@@ -2067,6 +5936,7 @@
         {
           "matrixId": "M_OBSERVATION",
           "instanceId": "obs_pass",
+          "presetId": "MP_OBS_AUDIT_BASIC",
           "preInstalled": false,
           "slots": [
             {
@@ -2076,6 +5946,10 @@
             {
               "slotId": "pass_filters",
               "slotType": "OBS_FILTERS"
+            },
+            {
+              "slotId": "pass_obs_rit",
+              "slotType": "RITUAL_OBS"
             }
           ],
           "installCostGold": 2
@@ -2083,6 +5957,7 @@
         {
           "matrixId": "M_STORAGE",
           "instanceId": "st_pass",
+          "presetId": "MP_STORAGE_KEEPER",
           "preInstalled": false,
           "slots": [
             {
@@ -2092,6 +5967,10 @@
             {
               "slotId": "pass_quota",
               "slotType": "ST_QUOTA"
+            },
+            {
+              "slotId": "pass_st_rit",
+              "slotType": "RITUAL_ST"
             }
           ],
           "installCostGold": 2
@@ -2099,6 +5978,7 @@
         {
           "matrixId": "M_DELIVERY",
           "instanceId": "cd_pass",
+          "presetId": "MP_DELIVERY_MINIMAL",
           "preInstalled": false,
           "slots": [
             {
@@ -2116,11 +5996,10 @@
       "defaultInstalled": [
         {
           "note": "Башня работает, но никто не ведёт записей о посетителях.",
-          "grantsCapabilities": [],
           "addsDebts": [
             {
               "id": "D_AUDIT_NEEDED",
-              "statusIfUnresolved": "F4_BLINDNESS"
+              "statusIfUnresolved": "F8_AUDIT_GAP"
             }
           ]
         }
@@ -2206,6 +6085,7 @@
         {
           "matrixId": "M_CONNECTIVITY",
           "instanceId": "net1",
+          "presetId": "MP_NET_INFRA_POST",
           "slots": [
             {
               "slotId": "net1_dns",
@@ -2222,6 +6102,10 @@
             {
               "slotId": "net1_disc2",
               "slotType": "NET_DISCOVERY"
+            },
+            {
+              "slotId": "net1_rit",
+              "slotType": "RITUAL_NET"
             }
           ],
           "installCostGold": 0
@@ -2229,6 +6113,7 @@
         {
           "matrixId": "M_OBSERVATION",
           "instanceId": "obs1",
+          "presetId": "MP_OBS_DOUBLE_LOG_FILTER",
           "slots": [
             {
               "slotId": "obs1_logs1",
@@ -2248,6 +6133,7 @@
         {
           "matrixId": "M_STORAGE",
           "instanceId": "st1",
+          "presetId": "MP_STORAGE_KEEPER",
           "slots": [
             {
               "slotId": "st1_ret",
@@ -2256,6 +6142,10 @@
             {
               "slotId": "st1_quota",
               "slotType": "ST_QUOTA"
+            },
+            {
+              "slotId": "st1_rit",
+              "slotType": "RITUAL_ST"
             }
           ],
           "installCostGold": 0
@@ -2263,6 +6153,7 @@
         {
           "matrixId": "M_DELIVERY",
           "instanceId": "cd1",
+          "presetId": "MP_DELIVERY_GATES",
           "slots": [
             {
               "slotId": "cd1_pipe",
@@ -2359,6 +6250,7 @@
         {
           "matrixId": "M_CONNECTIVITY",
           "instanceId": "net3",
+          "presetId": "MP_NET_EDGE",
           "preInstalled": false,
           "slots": [
             {
@@ -2376,6 +6268,10 @@
             {
               "slotId": "net3_disc2",
               "slotType": "NET_DISCOVERY"
+            },
+            {
+              "slotId": "net3_rit",
+              "slotType": "RITUAL_NET"
             }
           ],
           "installCostGold": 2
@@ -2383,6 +6279,7 @@
         {
           "matrixId": "M_OBSERVATION",
           "instanceId": "obs3",
+          "presetId": "MP_OBS_ALERTING",
           "preInstalled": false,
           "slots": [
             {
@@ -2403,6 +6300,7 @@
         {
           "matrixId": "M_STORAGE",
           "instanceId": "st3",
+          "presetId": "MP_STORAGE_KEEPER",
           "preInstalled": false,
           "slots": [
             {
@@ -2412,6 +6310,10 @@
             {
               "slotId": "st3_quota",
               "slotType": "ST_QUOTA"
+            },
+            {
+              "slotId": "st3_rit",
+              "slotType": "RITUAL_ST"
             }
           ],
           "installCostGold": 2
@@ -2419,6 +6321,7 @@
         {
           "matrixId": "M_DELIVERY",
           "instanceId": "cd3",
+          "presetId": "MP_DELIVERY_GATES",
           "preInstalled": false,
           "slots": [
             {

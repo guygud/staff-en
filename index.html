@@ -18,9 +18,12 @@
   <p id="briefing-client" class="briefing-client"></p>
 
   <p id="briefing-description" class="briefing-description"></p>
+  <p id="briefing-item" class="briefing-item" style="display:none"></p>
 
-  <p class="section-title">Требования заказчика</p>
-  <ul id="briefing-requirements"></ul>
+  <div id="briefing-requirements-section">
+    <p class="section-title">Требования заказчика</p>
+    <ul id="briefing-requirements"></ul>
+  </div>
 
   <div class="briefing-resources">
     <div class="resource-pill">Бюджет: <span id="briefing-budget"></span></div>
@@ -32,7 +35,7 @@
     <div id="briefing-debuffs"></div>
   </div>
 
-  <div class="hint-box">
+  <div id="briefing-hints-section" class="hint-box">
     <div id="briefing-hints"></div>
   </div>
 
@@ -51,8 +54,11 @@
     <span id="hud-gold" class="hud-resource"></span>
     <span id="hud-risk" class="hud-resource"></span>
     <span class="hud-divider">|</span>
-    <span class="hud-group-label">Долги</span>
+    <span class="hud-group-label">Симптомы</span>
     <div id="hud-statuses"></div>
+    <span class="hud-group-label hud-treat-label">Лечение</span>
+    <div id="hud-treatments" class="hud-treatments"></div>
+    <button id="btn-show-solution" class="btn-hint-hud" title="Показать решения">💡</button>
   </div>
 
   <!-- Main area -->
@@ -65,15 +71,17 @@
       <div id="sidebar-client" class="sidebar-client"></div>
       <p id="sidebar-description" class="sidebar-description"></p>
 
-      <p class="sidebar-section-title">Требования</p>
-      <ul id="sidebar-requirements" class="sidebar-requirements"></ul>
+      <div id="sidebar-requirements-section">
+        <p class="sidebar-section-title">Требования</p>
+        <ul id="sidebar-requirements" class="sidebar-requirements"></ul>
+      </div>
 
       <div class="sidebar-debuffs">
         <p class="sidebar-debuffs-title">Стартовые дебафы</p>
         <div id="sidebar-debuffs"></div>
       </div>
 
-      <div class="sidebar-hints">
+      <div id="sidebar-hints-section" class="sidebar-hints">
         <div id="sidebar-hints"></div>
       </div>
     </div>
@@ -160,6 +168,20 @@
     ✦ Все уровни пройдены. Ты настоящий Техно-Маг. ✦
   </div>
 
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════
+     SOLUTION MODAL
+════════════════════════════════════════════════════════════════ -->
+<div id="solution-modal" class="solution-modal" style="display:none">
+  <div class="solution-modal-backdrop"></div>
+  <div class="solution-modal-box">
+    <div class="solution-modal-header">
+      <h2 class="solution-modal-title">💡 Решения</h2>
+      <button id="solution-modal-close" class="solution-modal-close">✕</button>
+    </div>
+    <div id="solution-modal-body" class="solution-modal-body"></div>
+  </div>
 </div>
 
 <script type="module" src="ui.js"></script>

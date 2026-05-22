@@ -2,73 +2,183 @@
   "levelId": "L7_EDWARD_MULTIDC",
   "scenarios": [
     {
-      "name": "Путь A — Классический Multi-DC (без обрядов)",
+      "name": "Путь A — Edge + Audit + Capacity + Release",
       "placements": {
-        "l7_auth": "S_AUTHZ",
-        "l7_tls": "S_TLS_CERT",
-        "l7_disc1": "S_DISCOVERY",
-        "l7_disc2": "S_HEALTHCHECK",
-        "l7_logs": "S_LOGGING",
-        "l7_quota": "S_QUOTAS",
-        "l7_pipe": "S_CICD",
-        "l7_rb": "S_ROLLBACK"
+        "l7_auth":     "S_AUTHZ",
+        "l7_tls":      "S_TLS_CERT",
+        "l7_disc":     "S_DISCOVERY",
+        "l7_heart":    "S_GLOBAL_HEALTHCHECK",
+        "l7_logs":     "S_LOGGING",
+        "l7_filters":  "S_LOG_FILTER",
+        "l7_capacity": "S_CAPACITY_MIRROR",
+        "l7_quota":    "S_QUOTAS",
+        "l7_pipe":     "S_CICD",
+        "l7_rb":       "S_ROLLBACK",
+        "l7_gate":     "S_REGION_RECONCILER",
+        "l7_drill":    "S_MULTI_REGION_DRILL"
       },
-      "installedMatrixIds": [],
+      "installedMatrixIds": ["edge_l7", "audit_l7", "capacity_l7", "release_l7"],
       "expected": {
         "outcome": "pass",
         "missingRequirements": [],
         "fatalStatuses": [],
         "coinsSpentRange": [
-          18,
-          18
+          30,
+          30
         ],
         "auraTotalRange": [
-          4,
-          4
+          7,
+          7
         ]
       }
     },
     {
-      "name": "Путь B — Multi-DC с Кнарейкой и LOG_FILTER",
+      "name": "Путь B — Edge + Compliance + Reserve + Release",
       "placements": {
-        "l7_auth": "S_AUTHZ",
-        "l7_tls": "S_TLS_CERT",
-        "l7_disc1": "S_DISCOVERY",
-        "l7_disc2": "S_HEALTHCHECK",
-        "l7_logs": "S_LOGGING",
+        "l7_auth":             "S_AUTHZ",
+        "l7_tls":              "S_TLS_CERT",
+        "l7_disc":             "S_DISCOVERY",
+        "l7_heart":            "S_GLOBAL_HEALTHCHECK",
+        "l7_comp_logs":        "S_LOGGING",
+        "l7_comp_gate":        "S_REGION_RECONCILER",
+        "l7_comp_drill":       "S_MULTI_REGION_DRILL",
+        "l7_reserve_capacity": "S_CAPACITY_MIRROR",
+        "l7_reserve_quota":    "S_QUOTAS",
+        "l7_pipe":             "S_CICD",
+        "l7_rb":               "S_ROLLBACK"
+      },
+      "installedMatrixIds": ["edge_l7", "compliance_l7", "reserve_l7", "release_l7"],
+      "expected": {
+        "outcome": "pass",
+        "missingRequirements": [],
+        "fatalStatuses": [],
+        "coinsSpentRange": [
+          28,
+          28
+        ],
+        "auraTotalRange": [
+          8,
+          8
+        ]
+      }
+    },
+    {
+      "name": "Ловушка 1 — Нет глобального healthcheck (F15_FAILOVER_LOOP)",
+      "placements": {
+        "l7_auth":     "S_AUTHZ",
+        "l7_tls":      "S_TLS_CERT",
+        "l7_disc":     "S_DISCOVERY",
+        "l7_logs":     "S_LOGGING",
+        "l7_filters":  "S_LOG_FILTER",
+        "l7_capacity": "S_CAPACITY_MIRROR",
+        "l7_quota":    "S_QUOTAS",
+        "l7_pipe":     "S_CICD",
+        "l7_rb":       "S_ROLLBACK",
+        "l7_gate":     "S_REGION_RECONCILER",
+        "l7_drill":    "S_MULTI_REGION_DRILL"
+      },
+      "installedMatrixIds": ["edge_l7", "audit_l7", "capacity_l7", "release_l7"],
+      "expected": {
+        "outcome": "fail",
+        "fatalStatuses": [
+          "F15_FAILOVER_LOOP",
+          "F5_FRAGILITY"
+        ],
+        "missingRequirementsContains": [
+          "REQ_FAIL"
+        ]
+      }
+    },
+    {
+      "name": "Ловушка 2 — Нет сверки регионов (только requirement)",
+      "placements": {
+        "l7_auth":     "S_AUTHZ",
+        "l7_tls":      "S_TLS_CERT",
+        "l7_disc":     "S_DISCOVERY",
+        "l7_heart":    "S_GLOBAL_HEALTHCHECK",
+        "l7_logs":     "S_LOGGING",
+        "l7_filters":  "S_LOG_FILTER",
+        "l7_capacity": "S_CAPACITY_MIRROR",
+        "l7_quota":    "S_QUOTAS",
+        "l7_pipe":     "S_CICD",
+        "l7_rb":       "S_ROLLBACK",
+        "l7_drill":    "S_MULTI_REGION_DRILL"
+      },
+      "installedMatrixIds": ["edge_l7", "audit_l7", "capacity_l7", "release_l7"],
+      "expected": {
+        "outcome": "fail",
+        "fatalStatuses": [],
+        "missingRequirementsContains": [
+          "REQ_REGION_RECONCILE"
+        ]
+      }
+    },
+    {
+      "name": "Ловушка 3 — Сверили регионы, но не провели DR-учение",
+      "placements": {
+        "l7_auth":     "S_AUTHZ",
+        "l7_tls":      "S_TLS_CERT",
+        "l7_disc":     "S_DISCOVERY",
+        "l7_heart":    "S_GLOBAL_HEALTHCHECK",
+        "l7_logs":     "S_LOGGING",
+        "l7_filters":  "S_LOG_FILTER",
+        "l7_capacity": "S_CAPACITY_MIRROR",
+        "l7_quota":    "S_QUOTAS",
+        "l7_pipe":     "S_CICD",
+        "l7_rb":       "S_ROLLBACK",
+        "l7_gate":     "S_REGION_RECONCILER"
+      },
+      "installedMatrixIds": ["edge_l7", "audit_l7", "capacity_l7", "release_l7"],
+      "expected": {
+        "outcome": "fail",
+        "fatalStatuses": [
+          "F5_FRAGILITY"
+        ],
+        "missingRequirementsContains": [
+          "REQ_DR_DRILL"
+        ]
+      }
+    },
+    {
+      "name": "Ловушка 4 — Нет зеркала ёмкости (F16_CAPACITY_GAP)",
+      "placements": {
+        "l7_auth":    "S_AUTHZ",
+        "l7_tls":     "S_TLS_CERT",
+        "l7_disc":    "S_DISCOVERY",
+        "l7_heart":   "S_GLOBAL_HEALTHCHECK",
+        "l7_logs":    "S_LOGGING",
         "l7_filters": "S_LOG_FILTER",
-        "l7_quota": "S_QUOTAS",
-        "l7_pipe": "S_CICD",
-        "l7_rb": "S_ROLLBACK",
-        "l7_obs_rit": "R_CANARY"
+        "l7_quota":   "S_QUOTAS",
+        "l7_pipe":    "S_CICD",
+        "l7_rb":      "S_ROLLBACK",
+        "l7_gate":    "S_REGION_RECONCILER",
+        "l7_drill":   "S_MULTI_REGION_DRILL"
       },
-      "installedMatrixIds": [],
+      "installedMatrixIds": ["edge_l7", "audit_l7", "capacity_l7", "release_l7"],
       "expected": {
-        "outcome": "pass",
-        "missingRequirements": [],
-        "fatalStatuses": [],
-        "coinsSpentRange": [
-          21,
-          21
+        "outcome": "fail",
+        "fatalStatuses": [
+          "F16_CAPACITY_GAP"
         ],
-        "auraTotalRange": [
-          3,
-          3
+        "missingRequirementsContains": [
+          "REQ_RESERVE_CAPACITY"
         ]
       }
     },
     {
-      "name": "Ловушка — Нет квот (F1_OVERFLOW)",
+      "name": "Ловушка 5 — Есть зеркало, но нет квот (F1_OVERFLOW)",
       "placements": {
-        "l7_auth": "S_AUTHZ",
-        "l7_tls": "S_TLS_CERT",
-        "l7_disc1": "S_DISCOVERY",
-        "l7_disc2": "S_HEALTHCHECK",
-        "l7_logs": "S_LOGGING",
-        "l7_pipe": "S_CICD",
-        "l7_rb": "S_ROLLBACK"
+        "l7_auth":     "S_AUTHZ",
+        "l7_tls":      "S_TLS_CERT",
+        "l7_disc":     "S_DISCOVERY",
+        "l7_heart":    "S_GLOBAL_HEALTHCHECK",
+        "l7_capacity": "S_CAPACITY_MIRROR",
+        "l7_pipe":     "S_CICD",
+        "l7_rb":       "S_ROLLBACK",
+        "l7_gate":     "S_REGION_RECONCILER",
+        "l7_drill":    "S_MULTI_REGION_DRILL"
       },
-      "installedMatrixIds": [],
+      "installedMatrixIds": ["edge_l7", "audit_l7", "capacity_l7", "release_l7"],
       "expected": {
         "outcome": "fail",
         "fatalStatuses": [

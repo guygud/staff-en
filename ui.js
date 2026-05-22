@@ -57,54 +57,126 @@ function renderPhase() {
   else if (phase === 'RESULT') renderResult();
 }
 
+/** Слой плейтеста из new/*.csv (meta.playtestBrief), без требований/подсказок из JSON. */
+function getPlaytestBrief(level) {
+  const m = engine.data.meta;
+  if (m?.compiledFrom !== 'new' || !m?.playtestBrief) return null;
+  return m.playtestBrief[level.id] ?? null;
+}
+
+function stripPlaytestSymptomLabel(raw) {
+  const s = String(raw ?? '').trim();
+  const m = s.match(/[А-Яа-яЁёA-Za-z0-9].*$/);
+  return m ? m[0].trim() : s;
+}
+
 // ─── Screen: Briefing ─────────────────────────────────────────────────────────
 
 function renderBriefing() {
   show('screen-briefing');
   const level = engine.currentLevel;
   const data = engine.data;
+  const pb = getPlaytestBrief(level);
 
-  qs('#briefing-level-num').textContent = `Уровень ${level.order}`;
-  qs('#briefing-level-name').textContent = level.name;
-  qs('#briefing-client').textContent = `Заказчик: ${level.clientName}`;
-  qs('#briefing-description').textContent = level.description;
+  const reqSec = qs('#briefing-requirements-section');
+  const hintsSec = qs('#briefing-hints-section');
+  const itemEl = qs('#briefing-item');
 
-  // Requirements
-  const reqList = qs('#briefing-requirements');
-  reqList.innerHTML = '';
-  for (const req of level.requirements) {
-    const li = el('li');
-    li.innerHTML = `<span class="req-icon">◆</span> ${req.label}`;
-    reqList.appendChild(li);
-  }
-
-  // Budget & risk
-  qs('#briefing-budget').textContent = `${level.budget?.gold} ⚗ монет`;
-  qs('#briefing-risk').textContent = `до ${level.budget?.aura} ☠ ауры`;
-
-  // Стартовые дебафы (из defaultInstalled.addsDebts)
-  const debuffsContainer = qs('#briefing-debuffs');
-  debuffsContainer.innerHTML = '';
-  const inheritedDebts = (level.defaultInstalled ?? []).flatMap(d => d.addsDebts ?? []);
-  if (inheritedDebts.length === 0) {
-    debuffsContainer.innerHTML = '<span class="no-debuffs">нет</span>';
-  } else {
-    for (const debt of inheritedDebts) {
-      const status = engine.statusById(debt.statusIfUnresolved);
-      const badge = el('div', 'critical-badge');
-      badge.setAttribute('title', status ? status.name : debt.statusIfUnresolved);
-      badge.innerHTML = `<span class="status-icon">${status ? status.icon : '⚠'}</span><span class="status-label">${status ? status.name : debt.statusIfUnresolved}</span>`;
-      debuffsContainer.appendChild(badge);
+  if (pb) {
+    qs('#briefing-level-num').textContent = `Уровень ${pb.order}`;
+    qs('#briefing-level-name').textContent = pb.name;
+    qs('#briefing-client').textContent = `Заказчик: ${pb.clientName}`;
+    qs('#briefing-description').textContent = pb.description;
+    if (itemEl) {
+      if (pb.item) {
+        itemEl.style.display = '';
+        itemEl.textContent = `Предмет заказа: ${pb.item}`;
+      } else {
+        itemEl.style.display = 'none';
+        itemEl.textContent = '';
+      }
     }
-  }
 
-  // Hints
-  const hintBox = qs('#briefing-hints');
-  hintBox.innerHTML = '';
-  for (const hint of level.hints ?? []) {
-    const p = el('p', 'hint-line');
-    p.textContent = `💡 ${hint}`;
-    hintBox.appendChild(p);
+    if (reqSec) reqSec.style.display = 'none';
+
+    qs('#briefing-budget').textContent = `${pb.budget.gold} ⚗ монет`;
+    qs('#briefing-risk').textContent = `до ${pb.budget.aura} ☠ ауры`;
+
+    const debuffsContainer = qs('#briefing-debuffs');
+    debuffsContainer.innerHTML = '';
+    const labels = pb.inheritedDebuffLabels ?? [];
+    if (labels.length === 0) {
+      debuffsContainer.innerHTML = '<span class="no-debuffs">нет</span>';
+    } else {
+      for (const label of labels) {
+        const nameKey = stripPlaytestSymptomLabel(label);
+        const status = data.statusCatalog.find(st => st.name === nameKey);
+        const badge = el('div', 'critical-badge');
+        const treat = status ? typicalTreatmentTagsForStatus(data, status.id) : [];
+        const hint = status
+          ? `${status.name}${treat.length ? `. Обычно лечат: ${treat.join(', ')}` : ''}`
+          : label;
+        badge.setAttribute('title', hint);
+        const icon = status?.icon ?? '⚠';
+        const dispName = status?.name ?? nameKey;
+        badge.innerHTML = `<span class="status-icon">${icon}</span><span class="status-label">${dispName}</span>`;
+        debuffsContainer.appendChild(badge);
+      }
+    }
+
+    const hintBox = qs('#briefing-hints');
+    hintBox.innerHTML = '';
+    if (hintsSec) hintsSec.style.display = 'none';
+  } else {
+    if (reqSec) reqSec.style.display = '';
+    if (hintsSec) hintsSec.style.display = '';
+    if (itemEl) {
+      itemEl.style.display = 'none';
+      itemEl.textContent = '';
+    }
+
+    qs('#briefing-level-num').textContent = `Уровень ${level.order}`;
+    qs('#briefing-level-name').textContent = level.name;
+    qs('#briefing-client').textContent = `Заказчик: ${level.clientName}`;
+    qs('#briefing-description').textContent = level.description;
+
+    const reqList = qs('#briefing-requirements');
+    reqList.innerHTML = '';
+    for (const req of level.requirements) {
+      const li = el('li');
+      li.innerHTML = `<span class="req-icon">◆</span> ${req.label}`;
+      reqList.appendChild(li);
+    }
+
+    qs('#briefing-budget').textContent = `${level.budget?.gold} ⚗ монет`;
+    qs('#briefing-risk').textContent = `до ${level.budget?.aura} ☠ ауры`;
+
+    const debuffsContainer = qs('#briefing-debuffs');
+    debuffsContainer.innerHTML = '';
+    const inheritedDebts = (level.defaultInstalled ?? []).flatMap(d => d.addsDebts ?? []);
+    if (inheritedDebts.length === 0) {
+      debuffsContainer.innerHTML = '<span class="no-debuffs">нет</span>';
+    } else {
+      for (const debt of inheritedDebts) {
+        const status = engine.statusById(debt.statusIfUnresolved);
+        const badge = el('div', 'critical-badge');
+        const treat = typicalTreatmentTagsForStatus(data, debt.statusIfUnresolved);
+        const hint = status
+          ? `${status.name}${treat.length ? `. Обычно лечат: ${treat.join(', ')}` : ''}`
+          : debt.statusIfUnresolved;
+        badge.setAttribute('title', hint);
+        badge.innerHTML = `<span class="status-icon">${status ? status.icon : '⚠'}</span><span class="status-label">${status ? status.name : debt.statusIfUnresolved}</span>`;
+        debuffsContainer.appendChild(badge);
+      }
+    }
+
+    const hintBox = qs('#briefing-hints');
+    hintBox.innerHTML = '';
+    for (const hint of level.hints ?? []) {
+      const p = el('p', 'hint-line');
+      p.textContent = `💡 ${hint}`;
+      hintBox.appendChild(p);
+    }
   }
 
   qs('#btn-start-assembly').onclick = () => {
@@ -139,6 +211,50 @@ function buildDebtStatusMap() {
 }
 let debtStatusMap = null;
 
+function escAttr(s) {
+  return String(s)
+    .replace(/&/g, '&amp;')
+    .replace(/"/g, '&quot;')
+    .replace(/</g, '&lt;');
+}
+
+/** Merge treatment tags (and legacy `buffs`). */
+function cardTreatmentTags(card) {
+  return [...new Set([...(card?.treatmentTags ?? []), ...(card?.buffs ?? [])])];
+}
+
+function statusNameFromData(data, statusId) {
+  return data.statusCatalog.find(x => x.id === statusId)?.name ?? statusId;
+}
+
+/** Tags from treatmentCatalog that heal this status (for briefing/HUD hints). */
+function typicalTreatmentTagsForStatus(data, statusId) {
+  const tags = [];
+  for (const e of data.treatmentCatalog ?? []) {
+    if ((e.healsStatuses ?? []).includes(statusId)) tags.push(e.tag);
+  }
+  return tags;
+}
+
+/** One line per tag for tooltips / detail rows. */
+function treatmentHintLines(data, tags) {
+  const byTag = new Map((data.treatmentCatalog ?? []).map(e => [e.tag, e.healsStatuses ?? []]));
+  return tags.map(tag => {
+    const heals = byTag.get(tag) ?? [];
+    if (!heals.length) return `${tag} — без симптом-класса (орг. знак / требование)`;
+    const names = heals.map(sid => statusNameFromData(data, sid));
+    return `${tag} → ${names.join(', ')}`;
+  });
+}
+
+function formatTreatmentBadgesHTML(data, card) {
+  const tags = cardTreatmentTags(card);
+  const lines = treatmentHintLines(data, tags);
+  return tags.map((t, i) =>
+    `<span class="spell-treatment" title="${escAttr(lines[i] ?? t)}">💊 ${escAttr(t)}</span>`
+  ).join('');
+}
+
 function renderAssembly() {
   show('screen-assembly');
   selectedSpellId = null;
@@ -149,6 +265,7 @@ function renderAssembly() {
   renderMatrices();
   renderMatrixPanel();
   renderSpellPanel();
+  bindSolutionModal();
 
   qs('#btn-launch').onclick = () => {
     engine.evaluate();
@@ -156,15 +273,214 @@ function renderAssembly() {
   };
 }
 
+// ─── Solution Modal ───────────────────────────────────────────────────────────
+
+function bindSolutionModal() {
+  const btnShow  = qs('#btn-show-solution');
+  const modal    = qs('#solution-modal');
+  const btnClose = qs('#solution-modal-close');
+  const backdrop = modal?.querySelector('.solution-modal-backdrop');
+
+  if (!btnShow || !modal) return;
+
+  btnShow.onclick = () => openSolutionModal();
+  btnClose.onclick = () => closeSolutionModal();
+  backdrop.onclick = () => closeSolutionModal();
+}
+
+function openSolutionModal() {
+  const modal = qs('#solution-modal');
+  const body  = qs('#solution-modal-body');
+  const level = engine.currentLevel;
+
+  body.innerHTML = '';
+
+  const solutions = level.solutions ?? [];
+  if (solutions.length === 0) {
+    const p = el('p');
+    p.textContent = 'Решения для этого уровня не добавлены.';
+    p.style.color = 'var(--text-dim)';
+    body.appendChild(p);
+  } else {
+    for (const sol of solutions) {
+      body.appendChild(buildSolCard(sol, level));
+    }
+  }
+
+  Object.assign(modal.style, {
+    display: 'flex',
+    position: 'fixed',
+    inset: '0',
+    zIndex: '1000',
+    alignItems: 'center',
+    justifyContent: 'center',
+  });
+  const backdrop = modal.querySelector('.solution-modal-backdrop');
+  if (backdrop) Object.assign(backdrop.style, {
+    position: 'absolute',
+    inset: '0',
+    background: 'rgba(5,5,18,0.85)',
+    backdropFilter: 'blur(3px)',
+  });
+  const box = modal.querySelector('.solution-modal-box');
+  if (box) Object.assign(box.style, {
+    position: 'relative',
+    zIndex: '1',
+  });
+}
+
+function closeSolutionModal() {
+  const modal = qs('#solution-modal');
+  if (modal) modal.style.cssText = 'display:none';
+}
+
+function buildSolCard(sol, level) {
+  const allCards = [...(engine.data.spellCatalog ?? []), ...(engine.data.obryadCatalog ?? [])];
+  const cardById = id => allCards.find(c => c.id === id);
+
+  // Matrix name lookup
+  const matrixDefs = engine.data.matrixCatalog ?? [];
+  const levelMats  = level.availableMatrices ?? [];
+  const matrixName = instanceId => {
+    const inst = levelMats.find(m => m.instanceId === instanceId);
+    if (!inst) return instanceId;
+    const preset = (engine.data.matrixPresets ?? []).find(p => p.id === inst.presetId);
+    const def = matrixDefs.find(m => m.id === inst.matrixId);
+    return preset?.name ?? def?.name ?? inst.matrixId;
+  };
+
+  const card = el('div', 'sol-card');
+
+  // Header
+  const header = el('div', 'sol-card-header');
+  const name   = el('span', 'sol-card-name');
+  name.textContent = sol.name;
+  const applyBtn = el('button', 'sol-apply-btn');
+  applyBtn.textContent = '▶ Применить';
+  applyBtn.title = 'Загрузить эту сборку на доску';
+  applyBtn.onclick = () => applySolution(sol, level);
+  header.appendChild(name);
+  header.appendChild(applyBtn);
+  card.appendChild(header);
+
+  const body = el('div', 'sol-card-body');
+
+  // Optional matrices
+  if (sol.matrices?.length) {
+    const mRow = el('div');
+    mRow.style.display = 'flex'; mRow.style.gap = '6px'; mRow.style.flexWrap = 'wrap';
+    for (const mId of sol.matrices) {
+      const badge = el('div', 'sol-matrix-badge');
+      badge.textContent = `⊞ ${matrixName(mId)}`;
+      mRow.appendChild(badge);
+    }
+    body.appendChild(mRow);
+  }
+
+  // Placements
+  const placements = el('div', 'sol-placements');
+  for (const [slotId, cardId] of Object.entries(sol.placements ?? {})) {
+    const pill = el('div', 'sol-placement');
+    const slotEl = el('span', 'sol-placement-slot');
+    slotEl.textContent = slotId;
+    const arrow = el('span', 'sol-placement-arrow');
+    arrow.textContent = '→';
+    const cardEl = el('span', 'sol-placement-card');
+    const c = cardById(cardId);
+    cardEl.textContent = c ? c.name : cardId;
+    pill.appendChild(slotEl);
+    pill.appendChild(arrow);
+    pill.appendChild(cardEl);
+    placements.appendChild(pill);
+  }
+  body.appendChild(placements);
+
+  // Note
+  if (sol.note) {
+    const note = el('p', 'sol-note');
+    note.textContent = sol.note;
+    body.appendChild(note);
+  }
+
+  card.appendChild(body);
+  return card;
+}
+
+function applySolution(sol, level) {
+  // 1. Reset current placements
+  engine.state.placements = {};
+  engine.state.installedMatrixIds = [];
+
+  // 2. Install optional matrices
+  for (const mId of sol.matrices ?? []) {
+    engine.state.installedMatrixIds.push(mId);
+  }
+
+  // 3. Apply placements
+  for (const [slotId, cardId] of Object.entries(sol.placements ?? {})) {
+    engine.state.placements[slotId] = cardId;
+  }
+
+  // 4. Close modal and re-render assembly
+  closeSolutionModal();
+  renderMatrices();
+  renderMatrixPanel();
+  renderSpellPanel();
+  renderHUD();
+}
+
 function renderSidebar() {
   const level = engine.currentLevel;
+  const data = engine.data;
+  const pb = getPlaytestBrief(level);
+
+  const reqSec = qs('#sidebar-requirements-section');
+  const hintsSec = qs('#sidebar-hints-section');
+
+  if (pb) {
+    qs('#sidebar-level-num').textContent = `Уровень ${pb.order}`;
+    qs('#sidebar-level-name').textContent = pb.name;
+    qs('#sidebar-client').textContent = pb.clientName;
+    qs('#sidebar-description').textContent = pb.description;
+
+    if (reqSec) reqSec.style.display = 'none';
+
+    const sidebarDebuffs = qs('#sidebar-debuffs');
+    sidebarDebuffs.innerHTML = '';
+    const labels = pb.inheritedDebuffLabels ?? [];
+    if (labels.length === 0) {
+      sidebarDebuffs.innerHTML = '<span class="no-debuffs">нет</span>';
+    } else {
+      for (const label of labels) {
+        const nameKey = stripPlaytestSymptomLabel(label);
+        const status = data.statusCatalog.find(st => st.name === nameKey);
+        const badge = el('div', 'sidebar-critical-badge');
+        const treat = status ? typicalTreatmentTagsForStatus(data, status.id) : [];
+        const hint = status
+          ? `${status.name}${treat.length ? `. Обычно: ${treat.join(', ')}` : ''}`
+          : label;
+        badge.setAttribute('title', hint);
+        const icon = status?.icon ?? '⚠';
+        const dispName = status?.name ?? nameKey;
+        badge.innerHTML = `<span>${icon}</span><span>${dispName}</span>`;
+        sidebarDebuffs.appendChild(badge);
+      }
+    }
+
+    const hintBox = qs('#sidebar-hints');
+    hintBox.innerHTML = '';
+    if (hintsSec) hintsSec.style.display = 'none';
+    return;
+  }
+
+  if (reqSec) reqSec.style.display = '';
+  if (hintsSec) hintsSec.style.display = '';
 
   qs('#sidebar-level-num').textContent = `Уровень ${level.order}`;
   qs('#sidebar-level-name').textContent = level.name;
   qs('#sidebar-client').textContent = level.clientName;
   qs('#sidebar-description').textContent = level.description;
 
-  // Requirements
   const reqList = qs('#sidebar-requirements');
   reqList.innerHTML = '';
   for (const req of level.requirements) {
@@ -173,7 +489,6 @@ function renderSidebar() {
     reqList.appendChild(li);
   }
 
-  // Стартовые дебафы (сайдбар)
   const sidebarDebuffs = qs('#sidebar-debuffs');
   sidebarDebuffs.innerHTML = '';
   const sidebarDebts = (level.defaultInstalled ?? []).flatMap(d => d.addsDebts ?? []);
@@ -183,12 +498,16 @@ function renderSidebar() {
     for (const debt of sidebarDebts) {
       const status = engine.statusById(debt.statusIfUnresolved);
       const badge = el('div', 'sidebar-critical-badge');
+      const treat = typicalTreatmentTagsForStatus(engine.data, debt.statusIfUnresolved);
+      const hint = status
+        ? `${status.name}${treat.length ? `. Обычно: ${treat.join(', ')}` : ''}`
+        : debt.statusIfUnresolved;
+      badge.setAttribute('title', hint);
       badge.innerHTML = `<span>${status ? status.icon : '⚠'}</span><span>${status ? status.name : debt.statusIfUnresolved}</span>`;
       sidebarDebuffs.appendChild(badge);
     }
   }
 
-  // Hints
   const hintBox = qs('#sidebar-hints');
   hintBox.innerHTML = '';
   for (const hint of level.hints ?? []) {
@@ -231,6 +550,28 @@ function renderHUD() {
       badge.setAttribute('title', `${status.name}${isFatal ? ' — КРИТИЧНО!' : ' — добавляет риск'}`);
       badge.textContent = status.icon;
       statusBar.appendChild(badge);
+    }
+  }
+
+  const treatBar = qs('#hud-treatments');
+  if (treatBar) {
+    treatBar.innerHTML = '';
+    const at = live.activeTreatments ?? [];
+    if (at.length === 0) {
+      treatBar.innerHTML = '<span class="status-clear">—</span>';
+    } else {
+      for (const row of at) {
+        for (const h of row.heals ?? []) {
+          const parts = (h.healedStatusIds ?? []).map(sid => {
+            const st = engine.statusById(sid);
+            return st ? `${st.icon}${st.name}` : sid;
+          });
+          const span = el('span', 'treatment-live-badge');
+          span.setAttribute('title', `${row.cardName}: ${h.tag} → ${parts.join(', ')}`);
+          span.textContent = `${h.tag}`;
+          treatBar.appendChild(span);
+        }
+      }
     }
   }
 
@@ -290,8 +631,8 @@ function renderMatrices() {
     }
 
     header.innerHTML = `<span class="matrix-icon">${matDef.icon}</span>
-      <span class="matrix-name">${matDef.name}</span>
-      <span class="matrix-desc">${matDef.description}</span>
+      <span class="matrix-name">${engine.matrixInstanceLabel(matInst)}</span>
+      <span class="matrix-desc">${engine.matrixInstanceDescription(matInst)}</span>
       ${removeBtnHtml}`;
 
     if (!isLocked) {
@@ -340,13 +681,15 @@ function renderMatrixPanel() {
     card.dataset.instanceId = matInst.instanceId;
     card.draggable = true;
 
+    const displayName = engine.matrixInstanceLabel(matInst);
+    const displayDesc = engine.matrixInstanceDescription(matInst);
     card.innerHTML = `
       <div class="matrix-card-header">
         <span class="matrix-card-icon">${matDef.icon}</span>
-        <span class="matrix-card-name">${matDef.name}</span>
+        <span class="matrix-card-name">${displayName}</span>
         <span class="matrix-card-cost">⚗ ${matInst.installCostGold ?? 0}</span>
       </div>
-      <div class="matrix-card-desc">${matDef.description}</div>
+      <div class="matrix-card-desc">${displayDesc}</div>
       <div class="matrix-card-slots">${matInst.slots.map(s => slotTypeLabel(s.slotType)).join(' · ')}</div>
     `;
 
@@ -478,18 +821,24 @@ function renderSpellPanel() {
       return st ? `${st.icon} ${st.name}` : sid;
     }).join(', ');
 
-    const buffHints = (spell.buffs ?? []).map(b => `<span class="spell-buff">✨ ${b}</span>`).join('');
+    const treatmentBadges = formatTreatmentBadgesHTML(engine.data, spell);
+    const explicitIds = spell.resolvesDebts ?? [];
+    const explicitLine = explicitIds.length
+      ? `<div class="spell-explicit-resolve" title="Явный resolvesDebts — исключение над симптом-классом">Точечно: ${explicitIds.map(escAttr).join(', ')}</div>`
+      : '';
 
     card.innerHTML = `
       <div class="spell-name">${spell.name}</div>
       <div class="spell-desc">${spell.description}</div>
       <div class="spell-effects">
-        ${buffHints}
+        ${treatmentBadges ? `<div class="spell-treat-row"><span class="spell-meta-label">Лечит:</span>${treatmentBadges}</div>` : ''}
       </div>
+      ${explicitLine}
       <div class="spell-meta">
         <span class="spell-cost">⚗ ${spell.currencies?.gold ?? 0}</span>
         <span class="spell-risk ${(spell.currencies?.aura ?? 0) > 0 ? 'has-risk' : ''}">☠ +${spell.currencies?.aura ?? 0}</span>
-        ${debtHints ? `<span class="spell-debt" title="Добавляет долг">${debtHints}</span>` : ''}
+        ${debtHints ? `<span class="spell-debt" title="Создаёт симптом (долг)">${debtHints}</span>` : ''}
+        ${resolveHints ? `<span class="spell-resolve" title="Точечно снимает симптомы по id долга">↓ ${resolveHints}</span>` : ''}
       </div>
       <div class="spell-slots">${spell.allowedSlotTypes.map(slotTypeLabel).join(' · ')}</div>
     `;
@@ -550,7 +899,10 @@ function renderSpellPanel() {
       if (oGold !== 0) effectParts.push(`<span class="spell-cap obryad-coins">✨ ${oGold > 0 ? '+' : ''}${oGold} монет</span>`);
       if (oAura !== 0) effectParts.push(`<span class="spell-cap ${oAura > 0 ? 'obryad-aura-neg' : 'obryad-aura-pos'}">✨ ${oAura > 0 ? '+' : ''}${oAura} ауры</span>`);
       if (obryad.auraLimitDelta)  effectParts.push(`<span class="spell-cap obryad-coins">✨ лимит ауры +${obryad.auraLimitDelta}</span>`);
-      const obryadBuffHints = (obryad.buffs ?? []).map(b => `<span class="spell-buff">✨ ${b}</span>`).join('');
+      const obryadTreatment = formatTreatmentBadgesHTML(engine.data, obryad);
+      const explicitOb = (obryad.resolvesDebts ?? []).length
+        ? `<div class="spell-explicit-resolve" title="Явный resolvesDebts">Точечно: ${(obryad.resolvesDebts ?? []).map(escAttr).join(', ')}</div>`
+        : '';
 
       const obryadDebtHints = (obryad.addsDebts ?? []).map(d => {
         const st = engine.statusById(d.statusIfUnresolved);
@@ -561,8 +913,9 @@ function renderSpellPanel() {
         <div class="spell-name">${obryad.name}</div>
         <div class="spell-desc">${obryad.description ?? ''}</div>
         <div class="spell-effects">
-          ${effectParts.join('')}${obryadBuffHints}
+          ${effectParts.join('')}${obryadTreatment ? `<div class="spell-treat-row"><span class="spell-meta-label">Лечит:</span>${obryadTreatment}</div>` : ''}
         </div>
+        ${explicitOb}
         <div class="spell-meta">
           <span class="spell-cost">⚗ ${obryad.currencies?.gold ?? 0}</span>
           ${obryadDebtHints ? `<span class="spell-debt">${obryadDebtHints}</span>` : ''}
@@ -693,17 +1046,20 @@ function renderAssemblySummary() {
     if (!installedIds.has(matInst.instanceId)) continue;
     const matDef = engine.matrixById(matInst.matrixId);
     const li = el('li', 'assembly-item assembly-item-matrix');
-    li.innerHTML = `<span class="assembly-icon">${matDef?.icon ?? '🔷'}</span> <span class="assembly-name">${matDef?.name ?? matInst.matrixId}</span> <span class="assembly-cost">⚗ ${matInst.installCostGold ?? 0}</span>`;
+    li.innerHTML = `<span class="assembly-icon">${matDef?.icon ?? '🔷'}</span> <span class="assembly-name">${engine.matrixInstanceLabel(matInst)}</span> <span class="assembly-cost">⚗ ${matInst.installCostGold ?? 0}</span>`;
     list.appendChild(li);
   }
 
   // Placed spells and obryads
   for (const [slotId, cardId] of Object.entries(placements)) {
-    const spell = engine.spellById(cardId);
-    if (!spell) continue;
+    const placedCard = engine.cardById(cardId);
+    if (!placedCard) continue;
     const li = el('li', 'assembly-item');
-    const buffBadges = (spell.buffs ?? []).map(b => `<span class="assembly-buff">✨ ${b}</span>`).join('');
-    li.innerHTML = `<span class="assembly-name">${spell.name}</span>${buffBadges}`;
+    const treatBadges = formatTreatmentBadgesHTML(engine.data, placedCard);
+    const explicit = (placedCard.resolvesDebts ?? []).length
+      ? ` <span class="assembly-explicit" title="Точечные долги">(${placedCard.resolvesDebts.join(', ')})</span>`
+      : '';
+    li.innerHTML = `<span class="assembly-name">${placedCard.name}</span>${treatBadges ? `<span class="assembly-treat-wrap">${treatBadges}</span>` : ''}${explicit}`;
     list.appendChild(li);
   }
 
@@ -715,6 +1071,7 @@ function renderAssemblySummary() {
 }
 
 function renderFailReport(result, level) {
+  const pb = getPlaytestBrief(level);
   // Block 1: missing requirements
   const reqBlock = qs('#result-req-block');
   const reqList = qs('#result-req-list');
@@ -723,9 +1080,13 @@ function renderFailReport(result, level) {
   if (reqReasons.length > 0) {
     reqBlock.style.display = '';
     for (const r of reqReasons) {
-      const req = level.requirements.find(req => req.id === r.reqId);
       const li = el('li', 'fail-item');
-      li.innerHTML = `<span class="fail-icon">◆</span> Не выполнено: <strong>${req?.label ?? r.reqId}</strong>`;
+      const req = level.requirements.find(q => q.id === r.reqId);
+      if (pb) {
+        li.innerHTML = `<span class="fail-icon">◆</span> Не выполнено техническое требование <strong>${r.reqId}</strong> (в CSV плейтеста оно не показывается — правила уровня всё равно действуют).`;
+      } else {
+        li.innerHTML = `<span class="fail-icon">◆</span> Не выполнено: <strong>${req?.label ?? r.reqId}</strong>`;
+      }
       reqList.appendChild(li);
     }
   } else {

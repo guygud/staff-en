@@ -70,6 +70,14 @@ const DEBUFF_MAP = {
   F3_COMPROMISE:   'stun',
   F6_NONDELIVERY:  'slow',
   F7_CONFUSION:    'blind',
+  F8_AUDIT_GAP:    'blind',
+  F9_UNREVIEWED_RELEASE: 'stun',
+  F10_CONTRACT_DRIFT: 'slow',
+  F11_HOTSPOT:     'slow',
+  F12_SPLIT_BRAIN: 'stun',
+  F13_DARK_SHARD:  'blind',
+  F15_FAILOVER_LOOP:'slow',
+  F16_CAPACITY_GAP:'slow',
 };
 
 function levelDebuff(level) {
@@ -85,8 +93,9 @@ function levelDebuff(level) {
 function exportCard(card) {
   const states = [];
 
-  // buffs → type:"buff"
-  for (const b of card.buffs ?? []) {
+  // treatmentTags (legacy buffs) → type:"buff"
+  const tagNames = [...new Set([...(card.treatmentTags ?? []), ...(card.buffs ?? [])])];
+  for (const b of tagNames) {
     states.push({ name: b, type: 'buff', icon: `images/icons/${b.toLowerCase()}` });
   }
 

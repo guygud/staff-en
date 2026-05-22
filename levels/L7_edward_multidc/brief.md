@@ -2,87 +2,88 @@
 
 ## Нарратив
 
-> «Один ДЦ — одна точка отказа. Нам нужно два дата-центра, с шифрованием, правами, журналами, квотами и пайплайном. Первый ковчег мы деплоили руками — это не повторится. Случайный компромисс или переполнение на таком масштабе — катастрофа.»
+> «Семь контуров выглядят надёжно на бумаге. Но в машинном зале встанут только четыре. Выбирай так, чтобы второй дата-центр был не декорацией, а настоящим спасением.»
 > — Эдуард, SRE principal
 
-Эдуард проектирует финальную архитектуру: Multi-DC с полным набором матриц. Все четыре матрицы предустановлены. Первый деплой был ручным — нужно перевести систему на CI/CD стандарт и обеспечить полную наблюдаемость с квотами.
+Эдуард проектирует финальную multi-DC архитектуру. В отличие от прошлых уровней, здесь открыты семь матриц, но установить можно только четыре. Игрок должен выбрать архитектурный срез: где держать наблюдаемость, где проверять релизы, как закрыть резервную ёмкость и как провести аварийное переключение без ручного героизма.
 
 ## Технологический смысл
 
-Multi-datacenter setup: TLS + RBAC для inter-DC коммуникации, consistent discovery с healthcheck, centralized logging с quota management, CI/CD pipeline с rollback и gates для контроля MR.
+Multi-datacenter / HA-DR setup: TLS + AuthZ на краю, discovery с глобальным healthcheck, воспроизводимая доставка с rollback, сверка регионов, DR-учение, централизованные логи, квоты и резервная ёмкость.
 
 ## DoD — что должен принять Эдуард
 
 | Требование | Capability ID | Источник |
 |---|---|---|
-| TLS-шифрование | `HAS_TLS` | S_TLS_CERT |
-| Авторизация | `HAS_AUTHZ` | S_AUTHZ |
-| Failover | `HAS_FAILOVER` | S_HEALTHCHECK |
-| Воспроизводимая доставка | `HAS_CICD` | S_CICD |
-| Централизованное журналирование | `HAS_LOGS` | S_LOGGING |
-| Квоты (защита от переполнения) | `HAS_QUOTAS` | S_QUOTAS |
+| TLS-шифрование | `HAS_TLS` | `S_TLS_CERT` |
+| Авторизация | `HAS_AUTHZ` | `S_AUTHZ` |
+| Failover | `HAS_FAILOVER` | `S_GLOBAL_HEALTHCHECK` |
+| Воспроизводимая доставка | `HAS_CICD` | `S_CICD` |
+| Централизованное журналирование | `HAS_LOGS` | `S_LOGGING` |
+| Квоты | `HAS_QUOTAS` | `S_QUOTAS` |
+| Сверка регионов | `HAS_REGION_RECONCILE` | `S_REGION_RECONCILER` |
+| DR-учение | `HAS_DR_DRILL` | `S_MULTI_REGION_DRILL` |
+| Резервная ёмкость | `HAS_RESERVE_CAPACITY` | `S_CAPACITY_MIRROR` |
 
 ## Ограничения
 
-- **Монеты**: 24
-- **Аура**: 5
-- **Опциональные матрицы**: нет
+- **Монеты**: 30
+- **Аура**: 9
+- **Матрицы**: 7 на выбор, установить можно только 4 (`maxOptionalMatrices = 4`)
 
 ## Заказчик не простит
 
 | Статус | Почему критический |
 |---|---|
-| `F5_FRAGILITY` | DISCOVERY без HEALTHCHECK или CICD без ROLLBACK — хрупкость в Multi-DC = каскадный отказ |
-| `F1_OVERFLOW` | Без квот рост данных в двух ДЦ приведёт к переполнению |
-| `F3_COMPROMISE` | Конфликт карт нарушает целостность двух ДЦ |
+| `F6_NONDELIVERY` | Первый ковчег деплоили вручную; без CI/CD два DC невозможно держать одинаковыми |
+| `F15_FAILOVER_LOOP` | Локальные проверки без глобального взгляда гоняют трафик между DC |
+| `F16_CAPACITY_GAP` | Резервный DC не выдерживает полный поток основного |
+| `F5_FRAGILITY` | Discovery без healthcheck или CI/CD без rollback/DR drill ломают отказоустойчивость |
+| `F1_OVERFLOW` | Логи и зеркало ёмкости без квот переполняют резерв |
+| `F3_COMPROMISE` | Доступ без защиты недопустим на межрегиональном периметре |
 
-## Предустановки
+## Стартовые долги
 
-- **Предустановленные матрицы**: M_CONNECTIVITY, M_OBSERVATION, M_STORAGE, M_DELIVERY
-- **Долги при старте**: `D_NO_CICD` → F6_NONDELIVERY (первый ковчег деплоился вручную)
+```text
+D_NO_CICD -> F6_NONDELIVERY
+D_FAILOVER_LOOP -> F15_FAILOVER_LOOP
+D_RESERVE_CAPACITY_GAP -> F16_CAPACITY_GAP
+```
 
 ## Доступные матрицы
 
-| Матрица | Статус | Слоты |
-|---|---|---|
-| M_CONNECTIVITY | preInstalled (0 монет) | NET_AUTH, NET_TLS, NET_DISCOVERY×2, RITUAL_NET |
-| M_OBSERVATION | preInstalled (0 монет) | OBS_LOGS, OBS_FILTERS, RITUAL_OBS |
-| M_STORAGE | preInstalled (0 монет) | ST_RETENTION, ST_QUOTA, RITUAL_ST |
-| M_DELIVERY | preInstalled (0 монет) | CD_PIPELINE, CD_GATES, CD_ROLLBACK, RITUAL_CD |
-
-## Доступные заговоры
-
-| ID | Стоимость | Аура | Роль |
+| Instance | Название | Слоты | Роль |
 |---|---|---|---|
-| S_AUTHZ | 3 | 0 | Закрывает D_OPEN_ACCESS; даёт HAS_AUTHZ |
-| S_TLS_CERT | 2 | 0 | Даёт HAS_TLS |
-| S_DISCOVERY | 2 | +1 | Даёт HAS_DISCOVERY; добавляет D_NEEDS_HEALTHCHECK |
-| S_HEALTHCHECK | 2 | 0 | Закрывает D_NEEDS_HEALTHCHECK; даёт HAS_FAILOVER |
-| S_LOGGING | 2 | +1 | Даёт HAS_LOGS; добавляет D_LOG_VOLUME |
-| S_LOG_FILTER | 2 | 0 | Закрывает D_LOG_VOLUME; даёт HAS_LOG_FILTERING |
-| S_ACCESS_LOGS | 3 | +1 | Даёт HAS_ACCESS_LOGS; добавляет D_ACCESS_LOG_VOLUME |
-| S_TTL | 2 | +2 | Закрывает D_CACHE_GROWTH/D_LOG_VOLUME; **дорого по ауре** |
-| S_QUOTAS | 2 | +1 | Закрывает D_LOG_VOLUME/D_ACCESS_LOG_VOLUME/D_CACHE_GROWTH (слот ST_QUOTA) |
-| S_ROTATION | 2 | 0 | Закрывает D_LOG_VOLUME/D_ACCESS_LOG_VOLUME (слот ST_RETENTION) |
-| S_CICD | 2 | +1 | Закрывает D_NO_CICD; даёт HAS_CICD; добавляет D_NEEDS_ROLLBACK |
-| S_ROLLBACK | 2 | 0 | Закрывает D_NEEDS_ROLLBACK; даёт HAS_ROLLBACK |
-| S_MR_GATES | 2 | 0 | Даёт HAS_MR_GATES; контроль MR перед мержем (слот CD_GATES) |
+| `edge_l7` | Край Двух Обелисков | `NET_AUTH`, `NET_TLS`, `NET_DISCOVERY`×2 | Базовый периметр и глобальный failover |
+| `audit_l7` | Башня Сквозной Летописи | `OBS_LOGS`, `OBS_FILTERS`, `RITUAL_OBS` | Логи + фильтр шума |
+| `capacity_l7` | Зеркальные Закрома | `ST_RETENTION`, `ST_QUOTA`, `RITUAL_ST` | Резервная ёмкость + квоты |
+| `release_l7` | Двухрегионный Конвейер | `CD_PIPELINE`, `CD_GATES`, `CD_TESTING`, `CD_ROLLBACK`, `RITUAL_CD` | Доставка, rollback, region reconcile, DR drill |
+| `traffic_l7` | Весы Межрегионального Трафика | `NET_ROUTING`, `NET_DISCOVERY`, `RITUAL_NET` | Альтернативный traffic-контур |
+| `compliance_l7` | Палата Комплаенса | `OBS_LOGS`, `CD_GATES`, `CD_TESTING`, `RITUAL_OBS` | Логи + release-проверки без отдельной audit-башни |
+| `reserve_l7` | Резервный Перевал | `ST_RETENTION`, `ST_QUOTA`, `NET_ROUTING`, `RITUAL_NET` | Ёмкость, квоты и аварийный routing |
 
-## Доступные обряды
+## Ключевые каскады
 
-| ID | Слот | Стоимость | Эффект |
-|---|---|---|---|
-| R_CANARY | RITUAL_OBS | 1 | −1 Аура |
-| R_LIBRARY_GRANT | RITUAL_ST или RITUAL_OBS | 1 | −3 монеты |
-| R_GUARD_TO_BAR | RITUAL_NET | 0 | −2 Аура |
-| R_PATRON_SEAL | RITUAL_NET или RITUAL_CD | 1 | +2 лимит Ауры, −3 монеты |
+```text
+D_FAILOVER_LOOP
+  -> S_GLOBAL_HEALTHCHECK
+    -> D_UNTESTED_FAILOVER -> S_MULTI_REGION_DRILL
 
-## Заложенный урок / компромисс
+D_RESERVE_CAPACITY_GAP
+  -> S_CAPACITY_MIRROR
+    -> D_MIRROR_QUOTA_GAP -> S_QUOTAS
 
-Финальный уровень: все матрицы открыты, все обряды доступны, карт много. Ключевой выбор — как управлять D_LOG_VOLUME: через S_LOG_FILTER (бесплатно по ауре) или S_QUOTAS (+ возможности квот). S_MR_GATES — новая карта в CD_GATES слоте, вводит концепцию gate-проверок. Урок: «в полной системе важно не брать лишнее — каждая карта добавляет ауру, бюджет ограничен».
+D_NO_CICD
+  -> S_CICD
+    -> D_NEEDS_ROLLBACK -> S_ROLLBACK
+
+S_LOGGING
+  -> D_LOG_VOLUME -> S_LOG_FILTER или S_QUOTAS
+```
 
 ## Подсказки игроку
 
-- D_NO_CICD активен с самого начала — S_CICD обязателен; не забудь S_ROLLBACK.
-- S_LOGGING + D_LOG_VOLUME — привычная пара. На этом уровне можно закрыть его и S_QUOTAS (через M_STORAGE), и S_LOG_FILTER (через M_OBSERVATION).
-- Обряды работают в связке: R_LIBRARY_GRANT возвращает монеты, R_CANARY снижает ауру — используй оба для комфортного запаса.
+- `S_DISCOVERY` сам по себе не лечит failover: для L7 нужен `S_GLOBAL_HEALTHCHECK`.
+- `S_REGION_RECONCILER` остаётся обязательной release-проверкой, но больше не создаёт отдельный debuff.
+- `S_CAPACITY_MIRROR` обязателен для резерва, но без `S_QUOTAS` даёт переполнение.
+- Два честных пути: отдельные `audit_l7` + `capacity_l7` или более плотные `compliance_l7` + `reserve_l7`.

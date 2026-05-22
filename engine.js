@@ -2,6 +2,8 @@
 // Pure data-driven engine. No DOM dependencies.
 // Schema v0.3: cards use currencies.{gold,aura}; levels use budget.{gold,aura}.
 
+import { computePlacement } from './lib/simulate.mjs';
+
 export class Engine {
   constructor() {
     this.data = null;
@@ -49,6 +51,21 @@ export class Engine {
 
   matrixById(id) {
     return this.data.matrixCatalog.find(m => m.id === id) ?? null;
+  }
+
+  matrixPresetById(id) {
+    return (this.data.matrixPresets ?? []).find(p => p.id === id) ?? null;
+  }
+
+  /** Display name for a level matrix instance (always from matrixPresets when presetId is set). */
+  matrixInstanceLabel(matInst) {
+    const preset = matInst?.presetId ? this.matrixPresetById(matInst.presetId) : null;
+    return preset?.name ?? this.matrixById(matInst?.matrixId)?.name ?? matInst?.instanceId ?? '';
+  }
+
+  matrixInstanceDescription(matInst) {
+    const preset = matInst?.presetId ? this.matrixPresetById(matInst.presetId) : null;
+    return preset?.description ?? this.matrixById(matInst?.matrixId)?.description ?? '';
   }
 
   // ─── Matrix helpers ───────────────────────────────────────────────────────
@@ -148,90 +165,7 @@ export class Engine {
   // ─── Core computation (shared by evaluate + computeLiveState) ─────────────
 
   _compute(level, placements, installedMatrixIds) {
-    const cards = Object.values(placements)
-      .filter(Boolean)
-      .map(id => this.cardById(id))
-      .filter(Boolean);
-
-    // 1. Capabilities — from defaultInstalled + placed cards
-    const capabilities = new Set(
-      (level.defaultInstalled ?? []).flatMap(d => d.grantsCapabilities ?? [])
-    );
-    for (const card of cards) {
-      for (const ef of card.effects ?? []) {
-        if (ef.type === 'CAPABILITY') capabilities.add(ef.id);
-      }
-    }
-
-    // 2. Debts — from defaultInstalled (inherited) and placed cards
-    const debtMap = new Map();
-    for (const inst of level.defaultInstalled ?? []) {
-      for (const d of inst.addsDebts ?? []) debtMap.set(d.id, d);
-    }
-    for (const card of cards) {
-      for (const d of card.addsDebts ?? []) debtMap.set(d.id, d);
-    }
-
-    // 3. Resolve debts
-    for (const card of cards) {
-      for (const rid of card.resolvesDebts ?? []) debtMap.delete(rid);
-    }
-
-    // 4. Conflicts (F2)
-    const placedIds = new Set(Object.values(placements).filter(Boolean));
-    const firedConflicts = [];
-    for (const pair of this.data.conflictPairs ?? []) {
-      const bothPresent = pair.spells.every(id => placedIds.has(id));
-      if (!bothPresent) continue;
-      const resolved = (pair.resolvedBy ?? []).some(id => placedIds.has(id));
-      if (!resolved) firedConflicts.push({ pair, statusId: pair.statusIfUnresolved });
-    }
-
-    // 5. All fired status IDs
-    const allFiredStatuses = new Set([
-      ...[...debtMap.values()].map(d => d.statusIfUnresolved),
-      ...firedConflicts.map(c => c.statusId),
-    ]);
-
-    // 6. Split into critical / non-critical
-    const criticalSet = new Set(level.criticalStatuses ?? []);
-    const fatalStatuses    = [...allFiredStatuses].filter(s => criticalSet.has(s));
-    const nonCriticalStatuses = [...allFiredStatuses].filter(s => !criticalSet.has(s));
-
-    // 7. Aura = sum of currencies.aura from all cards + penalty per non-critical status
-    //    auraLimit can be raised by obryad auraLimitDelta
-    const auraLimitModifier = cards.reduce((sum, c) => sum + (c.auraLimitDelta ?? 0), 0);
-    const auraLimitFinal = (level.budget?.aura ?? 0) + auraLimitModifier;
-    let auraTotal = cards.reduce((sum, c) => sum + (c.currencies?.aura ?? 0), 0);
-    auraTotal += nonCriticalStatuses.length * (level.nonCriticalStatusAuraPenalty ?? 2);
-
-    // 8. Coins = sum of currencies.gold for all cards + installed optional matrix costs
-    const matrixInstallCost = (level.availableMatrices ?? [])
-      .filter(m => m.preInstalled === false && installedMatrixIds.includes(m.instanceId))
-      .reduce((sum, m) => sum + (m.installCostGold ?? 0), 0);
-
-    const coinsSpent = cards.reduce(
-      (sum, c) => sum + (c.currencies?.gold ?? 0), 0
-    ) + matrixInstallCost;
-
-    // 9. Missing requirements
-    const missingRequirements = (level.requirements ?? []).filter(
-      req => req.type === 'CAPABILITY_REQUIRED' && !capabilities.has(req.capabilityId)
-    );
-
-    return {
-      capabilities,
-      activeDebts: [...debtMap.values()],
-      firedConflicts,
-      allFiredStatuses: [...allFiredStatuses],
-      fatalStatuses,
-      nonCriticalStatuses,
-      auraTotal,
-      auraLimitFinal,
-      coinsSpent,
-      coinsRemaining: (level.budget?.gold ?? 0) - coinsSpent,
-      missingRequirements,
-    };
+    return computePlacement(this.data, level, placements, installedMatrixIds);
   }
 
   // ─── evaluate() ──────────────────────────────────────────────────────────
@@ -267,18 +201,32 @@ export class Engine {
     }
 
     const success = failReasons.length === 0;
+
+    // Determine ending: 'B' if any budget-modifying ritual was placed, else 'A'
+    const allCards = Object.values(this.state.placements)
+      .filter(Boolean)
+      .map(id => this.cardById(id))
+      .filter(Boolean);
+    const usedBudgetRitual = allCards.some(
+      c => (c.currencies?.gold ?? 0) < 0 || (c.auraLimitDelta ?? 0) > 0
+    );
+    const endingKey = (success && usedBudgetRitual) ? 'B' : 'A';
+
+    const reports = level.successReports ?? ['Отлично! Задача выполнена.'];
     const successReport = success
-      ? this._pickRandom(level.successReports ?? ['Отлично! Задача выполнена.'])
+      ? (endingKey === 'B' ? (reports[1] ?? reports[0]) : reports[0])
       : null;
 
     const result = {
       success,
+      endingKey,
       coinsSpent: c.coinsSpent,
       auraTotal: c.auraTotal,
       auraLimitFinal: c.auraLimitFinal,
       failReasons,
       activeStatuses: c.allFiredStatuses,
       unresolvedDebts: c.activeDebts,
+      activeTreatments: c.activeTreatments,
       successReport,
     };
 
@@ -303,6 +251,7 @@ export class Engine {
       unresolvedDebts:    c.activeDebts,
       missingRequirements: c.missingRequirements,
       criticalStatuses:   level.criticalStatuses ?? [],
+      activeTreatments:   c.activeTreatments,
     };
   }
 

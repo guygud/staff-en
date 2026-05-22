@@ -5,76 +5,66 @@
 > «У нас сотни партнёров, которые подключаются к API. Мне нужен audit trail — кто что делал. И я не могу допустить ситуацию, когда мы деплоим вручную: следующий релиз должен выходить воспроизводимо. Любая хрупкость или случайный компромисс — это скандал.»
 > — Кира, API platform lead
 
-Кира строит платформу для внешних партнёров. Уже развёрнуты сеть, наблюдаемость и пайплайн доставки, но CI/CD не стандартизирован — первый деплой делался вручную. Теперь нужно полностью автоматизировать доставку и обеспечить audit trail для compliance.
+Кира строит платформу для внешних партнёров. С порога есть три долга: открытый доступ, ручная доставка и отсутствие аудита. Когда игрок начинает лечить доставку, появляются каскадные хвосты: откат, MR-гейт и контрактные тесты. Игрок выбирает **compliance-путь** (фильтр логов) или **релизный контур** (архив логов + субсидия мецената).
 
 ## Технологический смысл
 
-API gateway onboarding: партнёрский доступ с TLS+AuthZ, service discovery для failover, access logs для compliance audit, CI/CD pipeline с rollback-защитой.
+API gateway: AuthZ, TLS (карты доступны), audit trail (`HAS_ACCESS_LOGS`), воспроизводимая доставка (`HAS_CICD` + `HAS_ROLLBACK`), обязательные **гейты на merge** (`HAS_MR_GATES`, слот `CD_GATES`) и контрактные тесты (`HAS_CONTRACT_TESTS`, слот `CD_TESTING`).
 
-## DoD — что должна принять Кира
+## Условия победы (движок)
 
-| Требование | Capability ID | Источник |
+Победа через закрытие **унаследованных долгов** `defaultInstalled.addsDebts` и отсутствие критических статусов. Отдельного списка `requirements` на уровне нет — DoD для дизайн-дока ниже.
+
+| Долг | Критический статус | Типичное закрытие |
 |---|---|---|
-| TLS-шифрование | `HAS_TLS` | S_TLS_CERT |
-| Авторизация | `HAS_AUTHZ` | S_AUTHZ |
-| Failover при отказе | `HAS_FAILOVER` | S_HEALTHCHECK |
-| Воспроизводимая доставка | `HAS_CICD` | S_CICD |
-| Аудит-лог партнёрских запросов | `HAS_ACCESS_LOGS` | S_ACCESS_LOGS |
+| D_OPEN_ACCESS | F3_COMPROMISE | S_AUTHZ |
+| D_NO_CICD | F6_NONDELIVERY | S_API_CICD |
+| D_AUDIT_NEEDED | F8_AUDIT_GAP | S_ACCESS_LOGS (журнал доступа, не общий `S_LOGGING`) |
+| D_NO_REVIEW_GATES | F9_UNREVIEWED_RELEASE | S_API_MR_GATES |
+| D_PARTNER_CONTRACT_DRIFT | F10_CONTRACT_DRIFT | S_CONTRACT_TESTS |
+
+Первые три долга стартуют через `defaultInstalled`. Остальные появляются каскадом: `S_API_CICD` закрывает `D_NO_CICD`, но добавляет **D_NEEDS_ROLLBACK** и **D_NO_REVIEW_GATES**; `S_API_MR_GATES` закрывает review-долг, но добавляет **D_PARTNER_CONTRACT_DRIFT**.
 
 ## Ограничения
 
-- **Монеты**: 18
-- **Аура**: 4
-- **Опциональные матрицы**: нет
+| Параметр | Значение |
+|---|---|
+| Монеты | **18** |
+| Аура (базовый лимит) | **3** |
+| Матрицы | все опциональные; `cd_l5` включает **CD_GATES** и **CD_TESTING** |
 
 ## Заказчик не простит
 
-| Статус | Почему критический |
+| Статус | Почему |
 |---|---|
-| `F3_COMPROMISE` | Конфликт карт нарушает целостность системы |
-| `F5_FRAGILITY` | DISCOVERY без HEALTHCHECK или CICD без ROLLBACK — хрупкость |
-| `F6_NONDELIVERY` | D_NO_CICD не закрыт — ручной деплой, нарушение контракта |
+| F3_COMPROMISE | Открытый доступ (`D_OPEN_ACCESS` не закрыт) |
+| F5_FRAGILITY | Discovery без healthcheck; CICD без rollback |
+| F6_NONDELIVERY | Нет пайплайна — даже при «гейтах на бумаге» |
+| F8_AUDIT_GAP | Нет журнала доступа: общие логи не доказывают партнёрские вызовы |
+| F9_UNREVIEWED_RELEASE | Релизный контур без обязательного MR-гейта |
+| F10_CONTRACT_DRIFT | Партнёрские API-контракты не сверяются перед релизом |
 
-## Предустановки
+## Матрица «Конвейер доставки» (`cd_l5`)
 
-- **Предустановленные матрицы**: M_CONNECTIVITY, M_OBSERVATION, M_DELIVERY
-- **Долги при старте**: `D_NO_CICD` → F6_NONDELIVERY (первый ковчег деплоился вручную)
+| Слот | Тип |
+|---|---|
+| l5_pipe | CD_PIPELINE |
+| l5_gate | **CD_GATES** |
+| l5_contract | **CD_TESTING** |
+| l5_rb | CD_ROLLBACK |
+| l5_cd_rit | RITUAL_CD |
 
-## Доступные матрицы
+## Ключевые карты
 
-| Матрица | Статус | Слоты |
-|---|---|---|
-| M_CONNECTIVITY | preInstalled (0 монет) | NET_AUTH, NET_TLS, NET_DISCOVERY×2, RITUAL_NET |
-| M_OBSERVATION | preInstalled (0 монет) | OBS_LOGS, OBS_FILTERS, RITUAL_OBS |
-| M_DELIVERY | preInstalled (0 монет) | CD_PIPELINE, CD_ROLLBACK, RITUAL_CD |
-
-## Доступные заговоры
-
-| ID | Стоимость | Аура | Роль |
-|---|---|---|---|
-| S_TLS_CERT | 2 | 0 | Даёт HAS_TLS |
-| S_AUTHZ | 3 | 0 | Закрывает D_OPEN_ACCESS, даёт HAS_AUTHZ |
-| S_DISCOVERY | 2 | +1 | Даёт HAS_DISCOVERY; **добавляет D_NEEDS_HEALTHCHECK** |
-| S_HEALTHCHECK | 2 | 0 | Закрывает D_NEEDS_HEALTHCHECK; даёт HAS_FAILOVER |
-| S_ACCESS_LOGS | 3 | +1 | Даёт HAS_ACCESS_LOGS; **добавляет D_ACCESS_LOG_VOLUME** (нет резолвера!) |
-| S_LOG_FILTER | 2 | 0 | Закрывает D_LOG_VOLUME; даёт HAS_LOG_FILTERING |
-| S_CICD | 2 | +1 | Закрывает D_NO_CICD; даёт HAS_CICD; **добавляет D_NEEDS_ROLLBACK** |
-| S_ROLLBACK | 2 | 0 | Закрывает D_NEEDS_ROLLBACK; даёт HAS_ROLLBACK |
-
-## Доступные обряды
-
-| ID | Слот | Стоимость | Эффект |
-|---|---|---|---|
-| R_GUARD_TO_BAR | RITUAL_NET | 0 | −2 Аура |
-| R_CANARY | RITUAL_OBS | 1 | −1 Аура |
-| R_PATRON_SEAL | RITUAL_NET или RITUAL_CD | 1 | +2 лимит Ауры, −3 монеты |
-
-## Заложенный урок / компромисс
-
-S_ACCESS_LOGS — единственный способ получить HAS_ACCESS_LOGS (требование Киры), но он добавляет D_ACCESS_LOG_VOLUME без доступного резолвера. Это гарантирует F1_OVERFLOW (некритический, +2 ауры). Игрок **обязан** использовать обряд для компенсации — либо снижение ауры (R_GUARD_TO_BAR / R_CANARY), либо расширение лимита (R_PATRON_SEAL). Урок: «в платформе для compliance всегда есть цена — её нужно отработать обрядом, а не игнорировать».
+| ID | Роль |
+|---|---|
+| S_API_MR_GATES | Гейты MR в `CD_GATES`; только после `S_API_CICD` |
+| S_CONTRACT_TESTS | Контрактные тесты в `CD_TESTING`; лечат разъезд партнёрских API |
+| S_API_CICD / S_ROLLBACK | Пара доставки |
+| S_ACCESS_LOGS + S_LOG_FILTER | Технический контроль объёма аудита |
+| S_ACCESS_LOGS + R_LOG_ARCHIVE | Архивация в `RITUAL_OBS` |
+| R_PATRON_SEAL | `RITUAL_CD`: −2 ⚗, +1 ☠, **+2** к лимиту ауры |
 
 ## Подсказки игроку
 
-- D_NO_CICD активен с самого начала — S_CICD обязателен, но за ним идёт D_NEEDS_ROLLBACK: не забудь S_ROLLBACK.
-- S_ACCESS_LOGS создаст некритический F1_OVERFLOW (+2 ауры). Один из обрядов поможет остаться в лимите.
-- R_PATRON_SEAL в RITUAL_CD даёт и возврат монет, и лимит ауры — лучший выбор если бюджет позволяет.
+См. `game-data.json` → `hints` уровня `L5_KIRA_API`.

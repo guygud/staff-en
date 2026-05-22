@@ -1,0 +1,5 @@
+﻿matrix_id,name,icon,description,technical_meaning,slot_count,slot_type_1,slot_type_2,slot_type_3,slot_type_4,slot_type_5,slot_type_6
+M_OBSERVATION,Матрица Взгляда,👁️,"Наблюдаемость: логи, трейсы, алерты","Наблюдаемость: логи, трейсы, алерты",5,OBS_LOGS,OBS_FILTERS,OBS_ALERTS,OBS_TRACING,RITUAL_OBS,
+M_STORAGE,Матрица Хранения,📦,"Хранение, TTL, ротация, квоты, индексы","Хранение, TTL, ротация, квоты, индексы",5,ST_RETENTION,ST_INDEX,ST_QUOTA,ST_SECRETS,RITUAL_ST,
+M_CONNECTIVITY,Матрица Связей,🕸,"API, доступ, маршрутизация, DNS, TLS","API, доступ, маршрутизация, DNS, TLS",6,NET_AUTH,NET_ROUTING,NET_DISCOVERY,NET_DNS,NET_TLS,RITUAL_NET
+M_DELIVERY,Матрица Копирования,⚙️,"CI/CD, деплой, откат, тесты","CI/CD, деплой, откат, тесты",5,CD_PIPELINE,CD_GATES,CD_ROLLBACK,CD_TESTING,RITUAL_CD,

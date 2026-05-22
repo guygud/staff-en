@@ -12,6 +12,7 @@
 import fs   from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { scenarioSimulationResult } from '../lib/simulate.mjs';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT      = path.resolve(__dirname, '..');
@@ -52,6 +53,11 @@ function section(title) {
   console.log(`\n── ${title}`);
 }
 
+if (data.meta?.compiledFrom === 'new') {
+  section('Group NEW — game-data compiled from new/');
+  pass('DATA', `compiledFrom=new (${data.meta.compiledAt ?? 'no compiledAt'})`);
+}
+
 /** Build all slot instances visible on a level (including optional). */
 function allSlots(level) {
   return (level.availableMatrices ?? []).flatMap(m => m.slots ?? []);
@@ -72,96 +78,98 @@ function cardById(id) {
 /** All status IDs referenced in reportTemplates. */
 const reportTemplateIds = new Set(Object.keys(data.reportTemplates ?? {}));
 
-// ─── Simulation (mirrors engine.js _compute, kept in sync manually) ──────────
-
-function simulate(level, placements, installedMatrixIds) {
-  const cards = Object.values(placements)
-    .filter(Boolean)
-    .map(id => cardById(id))
-    .filter(Boolean);
-
-  // 1. Capabilities
-  const capabilities = new Set(
-    (level.defaultInstalled ?? []).flatMap(d => d.grantsCapabilities ?? [])
-  );
-  for (const card of cards) {
-    for (const ef of card.effects ?? []) {
-      if (ef.type === 'CAPABILITY') capabilities.add(ef.id);
-    }
-  }
-
-  // 2. Debts
-  const debtMap = new Map();
-  for (const inst of level.defaultInstalled ?? []) {
-    for (const d of inst.addsDebts ?? []) debtMap.set(d.id, d);
-  }
-  for (const card of cards) {
-    for (const d of card.addsDebts ?? []) debtMap.set(d.id, d);
-  }
-
-  // 3. Resolve debts
-  for (const card of cards) {
-    for (const rid of card.resolvesDebts ?? []) debtMap.delete(rid);
-  }
-
-  // 4. Conflicts
-  const placedIds = new Set(Object.values(placements).filter(Boolean));
-  const firedConflicts = [];
-  for (const pair of data.conflictPairs ?? []) {
-    if (!pair.spells.every(id => placedIds.has(id))) continue;
-    if ((pair.resolvedBy ?? []).some(id => placedIds.has(id))) continue;
-    firedConflicts.push({ pair, statusId: pair.statusIfUnresolved });
-  }
-
-  // 5. Statuses
-  const allFiredStatuses = new Set([
-    ...[...debtMap.values()].map(d => d.statusIfUnresolved),
-    ...firedConflicts.map(c => c.statusId),
-  ]);
-
-  const criticalSet = new Set(level.criticalStatuses ?? []);
-  const fatalStatuses = [...allFiredStatuses].filter(s => criticalSet.has(s));
-  const nonCriticalStatuses = [...allFiredStatuses].filter(s => !criticalSet.has(s));
-
-  // 6. Aura
-  const auraLimitModifier = cards.reduce((sum, c) => sum + (c.auraLimitDelta ?? 0), 0);
-  const auraLimitFinal = (level.budget?.aura ?? 0) + auraLimitModifier;
-  let auraTotal = cards.reduce((sum, c) => sum + (c.currencies?.aura ?? 0), 0);
-  auraTotal += nonCriticalStatuses.length * (level.nonCriticalStatusAuraPenalty ?? 2);
-
-  // 7. Coins
-  const matrixInstallCost = (level.availableMatrices ?? [])
-    .filter(m => m.preInstalled === false && installedMatrixIds.includes(m.instanceId))
-    .reduce((sum, m) => sum + (m.installCostGold ?? 0), 0);
-
-  const coinsSpent = cards.reduce(
-    (sum, c) => sum + (c.currencies?.gold ?? 0), 0
-  ) + matrixInstallCost;
-
-  // 8. Missing requirements
-  const missingRequirements = (level.requirements ?? []).filter(
-    req => req.type === 'CAPABILITY_REQUIRED' && !capabilities.has(req.capabilityId)
-  );
-
-  // 9. Fail reasons
-  const failReasons = [];
-  if (missingRequirements.length)  failReasons.push({ type: 'REQ_MISSING' });
-  if (fatalStatuses.length)        failReasons.push({ type: 'FATAL_STATUS' });
-  if (coinsSpent > (level.budget?.gold ?? 0)) failReasons.push({ type: 'BUDGET_EXCEEDED' });
-  if (auraTotal  > auraLimitFinal)           failReasons.push({ type: 'AURA_EXCEEDED' });
-
-  return {
-    success: failReasons.length === 0,
-    coinsSpent,
-    auraTotal,
-    auraLimitFinal,
-    fatalStatuses,
-    missingRequirements: missingRequirements.map(r => r.id),
-    allFiredStatuses: [...allFiredStatuses],
-  };
-}
+const treatmentCatalogByTag = new Map(
+  (data.treatmentCatalog ?? []).map(e => [e.tag, new Set(e.healsStatuses ?? [])])
+);
+const knownTreatmentTags = new Set(treatmentCatalogByTag.keys());
+const statusCatalogIds = new Set(data.statusCatalog.map(s => s.id));
 
 // ─── GROUP A: Static data integrity ──────────────────────────────────────────
+
+section('Group A0 — Treatment catalog & card tags');
+
+for (const entry of data.treatmentCatalog ?? []) {
+  const tag = entry?.tag;
+  if (!tag || typeof tag !== 'string') {
+    fail('DATA', `treatmentCatalog entry missing string "tag": ${JSON.stringify(entry)}`);
+    continue;
+  }
+  pass('DATA', `treatmentCatalog tag "${tag}" defined`);
+  for (const sid of entry.healsStatuses ?? []) {
+    if (statusCatalogIds.has(sid)) {
+      pass('DATA', `treatment "${tag}" heals valid status "${sid}"`);
+    } else {
+      fail('DATA', `treatment "${tag}" references unknown status "${sid}"`);
+    }
+  }
+  if (!(entry.healsStatuses ?? []).length && !entry.narrativeOnly) {
+    console.warn(`  WARN [DATA] treatment "${tag}" has empty healsStatuses (narrative-only tag?)`);
+  }
+}
+
+for (const card of [...(data.spellCatalog ?? []), ...(data.obryadCatalog ?? [])]) {
+  for (const tag of card.treatmentTags ?? []) {
+    if (knownTreatmentTags.has(tag)) {
+      pass(`card:${card.id}`, `treatmentTag "${tag}" exists in treatmentCatalog`);
+    } else {
+      fail(`card:${card.id}`, `unknown treatmentTag "${tag}" on card ${card.id}`);
+    }
+  }
+  const rd = card.resolvesDebts ?? [];
+  if (rd.length) {
+    console.warn(`  WARN [card:${card.id}] explicit resolvesDebts (${rd.length}) — exception path; prefer treatmentTags when symptom-class healing is enough`);
+  }
+}
+
+section('Group AM — Matrix presets & level instances');
+
+const matrixPresets = data.matrixPresets ?? [];
+const matrixPresetById = new Map(matrixPresets.map(p => [p.id, p]));
+const matrixCatalogIds = new Set((data.matrixCatalog ?? []).map(m => m.id));
+const multiset = (arr) => [...arr].sort().join('+');
+
+for (const preset of matrixPresets) {
+  if (!preset.id || typeof preset.id !== 'string') {
+    fail('DATA', `matrixPresets entry missing string id: ${JSON.stringify(preset)}`);
+    continue;
+  }
+  if (!matrixCatalogIds.has(preset.matrixId)) {
+    fail('DATA', `matrixPreset "${preset.id}" references unknown matrixId "${preset.matrixId}"`);
+  } else {
+    pass('DATA', `matrixPreset "${preset.id}" → ${preset.matrixId} (${(preset.slotTypes ?? []).length} slots)`);
+  }
+}
+
+for (const level of levels) {
+  for (const am of level.availableMatrices ?? []) {
+    if (!am.presetId) {
+      fail(level.id, `matrix instance "${am.instanceId}" missing presetId`);
+      continue;
+    }
+    const preset = matrixPresetById.get(am.presetId);
+    if (!preset) {
+      fail(level.id, `matrix instance "${am.instanceId}" → unknown presetId "${am.presetId}"`);
+      continue;
+    }
+    if (preset.matrixId !== am.matrixId) {
+      fail(level.id, `matrix "${am.instanceId}": matrixId="${am.matrixId}" but preset "${preset.id}" expects "${preset.matrixId}"`);
+      continue;
+    }
+    const instanceMs = multiset((am.slots ?? []).map(s => s.slotType));
+    const presetMs = multiset(preset.slotTypes ?? []);
+    if (instanceMs !== presetMs) {
+      fail(level.id, `matrix "${am.instanceId}" (preset ${preset.id}): slot types differ — instance=[${instanceMs}] preset=[${presetMs}]`);
+    } else {
+      pass(level.id, `matrix "${am.instanceId}" matches preset "${preset.id}"`);
+    }
+    if (am.name != null) {
+      fail(level.id, `matrix "${am.instanceId}" has legacy "name" — use matrixPresets only`);
+    }
+    if (am.description != null) {
+      fail(level.id, `matrix "${am.instanceId}" has legacy "description" — use matrixPresets only`);
+    }
+  }
+}
 
 section('Group A — Static data integrity');
 
@@ -177,21 +185,34 @@ for (const level of levels) {
     fail(lid, `missing budget.{gold,aura}`);
   }
 
-  // A2: Each requirement's capabilityId is reachable
-  const reachable = new Set([
+  // A2: Each requirement is satisfiable by available cards
+  const reachableCapabilities = new Set([
     ...(level.defaultInstalled ?? []).flatMap(d => d.grantsCapabilities ?? []),
     ...availableCardIds(level)
       .map(id => cardById(id))
       .filter(Boolean)
       .flatMap(c => (c.effects ?? []).filter(e => e.type === 'CAPABILITY').map(e => e.id)),
   ]);
+  const reachableBuffs = new Set(
+    availableCardIds(level)
+      .map(id => cardById(id))
+      .filter(Boolean)
+      .flatMap(c => [...(c.treatmentTags ?? []), ...(c.buffs ?? [])])
+  );
 
   for (const req of level.requirements ?? []) {
-    if (req.type !== 'CAPABILITY_REQUIRED') continue;
-    if (reachable.has(req.capabilityId)) {
-      pass(lid, `REQ ${req.id}: capability ${req.capabilityId} is reachable`);
-    } else {
-      fail(lid, `REQ ${req.id}: capability ${req.capabilityId} is NOT reachable by any available card`);
+    if (req.type === 'CAPABILITY_REQUIRED') {
+      if (reachableCapabilities.has(req.capabilityId)) {
+        pass(lid, `REQ ${req.id}: capability ${req.capabilityId} is reachable`);
+      } else {
+        fail(lid, `REQ ${req.id}: capability ${req.capabilityId} is NOT reachable by any available card`);
+      }
+    } else if (req.type === 'BUFF_REQUIRED') {
+      if (reachableBuffs.has(req.buffId)) {
+        pass(lid, `REQ ${req.id}: buff "${req.buffId}" is reachable`);
+      } else {
+        fail(lid, `REQ ${req.id}: buff "${req.buffId}" is NOT reachable by any available card`);
+      }
     }
   }
 
@@ -305,7 +326,12 @@ for (const file of fixtureFiles) {
   if (filterLevelId && levelId !== filterLevelId) continue;
 
   for (const scenario of scenarios ?? []) {
-    const result = simulate(level, scenario.placements ?? {}, scenario.installedMatrixIds ?? []);
+    const result = scenarioSimulationResult(
+      data,
+      level,
+      scenario.placements ?? {},
+      scenario.installedMatrixIds ?? []
+    );
     const exp = scenario.expected;
     const name = `${levelId}/${scenario.name}`;
 
